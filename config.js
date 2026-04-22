@@ -1,4 +1,4 @@
-/* SIS — Cotizador: runtime configuration
+/* SIS - Cotizador: runtime configuration
  * Loaded before any cotizador script. Merges defaults with values
  * saved in localStorage (key: 'sis_cfg') and exposes window.CFG.
  */
@@ -9,12 +9,13 @@
     LABOR_RATIO_PCT: 30,   // Mano de obra % sobre materiales
     ACABADO_T1_PCT:  15,   // Acabado Tipo 1 markup (%)
     ACABADO_T2_PCT:  25,   // Acabado Tipo 2 markup (%)
-    HSP:             4.5,  // Horas Solar Pico — Ciudad de Guatemala
+    HSP:             4.5,  // Horas Solar Pico - Ciudad de Guatemala
     EFF_PCT:         87,   // Rendimiento del sistema (%)
     PANEL_W:         625,  // Potencia del panel (W)
     PRICE_PANEL:     800,  // Precio panel JA Solar 625W (Q)
     PRICE_HUAWEI_8K: 8200, // Precio inversor Huawei SUN2000-8K (Q)
-    SAVINGS_PCT:     90,   // Ahorro estimado al cliente — Cotizador Rápido (%)
+    SAVINGS_PCT:     90,   // Ahorro estimado al cliente - Cotizador Rapido (%)
+    GRID_FIXED_FEE_Q:120,  // Cargo fijo mensual no compensable (Q)
     CABLE_M_DEFAULT: 30,   // Metros de cable DC por defecto
     HUAWEI_BASE_KW:  8     // Base kW por unidad para escalar Huawei 8K
   };
@@ -41,6 +42,7 @@
     PRICE_PANEL:     m.PRICE_PANEL,
     PRICE_HUAWEI_8K: m.PRICE_HUAWEI_8K,
     SAVINGS_PCT:     m.SAVINGS_PCT     / 100,
+    GRID_FIXED_FEE_Q:m.GRID_FIXED_FEE_Q,
     CABLE_M:         m.CABLE_M_DEFAULT,
     HUAWEI_BASE_KW:  m.HUAWEI_BASE_KW,
     _raw:            m,

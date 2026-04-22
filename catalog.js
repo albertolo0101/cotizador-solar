@@ -1,5 +1,6 @@
 (function () {
   var API_PATH = '/api/catalog';
+  var FILE_PATH = 'catalog.json';
 
   var BASE_DEFAULTS = {
     panels: [
@@ -38,6 +39,10 @@
 
   var catalogCache = null;
   var loadPromise = null;
+  var sourceInfo = {
+    mode: 'defaults',
+    detail: 'Using embedded defaults.'
+  };
 
   function clone(data) {
     return JSON.parse(JSON.stringify(data));
@@ -97,20 +102,39 @@
     return { panels: panels, inverters: inverters };
   }
 
+  function setSource(mode, detail) {
+    sourceInfo = {
+      mode: mode,
+      detail: detail
+    };
+  }
+
+  function fetchJson(path) {
+    return fetch(path, { cache: 'no-store' }).then(function (res) {
+      if (!res.ok) throw new Error('Catalog request failed for ' + path);
+      return res.json();
+    });
+  }
+
   function loadCatalog() {
     if (catalogCache) return Promise.resolve(clone(catalogCache));
     if (loadPromise) return loadPromise.then(function () { return clone(catalogCache); });
 
-    loadPromise = fetch(API_PATH, { cache: 'no-store' })
-      .then(function (res) {
-        if (!res.ok) throw new Error('Catalog request failed');
-        return res.json();
-      })
+    loadPromise = fetchJson(API_PATH)
       .then(function (data) {
+        setSource('api', API_PATH);
         catalogCache = normalize(data);
         return clone(catalogCache);
       })
       .catch(function () {
+        return fetchJson(FILE_PATH).then(function (data) {
+          setSource('file', FILE_PATH);
+          catalogCache = normalize(data);
+          return clone(catalogCache);
+        });
+      })
+      .catch(function () {
+        setSource('defaults', 'Embedded defaults');
         catalogCache = normalize(getDefaults());
         return clone(catalogCache);
       })
@@ -140,6 +164,10 @@
 
   function getCatalog() {
     return clone(catalogCache || normalize(getDefaults()));
+  }
+
+  function getSourceInfo() {
+    return clone(sourceInfo);
   }
 
   function getActivePanels() {
@@ -173,6 +201,7 @@
     saveCatalog: saveCatalog,
     resetCatalog: resetCatalog,
     getCatalog: getCatalog,
+    getSourceInfo: getSourceInfo,
     getActivePanels: getActivePanels,
     getActiveInverters: getActiveInverters,
     getPanelById: getPanelById,
