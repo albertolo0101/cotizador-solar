@@ -340,7 +340,13 @@
       document.getElementById('roiResult').classList.remove('show');
       return;
     }
-    const ahorro = factura * (coverage / 100);
+    const cargoFijo = Number(CFG.GRID_FIXED_FEE_Q) || 120;
+    const facturaVariable = Math.max(factura - cargoFijo, 0);
+    const ahorro = facturaVariable * (coverage / 100);
+    if (ahorro <= 0) {
+      document.getElementById('roiResult').classList.remove('show');
+      return;
+    }
     const meses = Math.round(totalPrice / ahorro);
     const vidaUtil = 25 * 12;
     const pctRec = Math.min(meses / vidaUtil * 100, 50);
@@ -349,7 +355,7 @@
     document.getElementById('roi-precio').textContent = 'Q ' + fmt(totalPrice, 0);
     document.getElementById('roi-factura').textContent = fmtQ(factura);
     document.getElementById('roi-ahorro').textContent = fmtQ(ahorro) + '/mes';
-    document.getElementById('roi-cob').textContent = fmt(coverage, 0) + '%';
+    document.getElementById('roi-cob').textContent = fmt(coverage, 0) + '% de ' + fmtQ(facturaVariable);
     document.getElementById('rb-inv').style.width = pctRec + '%';
     document.getElementById('roi-free-label').textContent = anosLibres + ' anos de ahorro libre →';
     document.getElementById('roiResult').classList.add('show');
