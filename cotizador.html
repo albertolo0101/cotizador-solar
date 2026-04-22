@@ -1123,18 +1123,25 @@ function buildInvGrid() {
     const kwpNeeded = state.kwh / (HSP * EFF * 30);
     const panels    = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
     const kwp       = panels * PANEL_W / 1000;
-    const units     = Math.ceil(kwp / 8);
-    const unitPrice = PRICES['I-HUAWEI-8K'];
-    const card = document.createElement('div');
-    card.className = 'inv-btn active';
-    card.style.cssText = 'cursor:default; grid-column:1/-1;';
-    card.innerHTML = `
-      <span class="ib-kw">${units} × Huawei SUN2000-8K</span>
-      <span class="ib-brand">Huawei · Trifásico · ${units * 8} kWp total</span>
-      <span class="ib-price">${fmtQ(units * unitPrice)} (${units} × ${fmtQ(unitPrice)})</span>
-    `;
-    grid.appendChild(card);
-    state.inversor = 'I-HUAWEI-8K';
+    const units8k   = Math.ceil(kwp / 8);
+
+    INVERSORS.filter(i => i.cat === 'HUAWEI').forEach(inv => {
+      const btn = document.createElement('button');
+      btn.className = 'inv-btn' + (inv.id === state.inversor ? ' active' : '');
+      const unitPrice = PRICES[inv.id];
+      const scaled    = inv.id === 'I-HUAWEI-8K' && units8k > 1;
+      const label     = scaled ? `${units8k} × ${inv.label}` : inv.label;
+      const priceStr  = scaled
+        ? `${fmtQ(units8k * unitPrice)} (${units8k} × ${fmtQ(unitPrice)})`
+        : fmtQ(unitPrice);
+      btn.innerHTML = `
+        <span class="ib-kw">${label}</span>
+        <span class="ib-brand">${inv.brand} · ${inv.note}</span>
+        <span class="ib-price">${priceStr}</span>
+      `;
+      btn.onclick = () => { state.inversor = inv.id; buildInvGrid(); updateHuaweiRow(); update(); };
+      grid.appendChild(btn);
+    });
     return;
   }
 
@@ -1157,7 +1164,10 @@ function setCat(btn) {
   btn.classList.add('active');
   state.cat = btn.dataset.cat;
   if (state.cat === 'HUAWEI') {
-    state.inversor = 'I-HUAWEI-8K';
+    const kwpNeeded = state.kwh / (HSP * EFF * 30);
+    const p = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
+    const best = INVERSORS.filter(i => i.cat === 'HUAWEI').find(i => i.maxPanels >= p);
+    state.inversor = best ? best.id : 'I-HUAWEI-8K';
   } else {
     const first = INVERSORS.find(i => i.cat === state.cat);
     if (first) state.inversor = first.id;
@@ -1204,7 +1214,7 @@ function toggleExtras() {
 function computeBOM(panels, cableM, struct, invId, huaweiExtras, cat) {
   const n = panels;
   const isHuawei = cat === 'HUAWEI';
-  const invUnits = isHuawei ? Math.ceil(n * PANEL_W / 1000 / 8) : 1;
+  const invUnits = (isHuawei && invId === 'I-HUAWEI-8K') ? Math.ceil(n * PANEL_W / 1000 / 8) : 1;
   const largeSystem = n > 8;
 
   // Ratios from Excel "Ratios y Supuestos"
@@ -1398,7 +1408,6 @@ function update() {
 }
 
 function suggestInversor(panels) {
-  if (state.cat === 'HUAWEI') return; // scales automatically via invUnits
   const inCat = INVERSORS.filter(i => i.cat === state.cat);
   const best = inCat.find(i => i.maxPanels >= panels) || inCat[inCat.length - 1];
   if (!best || state.inversor === best.id) return;

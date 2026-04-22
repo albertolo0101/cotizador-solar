@@ -517,6 +517,10 @@ const SAVINGS_PCT = 0.90; // 90% of bill saved
 
 const P = {
   'P-JA-625W':    800,
+  'I-HUAWEI-3K':  8500,
+  'I-HUAWEI-4K':  10000,
+  'I-HUAWEI-5K':  11000,
+  'I-HUAWEI-6K':  10300,
   'I-HUAWEI-8K':  8200,
   'A-SMART-SENSOR': 914.52,
   'A-DONGLE-WLAN':  585,
@@ -543,16 +547,32 @@ function fmt(n, d=0) {
 }
 function fmtQ(n) { return 'Q ' + fmt(n, 0); }
 
+// Huawei options sorted by capacity — pick the smallest single unit that fits,
+// fall back to N × 8K for large systems
+const HUAWEI_OPTS = [
+  { id:'I-HUAWEI-3K', maxPanels: 6,  name:'SUN2000-3K'  },
+  { id:'I-HUAWEI-4K', maxPanels: 8,  name:'SUN2000-4K'  },
+  { id:'I-HUAWEI-5K', maxPanels: 10, name:'SUN2000-5K'  },
+  { id:'I-HUAWEI-6K', maxPanels: 12, name:'SUN2000-6K'  },
+  { id:'I-HUAWEI-8K', maxPanels: 20, name:'SUN2000-8K'  },
+];
+
+function selectHuawei(panels) {
+  const single = HUAWEI_OPTS.find(h => h.maxPanels >= panels);
+  if (single) return { id: single.id, units: 1, name: single.name };
+  const units = Math.ceil(panels * PANEL_W / 1000 / 8);
+  return { id: 'I-HUAWEI-8K', units, name: 'SUN2000-8K' };
+}
+
 function calcSystemPrice(panels) {
   const n = panels;
-  const kwp = n * PANEL_W / 1000;
-  const invUnits = Math.ceil(kwp / 8);
+  const { id: invId, units: invUnits, name: invName } = selectHuawei(n);
   const large = n > 8;
   const rieles = Math.ceil(Math.ceil(n / 2.3) / 2) * 2;
 
   let mat = 0;
   mat += n          * P['P-JA-625W'];
-  mat += invUnits   * P['I-HUAWEI-8K'];
+  mat += invUnits   * P[invId];
   mat +=               P['A-SMART-SENSOR'];
   mat +=               P['A-DONGLE-WLAN'];
   mat += rieles     * P['E-RIEL-6M'];
@@ -576,7 +596,7 @@ function calcSystemPrice(panels) {
   const labor   = mat * LABOR_RATIO;
   const subtotal = mat + acabado + labor;
   const iva  = subtotal * IVA;
-  return { total: Math.round((subtotal + iva) / 100) * 100, invUnits };
+  return { total: Math.round((subtotal + iva) / 100) * 100, invUnits, invName };
 }
 
 function update() {
@@ -586,7 +606,7 @@ function update() {
   const kwpNeeded = kwh / (HSP * EFF * 30);
   const panels    = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
   const kwpReal   = panels * PANEL_W / 1000;
-  const { total: systemPrice, invUnits } = calcSystemPrice(panels);
+  const { total: systemPrice, invUnits, invName } = calcSystemPrice(panels);
 
   const ahorroMensual = factura * SAVINGS_PCT;
   const nuevaCuota    = factura * (1 - SAVINGS_PCT);
@@ -602,7 +622,7 @@ function update() {
   const netAhorro = (yrs) => Math.max(0, yrs * 12 * ahorroMensual - systemPrice);
 
   // System card
-  document.getElementById('specInv').textContent     = `${invUnits} × Huawei SUN2000-8K`;
+  document.getElementById('specInv').textContent     = invUnits > 1 ? `${invUnits} × Huawei ${invName}` : `Huawei ${invName}`;
   document.getElementById('specPanels').textContent  = `${panels} und.`;
   document.getElementById('specKwp').textContent     = `${fmt(kwpReal, 2)} kWp`;
   document.getElementById('specPrice').textContent   = fmtQ(systemPrice);
