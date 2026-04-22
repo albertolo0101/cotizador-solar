@@ -335,6 +335,16 @@
     el.classList.add('num-pop');
   }
 
+  function updateSliderFill() {
+    const slider = document.getElementById('kwhSlider');
+    if (!slider) return;
+    const min = Number(slider.min) || 0;
+    const max = Number(slider.max) || 100;
+    const value = Number(slider.value) || min;
+    const pct = ((value - min) / Math.max(max - min, 1)) * 100;
+    slider.style.setProperty('--pct', pct + '%');
+  }
+
   function updateROI(factura, coverage, totalPrice) {
     if (factura <= 0) {
       document.getElementById('roiResult').classList.remove('show');
@@ -464,12 +474,14 @@
     v = Math.max(50, Math.min(5000, v));
     slider.value = Math.min(v, 6000);
     state.kwh = v;
+    updateSliderFill();
     update();
   });
   slider.addEventListener('input', function () {
     const v = parseInt(slider.value, 10);
     numInput.value = v;
     state.kwh = v;
+    updateSliderFill();
     update();
   });
   document.querySelectorAll('.preset-btn').forEach(function (btn) {
@@ -478,6 +490,7 @@
       numInput.value = v;
       slider.value = v;
       state.kwh = v;
+      updateSliderFill();
       document.querySelectorAll('.preset-btn').forEach(function (b) { b.classList.toggle('active', b === btn); });
       update();
     });
@@ -507,5 +520,6 @@
   buildInvGrid();
   updateHuaweiRow();
   document.getElementById('acabadoDesc').textContent = ACABADO[state.acabado].desc;
+  updateSliderFill();
   update();
 })();

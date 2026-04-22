@@ -5,7 +5,7 @@
   const IVA = CFG.IVA;
   const ACABADO_PCT = CFG.ACABADO_T1_PCT;
   const CABLE_M = CFG.CABLE_M;
-  const SAVINGS_PCT = CFG.SAVINGS_PCT;
+  const GRID_FIXED_FEE_Q = CFG.GRID_FIXED_FEE_Q;
 
   const MATERIAL_PRICES = {
     'A-SMART-SENSOR': 914.52,
@@ -129,8 +129,10 @@
     const coverage = Math.min(genMes / kwh * 100, 100);
     const result = calcSystemPrice(panels, fueraMetro, equipmentLine);
     const lineLabel = equipmentLine === 'HUAWEI' ? 'Premium' : 'Generico';
-    const ahorroMensual = factura * SAVINGS_PCT;
-    const nuevaCuota = factura * (1 - SAVINGS_PCT);
+    const cargoFijo = Number(GRID_FIXED_FEE_Q) || 120;
+    const facturaVariable = Math.max(factura - cargoFijo, 0);
+    const ahorroMensual = facturaVariable * (coverage / 100);
+    const nuevaCuota = Math.max(cargoFijo + (facturaVariable - ahorroMensual), cargoFijo);
 
     let paybackStr = '—';
     if (ahorroMensual > 0) {
@@ -151,7 +153,7 @@
     document.getElementById('billBefore').textContent = `Q ${fmt(factura, 0)}`;
     document.getElementById('billAfter').textContent = `Q ${fmt(nuevaCuota, 0)}`;
     document.getElementById('rowAhorro').textContent = `Q ${fmt(ahorroMensual, 0)} / mes`;
-    document.getElementById('rowCobertura').textContent = `${fmt(coverage, 0)}% de tu consumo`;
+    document.getElementById('rowCobertura').textContent = `${fmt(coverage, 0)}% de tu consumo · base variable ${fmtQ(facturaVariable)}`;
     document.getElementById('rowPayback').textContent = paybackStr;
     document.getElementById('proj5').textContent = `Q ${fmt(Math.max(0, 5 * 12 * ahorroMensual - result.total), 0)}`;
     document.getElementById('proj10').textContent = `Q ${fmt(Math.max(0, 10 * 12 * ahorroMensual - result.total), 0)}`;
