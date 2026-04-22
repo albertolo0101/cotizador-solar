@@ -1,4 +1,5 @@
 (async function () {
+  await SISConfig.loadConfig();
   const HSP = CFG.HSP;
   const EFF = CFG.EFF;
   const LABOR_RATIO = CFG.LABOR_RATIO;
@@ -529,6 +530,10 @@
     const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
     const totalRounded = Math.round(((subtotalBase + profitAmt + transportSurcharge) * (1 + IVA)) / 100) * 100;
     updateROI(factura, sizing.coverage, totalRounded);
+  });
+
+  window.addEventListener('storage', function (event) {
+    if (event.key === 'sis_cfg') window.location.reload();
   });
 
   await SISCatalog.loadCatalog();

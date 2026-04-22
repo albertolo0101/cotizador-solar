@@ -285,7 +285,7 @@ body::before {
           <span class="cfg-unit">%</span>
         </div>
         <span class="cfg-desc">Margen de ganancia adicional aplicado sobre el subtotal (materiales + acabado + mano de obra) antes del IVA. Aparece como línea separada en el desglose si es mayor a 0.</span>
-        <span class="cfg-default">Default: 0%</span>
+        <span class="cfg-default">Default: 1%</span>
       </div>
 
       <div class="cfg-field">
@@ -306,6 +306,16 @@ body::before {
         </div>
         <span class="cfg-desc">Mano de obra estimada como porcentaje del costo de materiales. Cubre instalación, cableado y puesta en marcha. Revisar según mercado laboral.</span>
         <span class="cfg-default">Default: 30%</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">GRID_FIXED_FEE_Q</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="GRID_FIXED_FEE_Q" min="0" step="1">
+          <span class="cfg-unit">Q</span>
+        </div>
+        <span class="cfg-desc">Cargo fijo mensual no compensable del distribuidor. Se resta de la parte variable de la factura antes de calcular ahorro y nueva cuota.</span>
+        <span class="cfg-default">Default: Q 120</span>
       </div>
     </div>
 
@@ -444,32 +454,40 @@ body::before {
 const FIELDS = [
   'PROFIT_PCT','IVA_PCT','LABOR_RATIO_PCT',
   'ACABADO_T1_PCT','ACABADO_T2_PCT',
-  'HSP','EFF_PCT','PANEL_W','SAVINGS_PCT',
+  'HSP','EFF_PCT','PANEL_W','SAVINGS_PCT','GRID_FIXED_FEE_Q',
   'PRICE_PANEL','PRICE_HUAWEI_8K',
   'CABLE_M_DEFAULT','HUAWEI_BASE_KW'
 ];
 
 function loadValues() {
-  const raw = CFG._raw;
+  const raw = SISConfig.getRawConfig();
   FIELDS.forEach(function(k) {
     const el = document.querySelector('[name="' + k + '"]');
     if (el) el.value = raw[k];
   });
 }
 
-function saveValues() {
+function getFormData() {
   const data = {};
   FIELDS.forEach(function(k) {
     const el = document.querySelector('[name="' + k + '"]');
     if (el && el.value !== '') data[k] = +el.value;
   });
-  localStorage.setItem('sis_cfg', JSON.stringify(data));
+  return data;
+}
+
+async function saveValues() {
+  await SISConfig.saveConfig(getFormData());
 }
 
 function resetDefaults() {
   if (!confirm('¿Restablecer todos los valores a los defaults de fábrica?')) return;
-  localStorage.removeItem('sis_cfg');
-  location.reload();
+  SISConfig.resetConfig().then(function () {
+    loadValues();
+    showToast('Configuracion restablecida y guardada en config.json');
+  }).catch(function () {
+    showToast('Error al restablecer config.json');
+  });
 }
 
 function showToast(msg) {
@@ -479,13 +497,26 @@ function showToast(msg) {
   setTimeout(function() { t.classList.remove('show'); }, 2500);
 }
 
-document.getElementById('cfgForm').addEventListener('submit', function(e) {
+document.getElementById('cfgForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  saveValues();
+  try {
+    await saveValues();
+    showToast('Configuracion guardada en config.json');
+  } catch (err) {
+    showToast('Error al guardar config.json');
+  }
+  return;
   showToast('✓ Guardado — recarga el cotizador para aplicar cambios');
 });
 
-loadValues();
+(async function () {
+  try {
+    await SISConfig.loadConfig();
+  } catch (err) {
+    // Keep defaults if the server is unavailable.
+  }
+  loadValues();
+})();
 </script>
 </body>
 </html>
