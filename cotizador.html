@@ -1182,7 +1182,7 @@ function computeBOM(panels, cableM, struct, invId, huaweiExtras) {
   const largeSystem = n > 8;
 
   // Ratios from Excel "Ratios y Supuestos"
-  const rieles   = Math.ceil(n / 2.3);
+  const rieles   = Math.ceil(Math.ceil(n / 2.3) / 2) * 2;
   const midclamp = n * 2;
   const endclamp = Math.ceil(n * 0.85);
   const tierra   = rieles;
