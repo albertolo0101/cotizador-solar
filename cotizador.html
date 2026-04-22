@@ -1117,6 +1117,26 @@ function fmtQ0(n) { return 'Q ' + fmt(n, 0); }
 function buildInvGrid() {
   const grid = document.getElementById('invGrid');
   grid.innerHTML = '';
+
+  if (state.cat === 'HUAWEI') {
+    const kwpNeeded = state.kwh / (HSP * EFF * 30);
+    const panels    = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
+    const kwp       = panels * PANEL_W / 1000;
+    const units     = Math.ceil(kwp / 8);
+    const unitPrice = PRICES['I-HUAWEI-8K'];
+    const card = document.createElement('div');
+    card.className = 'inv-btn active';
+    card.style.cssText = 'cursor:default; grid-column:1/-1;';
+    card.innerHTML = `
+      <span class="ib-kw">${units} × Huawei SUN2000-8K</span>
+      <span class="ib-brand">Huawei · Trifásico · ${units * 8} kWp total</span>
+      <span class="ib-price">${fmtQ(units * unitPrice)} (${units} × ${fmtQ(unitPrice)})</span>
+    `;
+    grid.appendChild(card);
+    state.inversor = 'I-HUAWEI-8K';
+    return;
+  }
+
   INVERSORS.filter(i => i.cat === state.cat).forEach(inv => {
     const btn = document.createElement('button');
     btn.className = 'inv-btn' + (inv.id === state.inversor ? ' active' : '');
@@ -1135,8 +1155,12 @@ function setCat(btn) {
   document.querySelectorAll('[data-cat]').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   state.cat = btn.dataset.cat;
-  const first = INVERSORS.find(i => i.cat === state.cat);
-  if (first) state.inversor = first.id;
+  if (state.cat === 'HUAWEI') {
+    state.inversor = 'I-HUAWEI-8K';
+  } else {
+    const first = INVERSORS.find(i => i.cat === state.cat);
+    if (first) state.inversor = first.id;
+  }
   buildInvGrid();
   updateHuaweiRow();
   update();
@@ -1176,9 +1200,10 @@ function toggleExtras() {
 }
 
 // ── COMPUTE BILL OF MATERIALS ──
-function computeBOM(panels, cableM, struct, invId, huaweiExtras) {
+function computeBOM(panels, cableM, struct, invId, huaweiExtras, cat) {
   const n = panels;
-  const isHuawei = invId === 'I-HUAWEI-8K';
+  const isHuawei = cat === 'HUAWEI';
+  const invUnits = isHuawei ? Math.ceil(n * PANEL_W / 1000 / 8) : 1;
   const largeSystem = n > 8;
 
   // Ratios from Excel "Ratios y Supuestos"
@@ -1208,7 +1233,11 @@ function computeBOM(panels, cableM, struct, invId, huaweiExtras) {
   bom.push({ section:'Paneles', code:'P-JA-625W', desc:'Panel JA Solar 625W bifacial', qty:n });
 
   // Inversor
-  bom.push({ section:'Inversor', code:invId, desc:`Inversor ${INVERSORS.find(i=>i.id===invId).brand} ${INVERSORS.find(i=>i.id===invId).label}`, qty:1 });
+  const _inv = INVERSORS.find(i => i.id === invId);
+  const invDesc = isHuawei
+    ? `${invUnits} × Inversor Huawei SUN2000-8K (${invUnits * 8} kWp)`
+    : `Inversor ${_inv.brand} ${_inv.label}`;
+  bom.push({ section:'Inversor', code:invId, desc:invDesc, qty:invUnits });
 
   // Huawei extras
   if (isHuawei && huaweiExtras) {
@@ -1309,7 +1338,8 @@ function update() {
   const genMes  = kwpReal * HSP * EFF * 30;
   const coverage = Math.min(genMes / kwh * 100, 100);
 
-  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras);
+  if (state.cat === 'HUAWEI') buildInvGrid();
+  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
   const { subtotalMats, acabadoAmt, labor, subtotalAll, ivaAmt, total } = renderBOM(bom);
   const totalRounded = Math.round(total / 100) * 100;
 
@@ -1367,6 +1397,7 @@ function update() {
 }
 
 function suggestInversor(panels) {
+  if (state.cat === 'HUAWEI') return; // scales automatically via invUnits
   const inCat = INVERSORS.filter(i => i.cat === state.cat);
   const best = inCat.find(i => i.maxPanels >= panels) || inCat[inCat.length - 1];
   if (!best || state.inversor === best.id) return;
@@ -1455,7 +1486,7 @@ document.getElementById('facturaInput').addEventListener('input', function() {
   const kwpReal = panels * PANEL_W / 1000;
   const genMes  = kwpReal * HSP * EFF * 30;
   const coverage = Math.min(genMes / kwh * 100, 100);
-  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras);
+  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
   const subtotalMats = bom.reduce((s,i) => s + i.subtotal, 0);
   const acabadoAmt = subtotalMats * ACABADO[state.acabado].pct;
   const labor = subtotalMats * LABOR_RATIO;
@@ -1488,7 +1519,7 @@ function generarPDF() {
   const genMes  = kwpReal * HSP * EFF * 30;
   const coverage = Math.min(genMes / kwh * 100, 100);
   const inv = INVERSORS.find(i => i.id === state.inversor);
-  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras);
+  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
   const subtotalMats = bom.reduce((s,i) => s + i.subtotal, 0);
   const acabadoInfo  = ACABADO[state.acabado];
   const acabadoAmt   = subtotalMats * acabadoInfo.pct;
