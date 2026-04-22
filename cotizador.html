@@ -172,7 +172,7 @@ header {
 .kwh-input-box input::-webkit-inner-spin-button,
 .kwh-input-box input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .kwh-unit {
-  font-size: 0.85rem; color: var(--txt3); padding-right: 1.2rem;
+  font-size: 0.85rem; color: var(--txt); padding-right: 1.2rem;
   white-space: nowrap;
 }
 
@@ -670,9 +670,10 @@ footer a { color: var(--amber); text-decoration: none; }
     --green-soft: #ecfdf5; --blue-soft: #eff6ff;
   }
 
-  header, .hero, .step-card, #pdfSection { display: none !important; }
+  header, .hero, .step-card, #pdfSection, .kwh-guide-img { display: none !important; }
   .wrap { padding: 0 !important; max-width: 100% !important; }
   #print-header { display: block !important; }
+  #print-before-after { display: block !important; }
   .results-section, .roi-toggle-wrap, footer { display: block !important; }
   .kpi-card, .balance-card, .tech-note, .breakdown-toggle, .breakdown-body, .roi-toggle, .roi-body {
     border: 1px solid #ccc !important;
@@ -693,7 +694,7 @@ footer a { color: var(--amber); text-decoration: none; }
 
 <div class="wrap">
 
-  <div id="print-header" style="display:none; margin-bottom:2rem; padding-bottom:1rem; border-bottom:2px solid #b45309;">
+  <div id="print-header" style="display:none; margin-bottom:1.2rem; padding-bottom:1rem; border-bottom:2px solid #b45309;">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
       <div>
         <div style="font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:#b45309;">SIS</div>
@@ -703,6 +704,24 @@ footer a { color: var(--amber); text-decoration: none; }
         <div style="font-weight:700;">Cotizacion Solar Detallada</div>
         <div id="print-date"></div>
         <div>30053270 · 58756331</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANTES / DESPUÉS — solo impresión -->
+  <div id="print-before-after" style="display:none; margin-bottom:1.4rem; padding:1rem 1.2rem; border:1px solid #ddd; border-radius:8px; background:#fafafa;">
+    <div style="font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#777; text-align:center; margin-bottom:0.9rem;">Impacto del sistema solar en tu consumo y factura</div>
+    <div style="display:grid; grid-template-columns:1fr 44px 1fr; gap:0.5rem; align-items:center;">
+      <div style="background:#fff8f0; border:1px solid #b45309; border-radius:6px; padding:0.75rem 1rem;">
+        <div style="font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:#888; margin-bottom:0.5rem; font-weight:700;">ANTES del sistema solar</div>
+        <div style="font-size:0.82rem; color:#333; margin-bottom:3px;">Consumo mensual: <strong id="pba-kwh">—</strong></div>
+        <div style="font-size:0.82rem; color:#333;">Pago de luz: <strong id="pba-factura">—</strong> / mes</div>
+      </div>
+      <div style="text-align:center; font-size:1.4rem; color:#aaa; line-height:1;">→</div>
+      <div style="background:#ecfdf5; border:1px solid #047857; border-radius:6px; padding:0.75rem 1rem;">
+        <div style="font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:#888; margin-bottom:0.5rem; font-weight:700;">CON sistema solar</div>
+        <div style="font-size:0.82rem; color:#333; margin-bottom:3px;">Consumo de red: <strong style="color:#047857;">~0 kWh</strong> / mes</div>
+        <div style="font-size:0.82rem; color:#333;">Cargo fijo estimado: <strong id="pba-cuota" style="color:#047857;">—</strong> / mes</div>
       </div>
     </div>
   </div>
@@ -749,6 +768,10 @@ footer a { color: var(--amber); text-decoration: none; }
       <button class="preset-btn" data-val="900">Casa grande <small style="opacity:.6;display:block">~900 kWh</small></button>
       <button class="preset-btn" data-val="1400">Comercial <small style="opacity:.6;display:block">~1,400 kWh</small></button>
       <button class="preset-btn" data-val="3500">Industrial <small style="opacity:.6;display:block">~3,500 kWh</small></button>
+    </div>
+
+    <div style="margin-top:1.1rem;">
+      <img src="ejemplofactura.png" alt="¿Dónde encontrar tu consumo de kWh? Guía EEGSA y Energuate" class="kwh-guide-img" style="width:100%;border-radius:8px;display:block;">
     </div>
   </div>
 

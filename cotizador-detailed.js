@@ -312,7 +312,8 @@
       ${state.fueraMetro ? `<div class="bd-total-row"><span class="tk">Servicios fuera del area metropolitana (8%)</span><span class="tv">${fmtQ(transportSurcharge)}</span></div>` : ''}
       <div class="bd-total-row"><span class="tk">Subtotal sin IVA</span><span class="tv">${fmtQ(subtotalAll)}</span></div>
       <div class="bd-total-row"><span class="tk">IVA ${Math.round(IVA * 100)}%</span><span class="tv">${fmtQ(ivaAmt)}</span></div>
-      <div class="bd-total-row grand"><span class="tk">TOTAL CON IVA</span><span class="tv">Q ${fmt(Math.round(total / 100) * 100, 0)}</span></div>
+      <div class="bd-total-row grand"><span class="tk">TOTAL ESTIMADO (IVA incl.)</span><span class="tv">Q ${fmt(Math.round(total / 100) * 100, 0)}</span></div>
+      <div class="bd-total-row" style="opacity:0.7;margin-top:3px;padding-top:4px;border-top:1px dashed #ccc;"><span class="tk" style="font-size:0.72rem;">Total real con centavos</span><span class="tv" style="font-size:0.82rem;">Q ${fmt(total, 2)}</span></div>
     `;
 
     return { subtotalMats, acabadoAmt, labor, transportSurcharge, subtotalAll, ivaAmt, total };
@@ -419,6 +420,14 @@
 
     const factura = parseFloat(document.getElementById('facturaInput').value) || 0;
     if (factura > 0) updateROI(factura, sizing.coverage, totalRounded);
+
+    const cargoFijo = Number(CFG.GRID_FIXED_FEE_Q) || 120;
+    const pbaKwh = document.getElementById('pba-kwh');
+    const pbaFactura = document.getElementById('pba-factura');
+    const pbaCuota = document.getElementById('pba-cuota');
+    if (pbaKwh) pbaKwh.textContent = fmt(state.kwh, 0) + ' kWh';
+    if (pbaFactura) pbaFactura.textContent = factura > 0 ? 'Q ' + fmt(factura, 0) : '—';
+    if (pbaCuota) pbaCuota.textContent = 'Q ' + fmt(cargoFijo, 0);
   }
 
   window.toggleBreakdown = function () {

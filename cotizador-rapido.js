@@ -99,6 +99,7 @@
 
     return {
       total: Math.round((subtotal + iva) / 100) * 100,
+      totalExact: subtotal + iva,
       selected,
       transportSurcharge,
       panel
@@ -140,7 +141,7 @@
       const mo = result.total / ahorroMensual;
       const yy = Math.floor(mo / 12);
       const mm = Math.round(mo % 12);
-      paybackStr = mm > 0 ? `${yy} anos ${mm} meses` : `${yy} anos`;
+      paybackStr = mm > 0 ? `${yy} años ${mm} meses` : `${yy} años`;
     }
 
     document.getElementById('systemCardTitle').textContent = `Sistema recomendado · ${lineLabel} · Losa · Acabado Tipo 1`;
@@ -148,6 +149,8 @@
     document.getElementById('specPanels').textContent = `${panels} und.`;
     document.getElementById('specKwp').textContent = `${fmt(kwpReal, 2)} kWp`;
     document.getElementById('specPrice').textContent = fmtQ(result.total);
+    const exactEl = document.getElementById('specPriceExact');
+    if (exactEl) exactEl.textContent = 'Q ' + fmt(result.totalExact, 2);
     document.getElementById('specPriceSub').textContent = fueraMetro
       ? `Incluye equipos ${lineLabel.toLowerCase()}, acabado Tipo 1, mano de obra y recargo fuera area metropolitana (${fmtQ(result.transportSurcharge)}) · referencial`
       : `Incluye equipos ${lineLabel.toLowerCase()}, acabado Tipo 1 y mano de obra · referencial`;
@@ -159,6 +162,13 @@
     document.getElementById('proj5').textContent = `Q ${fmt(Math.max(0, 5 * 12 * ahorroMensual - result.total), 0)}`;
     document.getElementById('proj10').textContent = `Q ${fmt(Math.max(0, 10 * 12 * ahorroMensual - result.total), 0)}`;
     document.getElementById('proj25').textContent = `Q ${fmt(Math.max(0, 25 * 12 * ahorroMensual - result.total), 0)}`;
+
+    const pbaKwh = document.getElementById('pba-kwh');
+    const pbaFactura = document.getElementById('pba-factura');
+    const pbaCuota = document.getElementById('pba-cuota');
+    if (pbaKwh) pbaKwh.textContent = fmt(kwh, 0) + ' kWh';
+    if (pbaFactura) pbaFactura.textContent = factura > 0 ? 'Q ' + fmt(factura, 0) : '—';
+    if (pbaCuota) pbaCuota.textContent = 'Q ' + fmt(cargoFijo, 0);
   }
 
   window.imprimirPDF = function () {
