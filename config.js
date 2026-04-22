@@ -113,7 +113,10 @@
     return clone(configCache || normalize(BASE_DEFAULTS));
   }
 
-  applyConfig(BASE_DEFAULTS);
+  // Set initial window.CFG with defaults for immediate use, but do NOT call
+  // applyConfig(BASE_DEFAULTS) here because that would set configCache and
+  // cause loadConfig() to short-circuit and never fetch config.json.
+  window.CFG = buildRuntime(normalize(BASE_DEFAULTS));
 
   window.SISConfig = {
     API_PATH: API_PATH,

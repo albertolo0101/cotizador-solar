@@ -143,7 +143,7 @@ header {
 .input-box input::-webkit-outer-spin-button,
 .input-box input::-webkit-inner-spin-button { -webkit-appearance: none; }
 .input-box .unit {
-  padding: 0 1rem; font-size: 0.75rem; color: var(--txt3);
+  padding: 0 1rem; font-size: 0.75rem; color: var(--txt);
   font-family: 'DM Mono', monospace; white-space: nowrap;
 }
 
@@ -391,17 +391,12 @@ footer a { color: var(--amber); text-decoration: none; }
     --amber-glow2: #fde68a;
   }
 
-  header, .input-card, .print-btn, .note-card footer { display: none !important; }
+  header, .input-card, .print-btn, .note-card, footer, .kwh-guide-img { display: none !important; }
   .wrap { padding: 0 !important; max-width: 100% !important; }
   .result-card { break-inside: avoid; border: 1px solid #ccc !important; }
 
-  /* Print header */
-  .results-section::before {
-    content: '';
-    display: block;
-    margin-bottom: 1.5rem;
-  }
   #print-header { display: block !important; }
+  #print-before-after { display: block !important; }
 
   .price-hero { background: #fef3c7 !important; border: 1px solid #b45309 !important; }
   .savings-after { background: #ecfdf5 !important; border: 1px solid #6ee7b7 !important; }
@@ -419,7 +414,7 @@ footer a { color: var(--amber); text-decoration: none; }
 <div class="wrap">
 
   <!-- PRINT HEADER (hidden on screen) -->
-  <div id="print-header" style="display:none; margin-bottom:2rem; padding-bottom:1rem; border-bottom:2px solid #b45309;">
+  <div id="print-header" style="display:none; margin-bottom:1.2rem; padding-bottom:1rem; border-bottom:2px solid #b45309;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <div>
         <div style="font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:#b45309;">SIS</div>
@@ -429,6 +424,24 @@ footer a { color: var(--amber); text-decoration: none; }
         <div style="font-weight:700;">Cotización Rápida Solar</div>
         <div id="print-date"></div>
         <div>📞 30053270 · 58756331</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANTES / DESPUÉS — solo impresión -->
+  <div id="print-before-after" style="display:none; margin-bottom:1.4rem; padding:1rem 1.2rem; border:1px solid #ddd; border-radius:8px; background:#fafafa;">
+    <div style="font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#777; text-align:center; margin-bottom:0.9rem;">Impacto del sistema solar en tu consumo y factura</div>
+    <div style="display:grid; grid-template-columns:1fr 44px 1fr; gap:0.5rem; align-items:center;">
+      <div style="background:#fff8f0; border:1px solid #b45309; border-radius:6px; padding:0.75rem 1rem;">
+        <div style="font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:#888; margin-bottom:0.5rem; font-weight:700;">ANTES del sistema solar</div>
+        <div style="font-size:0.82rem; color:#333; margin-bottom:3px;">Consumo mensual: <strong id="pba-kwh">—</strong></div>
+        <div style="font-size:0.82rem; color:#333;">Pago de luz: <strong id="pba-factura">—</strong> / mes</div>
+      </div>
+      <div style="text-align:center; font-size:1.4rem; color:#aaa; line-height:1;">→</div>
+      <div style="background:#ecfdf5; border:1px solid #047857; border-radius:6px; padding:0.75rem 1rem;">
+        <div style="font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:#888; margin-bottom:0.5rem; font-weight:700;">CON sistema solar</div>
+        <div style="font-size:0.82rem; color:#333; margin-bottom:3px;">Consumo de red: <strong style="color:#047857;">~0 kWh</strong> / mes</div>
+        <div style="font-size:0.82rem; color:#333;">Cargo fijo estimado: <strong id="pba-cuota" style="color:#047857;">—</strong> / mes</div>
       </div>
     </div>
   </div>
@@ -459,19 +472,23 @@ footer a { color: var(--amber); text-decoration: none; }
     <div class="input-card-title">Datos de consumo</div>
     <div class="inputs-row">
       <div class="input-group">
-        <label>Consumo mensual</label>
+        <label>① Consumos eléctricos</label>
         <div class="input-box">
           <input type="number" id="kwhInput" min="50" max="6000" value="600" placeholder="600">
           <span class="unit">kWh / mes</span>
         </div>
       </div>
       <div class="input-group">
-        <label>Factura mensual actual</label>
+        <label>② Monto a pagar</label>
         <div class="input-box">
           <input type="number" id="facturaInput" min="0" value="800" placeholder="800">
           <span class="unit">Q / mes</span>
         </div>
       </div>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <img src="ejemplofactura.png" alt="¿Dónde encontrar tu consumo de kWh? Guía EEGSA y Energuate" class="kwh-guide-img" style="width:100%;border-radius:8px;display:block;">
     </div>
 
     <div class="line-toggle">
@@ -522,6 +539,10 @@ footer a { color: var(--amber); text-decoration: none; }
           <div class="ph-label">Inversión total estimada (IVA incluido)</div>
           <div class="ph-val" id="specPrice">—</div>
           <div class="ph-sub" id="specPriceSub">Incluye equipos, acabado Tipo 1 y mano de obra · referencial</div>
+        </div>
+        <div style="text-align:right; flex-shrink:0;">
+          <div style="font-size:0.6rem; color:var(--txt3); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:3px;">Total exacto</div>
+          <div style="font-family:'DM Mono',monospace; font-size:0.88rem; color:var(--txt2);" id="specPriceExact">—</div>
         </div>
       </div>
     </div>
