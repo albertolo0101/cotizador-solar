@@ -617,6 +617,11 @@ footer {
 footer strong { color: var(--txt2); }
 footer a { color: var(--amber); text-decoration: none; }
 
+/* ── FUERA METRO TOGGLE (amber variant) ── */
+.extras-row.amber-mode.active { border-color: rgba(245,158,11,0.3); background: var(--amber-glow2); }
+.extras-row.amber-mode.active .toggle-pill { background: var(--amber); }
+.extras-row.amber-mode.active .toggle-pill::after { transform: translateX(18px); background: white; }
+
 /* ── ANIMATIONS ── */
 @keyframes fadeDown {
   from { opacity: 0; transform: translateY(-12px); }
@@ -774,6 +779,18 @@ footer a { color: var(--amber); text-decoration: none; }
     <div style="margin-top:1.2rem;padding:0.9rem 1rem;background:var(--ink3);border:1px solid var(--line);border-radius:var(--radius-sm);">
       <div style="font-size:0.67rem;color:var(--txt3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.6rem;">Incluye en el acabado</div>
       <div id="acabadoDesc" style="font-size:0.78rem;color:var(--txt2);line-height:1.7;">—</div>
+    </div>
+  </div>
+
+  <!-- STEP 4: OPCIONES DE SERVICIO -->
+  <div class="step-card" style="animation-delay:0.34s">
+    <div class="step-label">Paso 4 — Opciones de servicio</div>
+    <div class="extras-row amber-mode" id="fueraMetroRow" onclick="toggleFueraMetro()">
+      <div class="extras-txt">
+        <div class="et1">Servicios fuera del área metropolitana</div>
+        <div class="et2">Recargo del 8% sobre materiales — cubre transporte y trámites para instalaciones fuera de ciudad</div>
+      </div>
+      <div class="toggle-pill"></div>
     </div>
   </div>
 
@@ -1107,6 +1124,7 @@ let state = {
   cableM: 30,
   huaweiExtras: false,
   acabado: 'TIPO1',
+  fueraMetro: false,
 };
 
 const HSP = CFG.HSP, EFF = CFG.EFF, PANEL_W = CFG.PANEL_W;
@@ -1212,6 +1230,13 @@ function toggleExtras() {
   state.huaweiExtras = !state.huaweiExtras;
   const row = document.getElementById('huaweiExtrasRow');
   row.classList.toggle('active', state.huaweiExtras);
+  update();
+}
+
+function toggleFueraMetro() {
+  state.fueraMetro = !state.fueraMetro;
+  const row = document.getElementById('fueraMetroRow');
+  row.classList.toggle('active', state.fueraMetro);
   update();
 }
 
@@ -1325,15 +1350,16 @@ function renderBOM(bom) {
   });
   content.innerHTML = html;
 
-  const subtotalMats = bom.reduce((s,i) => s + i.subtotal, 0);
-  const acabadoInfo  = ACABADO[state.acabado];
-  const acabadoAmt   = subtotalMats * acabadoInfo.pct;
-  const labor        = subtotalMats * LABOR_RATIO;
-  const subtotalBase = subtotalMats + acabadoAmt + labor;
-  const profitAmt    = subtotalBase * CFG.PROFIT_PCT;
-  const subtotalAll  = subtotalBase + profitAmt;
-  const ivaAmt       = subtotalAll * IVA;
-  const total        = subtotalAll + ivaAmt;
+  const subtotalMats       = bom.reduce((s,i) => s + i.subtotal, 0);
+  const acabadoInfo        = ACABADO[state.acabado];
+  const acabadoAmt         = subtotalMats * acabadoInfo.pct;
+  const labor              = subtotalMats * LABOR_RATIO;
+  const subtotalBase       = subtotalMats + acabadoAmt + labor;
+  const profitAmt          = subtotalBase * CFG.PROFIT_PCT;
+  const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
+  const subtotalAll        = subtotalBase + profitAmt + transportSurcharge;
+  const ivaAmt             = subtotalAll * IVA;
+  const total              = subtotalAll + ivaAmt;
 
   const laborPct  = Math.round(CFG.LABOR_RATIO * 100);
   const profitPct = Math.round(CFG.PROFIT_PCT  * 100);
@@ -1343,13 +1369,14 @@ function renderBOM(bom) {
     <div class="bd-total-row"><span class="tk">Equipos sin IVA</span><span class="tv">${fmtQ(subtotalMats)}</span></div>
     <div class="bd-total-row"><span class="tk">${acabadoInfo.label}</span><span class="tv">${fmtQ(acabadoAmt)}</span></div>
     <div class="bd-total-row"><span class="tk">Mano de obra estimada (${laborPct}%)</span><span class="tv">${fmtQ(labor)}</span></div>
-    ${profitPct > 0 ? `<div class="bd-total-row"><span class="tk">Margen SIS (${profitPct}%)</span><span class="tv">${fmtQ(profitAmt)}</span></div>` : ''}
+    ${profitPct > 0 ? `<div class="bd-total-row"><span class="tk">Flete y servicios adicionales (${profitPct}%)<br><small style="font-size:0.7em;opacity:0.65;font-weight:400;">Costos calculados en base a transporte y trámites administrativos</small></span><span class="tv">${fmtQ(profitAmt)}</span></div>` : ''}
+    ${state.fueraMetro ? `<div class="bd-total-row"><span class="tk">Servicios fuera del área metropolitana (8%)</span><span class="tv">${fmtQ(transportSurcharge)}</span></div>` : ''}
     <div class="bd-total-row"><span class="tk">Subtotal sin IVA</span><span class="tv">${fmtQ(subtotalAll)}</span></div>
     <div class="bd-total-row"><span class="tk">IVA ${ivaPct}%</span><span class="tv">${fmtQ(ivaAmt)}</span></div>
     <div class="bd-total-row grand"><span class="tk">TOTAL CON IVA</span><span class="tv">Q ${fmt(Math.round(total/100)*100, 0)}</span></div>
   `;
 
-  return { subtotalMats, acabadoAmt, labor, subtotalBase, profitAmt, subtotalAll, ivaAmt, total };
+  return { subtotalMats, acabadoAmt, labor, subtotalBase, profitAmt, transportSurcharge, subtotalAll, ivaAmt, total };
 }
 
 // ── MAIN UPDATE ──
@@ -1363,7 +1390,7 @@ function update() {
 
   if (state.cat === 'HUAWEI') buildInvGrid();
   const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
-  const { subtotalMats, acabadoAmt, labor, subtotalAll, ivaAmt, total } = renderBOM(bom);
+  const { subtotalMats, acabadoAmt, labor, transportSurcharge, subtotalAll, ivaAmt, total } = renderBOM(bom);
   const totalRounded = Math.round(total / 100) * 100;
 
   // KPIs
@@ -1509,11 +1536,15 @@ document.getElementById('facturaInput').addEventListener('input', function() {
   const genMes  = kwpReal * HSP * EFF * 30;
   const coverage = Math.min(genMes / kwh * 100, 100);
   const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
-  const subtotalMats = bom.reduce((s,i) => s + i.subtotal, 0);
-  const acabadoAmt = subtotalMats * ACABADO[state.acabado].pct;
-  const labor = subtotalMats * LABOR_RATIO;
-  const totalFull = (subtotalMats + acabadoAmt + labor) * (1 + IVA);
-  const totalRounded = Math.round(totalFull / 100) * 100;
+  const subtotalMats  = bom.reduce((s,i) => s + i.subtotal, 0);
+  const acabadoAmt    = subtotalMats * ACABADO[state.acabado].pct;
+  const labor         = subtotalMats * LABOR_RATIO;
+  const subtotalBase  = subtotalMats + acabadoAmt + labor;
+  const profitAmt     = subtotalBase * CFG.PROFIT_PCT;
+  const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
+  const subtotalAll   = subtotalBase + profitAmt + transportSurcharge;
+  const totalFull     = subtotalAll * (1 + IVA);
+  const totalRounded  = Math.round(totalFull / 100) * 100;
   updateROI(fv, coverage, totalRounded);
 });
 
@@ -1542,14 +1573,17 @@ function generarPDF() {
   const coverage = Math.min(genMes / kwh * 100, 100);
   const inv = INVERSORS.find(i => i.id === state.inversor);
   const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
-  const subtotalMats = bom.reduce((s,i) => s + i.subtotal, 0);
-  const acabadoInfo  = ACABADO[state.acabado];
-  const acabadoAmt   = subtotalMats * acabadoInfo.pct;
-  const labor        = subtotalMats * LABOR_RATIO;
-  const subtotalAll  = subtotalMats + acabadoAmt + labor;
-  const ivaAmt       = subtotalAll * IVA;
-  const total        = subtotalAll + ivaAmt;
-  const totalRounded = Math.round(total / 100) * 100;
+  const subtotalMats       = bom.reduce((s,i) => s + i.subtotal, 0);
+  const acabadoInfo        = ACABADO[state.acabado];
+  const acabadoAmt         = subtotalMats * acabadoInfo.pct;
+  const labor              = subtotalMats * LABOR_RATIO;
+  const subtotalBase       = subtotalMats + acabadoAmt + labor;
+  const profitAmt          = subtotalBase * CFG.PROFIT_PCT;
+  const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
+  const subtotalAll        = subtotalBase + profitAmt + transportSurcharge;
+  const ivaAmt             = subtotalAll * IVA;
+  const total              = subtotalAll + ivaAmt;
+  const totalRounded       = Math.round(total / 100) * 100;
   const today = new Date().toLocaleDateString('es-GT', {day:'2-digit',month:'long',year:'numeric'});
 
   // Group BOM by section
@@ -1701,6 +1735,14 @@ function generarPDF() {
         <td style="font-size:10px;color:#8899aa;padding:4px 0;">Mano de obra estimada (30%)</td>
         <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(labor)}</td>
       </tr>
+      ${profitAmt > 0 ? `<tr>
+        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Flete y servicios adicionales (${Math.round(CFG.PROFIT_PCT*100)}%)<br><span style="font-size:8.5px;color:#4a5a70;">Costos de transporte y trámites administrativos</span></td>
+        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(profitAmt)}</td>
+      </tr>` : ''}
+      ${state.fueraMetro ? `<tr>
+        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Servicios fuera del área metropolitana (8%)</td>
+        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(transportSurcharge)}</td>
+      </tr>` : ''}
       <tr>
         <td style="font-size:10px;color:#8899aa;padding:4px 0;">Subtotal sin IVA</td>
         <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(subtotalAll)}</td>
