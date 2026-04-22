@@ -681,14 +681,14 @@ footer a { color: var(--amber); text-decoration: none; }
 
     <div class="kwh-row">
       <div class="kwh-input-box">
-        <input type="number" id="kwhInput" min="50" max="5000" value="600" placeholder="600">
+        <input type="number" id="kwhInput" min="50" max="6000" value="600" placeholder="600">
         <span class="kwh-unit">kWh / mes</span>
       </div>
     </div>
 
-    <input type="range" id="kwhSlider" min="50" max="3000" value="600" step="10">
+    <input type="range" id="kwhSlider" min="50" max="6000" value="600" step="10">
     <div class="slider-ticks">
-      <span>50</span><span>500</span><span>1,000</span><span>2,000</span><span>3,000 kWh</span>
+      <span>50</span><span>1,000</span><span>2,000</span><span>4,000</span><span>6,000 kWh</span>
     </div>
 
     <div class="presets">
@@ -697,6 +697,7 @@ footer a { color: var(--amber); text-decoration: none; }
       <button class="preset-btn active" data-val="600">Casa mediana <small style="opacity:.6;display:block">~600 kWh</small></button>
       <button class="preset-btn" data-val="900">Casa grande <small style="opacity:.6;display:block">~900 kWh</small></button>
       <button class="preset-btn" data-val="1400">Comercial <small style="opacity:.6;display:block">~1,400 kWh</small></button>
+      <button class="preset-btn" data-val="3500">Industrial <small style="opacity:.6;display:block">~3,500 kWh</small></button>
     </div>
   </div>
 
@@ -1354,7 +1355,7 @@ function update() {
   document.getElementById('techNote').innerHTML = note;
 
   // slider gradient
-  const pct = ((Math.min(kwh,3000) - 50) / (3000 - 50) * 100).toFixed(1);
+  const pct = ((Math.min(kwh,6000) - 50) / (6000 - 50) * 100).toFixed(1);
   document.getElementById('kwhSlider').style.setProperty('--pct', pct + '%');
 
   // update ROI if visible
@@ -1425,7 +1426,7 @@ const slider   = document.getElementById('kwhSlider');
 numInput.addEventListener('input', () => {
   let v = parseInt(numInput.value) || 50;
   v = Math.max(50, Math.min(5000, v));
-  slider.value = Math.min(v, 3000);
+  slider.value = Math.min(v, 6000);
   state.kwh = v;
   update();
 });
