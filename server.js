@@ -5,6 +5,7 @@ const path = require('path');
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 const ROOT = __dirname;
 const CATALOG_PATH = path.join(ROOT, 'catalog.json');
+const CONFIG_PATH = path.join(ROOT, 'config.json');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -54,6 +55,26 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, JSON.stringify({ ok: true }), 'application/json; charset=utf-8');
     } catch (err) {
       return send(res, 400, JSON.stringify({ error: 'Invalid catalog payload' }), 'application/json; charset=utf-8');
+    }
+  }
+
+  if (req.url === '/api/config' && req.method === 'GET') {
+    try {
+      const json = fs.readFileSync(CONFIG_PATH, 'utf8');
+      return send(res, 200, json, 'application/json; charset=utf-8');
+    } catch (err) {
+      return send(res, 500, JSON.stringify({ error: 'Could not read config.json' }), 'application/json; charset=utf-8');
+    }
+  }
+
+  if (req.url === '/api/config' && req.method === 'PUT') {
+    try {
+      const body = await readBody(req);
+      JSON.parse(body);
+      fs.writeFileSync(CONFIG_PATH, body, 'utf8');
+      return send(res, 200, JSON.stringify({ ok: true }), 'application/json; charset=utf-8');
+    } catch (err) {
+      return send(res, 400, JSON.stringify({ error: 'Invalid config payload' }), 'application/json; charset=utf-8');
     }
   }
 

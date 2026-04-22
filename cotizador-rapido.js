@@ -1,4 +1,5 @@
 (async function () {
+  await SISConfig.loadConfig();
   const HSP = CFG.HSP;
   const EFF = CFG.EFF;
   const LABOR_RATIO = CFG.LABOR_RATIO;
