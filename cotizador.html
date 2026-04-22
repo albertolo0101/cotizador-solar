@@ -924,6 +924,7 @@ footer a { color: var(--amber); text-decoration: none; }
 
 </div><!-- /wrap -->
 
+<script src="config.js"></script>
 <script>
 // ══════════════════════════════════════════════════════════════════
 // PRICES FROM EXCEL (highest observed per product)
@@ -1017,6 +1018,10 @@ const PRICES = {
   'A-CAJA-8P':      294.46,
 };
 
+// apply configurable price overrides from admin panel
+PRICES['P-JA-625W']   = CFG.PRICE_PANEL;
+PRICES['I-HUAWEI-8K'] = CFG.PRICE_HUAWEI_8K;
+
 // Inversor catalogue  (sorted by maxPanels asc — required for suggestInversor)
 const INVERSORS = [
   // ─── genérico: microinverters ────────────────────────────────────────────────
@@ -1082,13 +1087,13 @@ const INVERSORS = [
 // ── ACABADO CONFIG ──
 const ACABADO = {
   TIPO1: {
-    pct: 0.15,
-    label: 'Tipo 1 — Estándar (+15%)',
+    get pct() { return CFG.ACABADO_T1_PCT; },
+    get label() { return `Tipo 1 — Estándar (+${Math.round(CFG.ACABADO_T1_PCT*100)}%)`; },
     desc: 'Conduit PVC plástico · Cajas de paso plásticas · Amarras plásticas · Etiquetado básico'
   },
   TIPO2: {
-    pct: 0.25,
-    label: 'Tipo 2 — Premium (+25%)',
+    get pct() { return CFG.ACABADO_T2_PCT; },
+    get label() { return `Tipo 2 — Premium (+${Math.round(CFG.ACABADO_T2_PCT*100)}%)`; },
     desc: 'Conduit metálico EMT · Cajas de paso metálicas · Abrazaderas metálicas · Etiquetado profesional · Acabado pintura anticorrosiva'
   }
 };
@@ -1104,9 +1109,9 @@ let state = {
   acabado: 'TIPO1',
 };
 
-const HSP = 4.5, EFF = 0.87, PANEL_W = 625;
-const LABOR_RATIO = 0.30; // 30% of materials for labor
-const IVA = 0.12;
+const HSP = CFG.HSP, EFF = CFG.EFF, PANEL_W = CFG.PANEL_W;
+const LABOR_RATIO = CFG.LABOR_RATIO;
+const IVA = CFG.IVA;
 
 function fmt(n, d=0) {
   return n.toLocaleString('es-GT', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -1324,20 +1329,27 @@ function renderBOM(bom) {
   const acabadoInfo  = ACABADO[state.acabado];
   const acabadoAmt   = subtotalMats * acabadoInfo.pct;
   const labor        = subtotalMats * LABOR_RATIO;
-  const subtotalAll  = subtotalMats + acabadoAmt + labor;
+  const subtotalBase = subtotalMats + acabadoAmt + labor;
+  const profitAmt    = subtotalBase * CFG.PROFIT_PCT;
+  const subtotalAll  = subtotalBase + profitAmt;
   const ivaAmt       = subtotalAll * IVA;
   const total        = subtotalAll + ivaAmt;
+
+  const laborPct  = Math.round(CFG.LABOR_RATIO * 100);
+  const profitPct = Math.round(CFG.PROFIT_PCT  * 100);
+  const ivaPct    = Math.round(CFG.IVA          * 100);
 
   totals.innerHTML = `
     <div class="bd-total-row"><span class="tk">Equipos sin IVA</span><span class="tv">${fmtQ(subtotalMats)}</span></div>
     <div class="bd-total-row"><span class="tk">${acabadoInfo.label}</span><span class="tv">${fmtQ(acabadoAmt)}</span></div>
-    <div class="bd-total-row"><span class="tk">Mano de obra estimada (30%)</span><span class="tv">${fmtQ(labor)}</span></div>
+    <div class="bd-total-row"><span class="tk">Mano de obra estimada (${laborPct}%)</span><span class="tv">${fmtQ(labor)}</span></div>
+    ${profitPct > 0 ? `<div class="bd-total-row"><span class="tk">Margen SIS (${profitPct}%)</span><span class="tv">${fmtQ(profitAmt)}</span></div>` : ''}
     <div class="bd-total-row"><span class="tk">Subtotal sin IVA</span><span class="tv">${fmtQ(subtotalAll)}</span></div>
-    <div class="bd-total-row"><span class="tk">IVA 12%</span><span class="tv">${fmtQ(ivaAmt)}</span></div>
+    <div class="bd-total-row"><span class="tk">IVA ${ivaPct}%</span><span class="tv">${fmtQ(ivaAmt)}</span></div>
     <div class="bd-total-row grand"><span class="tk">TOTAL CON IVA</span><span class="tv">Q ${fmt(Math.round(total/100)*100, 0)}</span></div>
   `;
 
-  return { subtotalMats, acabadoAmt, labor, subtotalAll, ivaAmt, total };
+  return { subtotalMats, acabadoAmt, labor, subtotalBase, profitAmt, subtotalAll, ivaAmt, total };
 }
 
 // ── MAIN UPDATE ──

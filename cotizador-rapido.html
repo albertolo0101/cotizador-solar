@@ -507,13 +507,14 @@ footer a { color: var(--amber); text-decoration: none; }
 
 </div><!-- /wrap -->
 
+<script src="config.js"></script>
 <script>
-const HSP = 4.5, EFF = 0.87, PANEL_W = 625;
-const LABOR_RATIO = 0.30;
-const IVA = 0.12;
-const ACABADO_PCT = 0.25; // Tipo 2
-const CABLE_M = 30;
-const SAVINGS_PCT = 0.90; // 90% of bill saved
+const HSP = CFG.HSP, EFF = CFG.EFF, PANEL_W = CFG.PANEL_W;
+const LABOR_RATIO = CFG.LABOR_RATIO;
+const IVA = CFG.IVA;
+const ACABADO_PCT = CFG.ACABADO_T2_PCT;
+const CABLE_M = CFG.CABLE_M;
+const SAVINGS_PCT = CFG.SAVINGS_PCT;
 
 const P = {
   'P-JA-625W':    800,
@@ -541,6 +542,10 @@ const P = {
   'A-SUP-2P-AC':  321.25,
   'A-CAJA-8P':    294.46,
 };
+
+// apply configurable price overrides
+P['P-JA-625W']   = CFG.PRICE_PANEL;
+P['I-HUAWEI-8K'] = CFG.PRICE_HUAWEI_8K;
 
 function fmt(n, d=0) {
   return n.toLocaleString('es-GT', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -592,10 +597,12 @@ function calcSystemPrice(panels) {
   mat +=               P['A-SUP-2P-AC'];
   mat += Math.ceil(n / 7 + 0.5) * P['A-CAJA-8P'];
 
-  const acabado = mat * ACABADO_PCT;
-  const labor   = mat * LABOR_RATIO;
-  const subtotal = mat + acabado + labor;
-  const iva  = subtotal * IVA;
+  const acabado     = mat * ACABADO_PCT;
+  const labor       = mat * LABOR_RATIO;
+  const subtotalBase = mat + acabado + labor;
+  const profit      = subtotalBase * CFG.PROFIT_PCT;
+  const subtotal    = subtotalBase + profit;
+  const iva         = subtotal * IVA;
   return { total: Math.round((subtotal + iva) / 100) * 100, invUnits, invName };
 }
 

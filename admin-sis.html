@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — SIS Configuración</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Lato:wght@300;400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --amber: #F59E0B;
+  --amber-d: #B45309;
+  --ink: #0C0F18;
+  --ink2: #131829;
+  --ink3: #1A2236;
+  --ink4: #222C42;
+  --line: rgba(255,255,255,0.07);
+  --line2: rgba(255,255,255,0.12);
+  --txt: #E8EDF5;
+  --txt2: rgba(232,237,245,0.55);
+  --txt3: rgba(232,237,245,0.28);
+  --green: #34D399;
+  --red: #F87171;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--ink);
+  color: var(--txt);
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
+
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line2);
+}
+.admin-badge {
+  background: #EF4444;
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.admin-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--txt);
+}
+.admin-sub {
+  font-size: 0.75rem;
+  color: var(--txt3);
+  margin-top: 2px;
+}
+
+/* NOTICE */
+.notice {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  color: rgba(232,237,245,0.65);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+.notice strong { color: #F87171; }
+
+/* SECTION */
+.cfg-section {
+  margin-bottom: 2rem;
+}
+.cfg-section-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cfg-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* FIELD */
+.cfg-field {
+  background: var(--ink2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.6rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 12px;
+  align-items: start;
+  transition: border-color 0.2s;
+}
+.cfg-field:hover { border-color: var(--line2); }
+.cfg-field:focus-within { border-color: var(--amber); }
+
+.cfg-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--txt);
+  font-weight: 500;
+}
+.cfg-desc {
+  grid-column: 1;
+  font-size: 0.7rem;
+  color: var(--txt3);
+  margin-top: 2px;
+  line-height: 1.45;
+}
+.cfg-input-wrap {
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cfg-input {
+  width: 90px;
+  padding: 0.4rem 0.6rem;
+  background: var(--ink3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--txt);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  text-align: right;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.cfg-input:focus { border-color: var(--amber); }
+.cfg-unit {
+  font-size: 0.7rem;
+  color: var(--txt3);
+  font-family: 'DM Mono', monospace;
+  min-width: 24px;
+}
+.cfg-default {
+  grid-column: 1;
+  font-size: 0.65rem;
+  color: var(--txt3);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ACTIONS */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 2.5rem;
+}
+.btn-save {
+  flex: 1;
+  padding: 0.95rem 1.5rem;
+  background: linear-gradient(135deg, var(--amber), var(--amber-d));
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-save:active { transform: scale(0.98); }
+
+.btn-reset {
+  padding: 0.95rem 1.2rem;
+  background: transparent;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--txt3);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-reset:hover { border-color: var(--red); color: var(--red); }
+
+/* TOAST */
+#toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--ink3);
+  border: 1px solid var(--green);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1.4rem;
+  font-size: 0.82rem;
+  color: var(--green);
+  font-family: 'DM Mono', monospace;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* BACK LINK */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--txt3);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--amber); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <a class="back-link" href="index.html">← Volver al inicio</a>
+
+  <div class="admin-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <span class="admin-badge">ADMIN</span>
+        <span class="admin-title">Configuración SIS</span>
+      </div>
+      <div class="admin-sub">Variables del cotizador · Cambios se guardan en este navegador</div>
+    </div>
+  </div>
+
+  <div class="notice">
+    <strong>Uso interno.</strong> Esta página no está enlazada desde el menú principal. Los valores se guardan en el almacenamiento local de este navegador — son permanentes hasta que se borren manualmente o se use el botón "Restablecer defaults". Si abres el cotizador en otro navegador o dispositivo usará los valores por defecto.
+  </div>
+
+  <form id="cfgForm">
+
+    <!-- ── FINANCIERO ── -->
+    <div class="cfg-section">
+      <div class="cfg-section-title">💰 Financiero</div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">PROFIT_PCT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="PROFIT_PCT" min="0" max="100" step="0.5">
+          <span class="cfg-unit">%</span>
+        </div>
+        <span class="cfg-desc">Margen de ganancia adicional aplicado sobre el subtotal (materiales + acabado + mano de obra) antes del IVA. Aparece como línea separada en el desglose si es mayor a 0.</span>
+        <span class="cfg-default">Default: 0%</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">IVA_PCT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="IVA_PCT" min="0" max="30" step="0.5">
+          <span class="cfg-unit">%</span>
+        </div>
+        <span class="cfg-desc">IVA aplicable en Guatemala. Actualmente 12%. Ajustar si la tasa fiscal cambia o si se trabaja con precios exentos.</span>
+        <span class="cfg-default">Default: 12%</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">LABOR_RATIO_PCT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="LABOR_RATIO_PCT" min="0" max="100" step="1">
+          <span class="cfg-unit">%</span>
+        </div>
+        <span class="cfg-desc">Mano de obra estimada como porcentaje del costo de materiales. Cubre instalación, cableado y puesta en marcha. Revisar según mercado laboral.</span>
+        <span class="cfg-default">Default: 30%</span>
+      </div>
+    </div>
+
+    <!-- ── ACABADOS ── -->
+    <div class="cfg-section">
+      <div class="cfg-section-title">🏗️ Acabados</div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">ACABADO_T1_PCT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="ACABADO_T1_PCT" min="0" max="100" step="1">
+          <span class="cfg-unit">%</span>
+        </div>
+        <span class="cfg-desc">Acabado Tipo 1 — Estándar. Conduit PVC, cajas plásticas. Markup sobre el costo de materiales del sistema.</span>
+        <span class="cfg-default">Default: 15%</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">ACABADO_T2_PCT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="ACABADO_T2_PCT" min="0" max="100" step="1">
+          <span class="cfg-unit">%</span>
+        </div>
+        <span class="cfg-desc">Acabado Tipo 2 — Premium. Conduit metálico EMT, cajas metálicas, pintura anticorrosiva. Markup sobre materiales.</span>
+        <span class="cfg-default">Default: 25%</span>
+      </div>
+    </div>
+
+    <!-- ── PARÁMETROS SOLARES ── -->
+    <div class="cfg-section">
+      <div class="cfg-section-title">☀️ Parámetros Solares</div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">HSP</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="HSP" min="1" max="8" step="0.1">
+          <span class="cfg-unit">h/día</span>
+        </div>
+        <span class="cfg-desc">Horas Solar Pico para Ciudad de Guatemala. Determina cuánta energía produce el sistema por día. Varía por zona geográfica (4.0–5.5 para Guatemala).</span>
+        <span class="cfg-default">Default: 4.5 h/día</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">EFF_PCT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="EFF_PCT" min="50" max="99" step="1">
+          <span class="cfg-unit">%</span>
+        </div>
+        <span class="cfg-desc">Rendimiento global del sistema: pérdidas por calor, cableado, inversor, suciedad. Valor realista 82–90%. Reducir si el site tiene sombras parciales.</span>
+        <span class="cfg-default">Default: 87%</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">PANEL_W</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="PANEL_W" min="100" max="1000" step="5">
+          <span class="cfg-unit">W</span>
+        </div>
+        <span class="cfg-desc">Potencia nominal del panel fotovoltaico principal. Cambiar si se cambia el modelo de panel (actualmente JA Solar 625W bifacial).</span>
+        <span class="cfg-default">Default: 625 W</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">SAVINGS_PCT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="SAVINGS_PCT" min="0" max="100" step="1">
+          <span class="cfg-unit">%</span>
+        </div>
+        <span class="cfg-desc">Porcentaje de la factura eléctrica que el sistema cubre en el Cotizador Rápido. El 10% restante es consumo nocturno estimado. Ajustar según perfil del cliente.</span>
+        <span class="cfg-default">Default: 90%</span>
+      </div>
+    </div>
+
+    <!-- ── PRECIOS CLAVE ── -->
+    <div class="cfg-section">
+      <div class="cfg-section-title">💲 Precios Clave</div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">PRICE_PANEL</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="PRICE_PANEL" min="0" step="10">
+          <span class="cfg-unit">Q</span>
+        </div>
+        <span class="cfg-desc">Precio unitario del panel JA Solar 625W (sin IVA). Actualizar cuando cambien los precios de proveedor o se cambie el modelo de panel.</span>
+        <span class="cfg-default">Default: Q 800</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">PRICE_HUAWEI_8K</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="PRICE_HUAWEI_8K" min="0" step="100">
+          <span class="cfg-unit">Q</span>
+        </div>
+        <span class="cfg-desc">Precio del inversor Huawei SUN2000-8K (sin IVA). Es la unidad de escala para sistemas grandes — el precio por unidad se multiplica según el número de equipos.</span>
+        <span class="cfg-default">Default: Q 8,200</span>
+      </div>
+    </div>
+
+    <!-- ── TÉCNICO ── -->
+    <div class="cfg-section">
+      <div class="cfg-section-title">⚙️ Técnico</div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">CABLE_M_DEFAULT</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="CABLE_M_DEFAULT" min="5" max="200" step="5">
+          <span class="cfg-unit">m</span>
+        </div>
+        <span class="cfg-desc">Metros de cable DC (rojo + negro) incluidos por defecto en el Cotizador Rápido y como valor inicial del Cotizador Detallado. Ajustar según distancia típica de tus instalaciones.</span>
+        <span class="cfg-default">Default: 30 m</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">HUAWEI_BASE_KW</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="HUAWEI_BASE_KW" min="1" max="50" step="1">
+          <span class="cfg-unit">kW</span>
+        </div>
+        <span class="cfg-desc">Capacidad en kW por unidad para el cálculo de escalado Huawei (actualmente SUN2000-8K). Determina cuántos inversores se necesitan: ceil(kWp / HUAWEI_BASE_KW).</span>
+        <span class="cfg-default">Default: 8 kW</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn-save">💾 &nbsp;Guardar configuración</button>
+      <button type="button" class="btn-reset" onclick="resetDefaults()">Restablecer defaults</button>
+    </div>
+
+  </form>
+
+</div>
+
+<div id="toast">✓ Configuración guardada</div>
+
+<script>
+const FIELDS = [
+  'PROFIT_PCT','IVA_PCT','LABOR_RATIO_PCT',
+  'ACABADO_T1_PCT','ACABADO_T2_PCT',
+  'HSP','EFF_PCT','PANEL_W','SAVINGS_PCT',
+  'PRICE_PANEL','PRICE_HUAWEI_8K',
+  'CABLE_M_DEFAULT','HUAWEI_BASE_KW'
+];
+
+function loadValues() {
+  const raw = CFG._raw;
+  FIELDS.forEach(function(k) {
+    const el = document.querySelector('[name="' + k + '"]');
+    if (el) el.value = raw[k];
+  });
+}
+
+function saveValues() {
+  const data = {};
+  FIELDS.forEach(function(k) {
+    const el = document.querySelector('[name="' + k + '"]');
+    if (el && el.value !== '') data[k] = +el.value;
+  });
+  localStorage.setItem('sis_cfg', JSON.stringify(data));
+}
+
+function resetDefaults() {
+  if (!confirm('¿Restablecer todos los valores a los defaults de fábrica?')) return;
+  localStorage.removeItem('sis_cfg');
+  location.reload();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg || '✓ Configuración guardada';
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+document.getElementById('cfgForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  saveValues();
+  showToast('✓ Guardado — recarga el cotizador para aplicar cambios');
+});
+
+loadValues();
+</script>
+</body>
+</html>
