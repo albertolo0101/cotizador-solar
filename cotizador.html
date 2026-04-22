@@ -910,11 +910,65 @@ footer a { color: var(--amber); text-decoration: none; }
 const PRICES = {
   // panels
   'P-JA-625W': 800,
-  // inversors
-  'I-SOLIS-2.5K': 5250,
-  'I-CSOLAR-5K':  5269.45,
-  'I-CSOLAR-7K':  6700,
-  'I-HUAWEI-8K':  8200,
+  // inversors — individual
+  'I-SOLIS-2.5K':        5250,
+  'I-CSOLAR-5K':         5269.45,
+  'I-CSOLAR-7K':         6700,
+  'I-HUAWEI-8K':         8200,
+  'I-HUAWEI-3K':         8500,
+  'I-HUAWEI-4K':         10000,
+  'I-HUAWEI-5K':         11000,
+  'I-HUAWEI-6K':         10300,
+  'I-HOYMILES-1.8K':     3000,
+  'I-HOYMILES-2K':       0,
+  'I-APS-DS3D':          4500,
+  'I-GROWATT-MIC3.3K':   5519,
+  'I-GROWATT-MIN5K':     5749,
+  'I-GROWATT-MIN6K':     6499,
+  'I-GROWATT-MIN7K':     8200,
+  'I-GROWATT-MIN10K':    11910,
+  'I-GROWATT-SPF3K':     6536,
+  'I-GROWATT-SPF6K':     12346,
+  'I-GROWATT-MAC15K':    22540,
+  'I-GROWATT-MAC25K':    40668,
+  'I-GROWATT-MAC36K':    50836,
+  // inversors — system packages (15K-LV-650W)
+  'I-SIS-15KLV-1760':    36610,
+  'I-SIS-15KLV-1848':    37604,
+  'I-SIS-15KLV-1936':    38597,
+  'I-SIS-15KLV-2024':    39591,
+  'I-SIS-15KLV-2112':    40584,
+  'I-SIS-15KLV-2288':    42541,
+  'I-SIS-15KLV-2464':    44528,
+  'I-SIS-15KLV-2640':    46515,
+  // inversors — system packages (18K-LV-650W)
+  'I-SIS-18KLV-1848':    40464,
+  'I-SIS-18KLV-2112':    43444,
+  'I-SIS-18KLV-2288':    45401,
+  'I-SIS-18KLV-2464':    47388,
+  'I-SIS-18KLV-2640':    49375,
+  // inversors — system packages (10K-G5-650W)
+  'I-SIS-10KG5-1760':    28582,
+  // inversors — system packages (10K-LV-650W)
+  'I-SIS-10KLV-1760':    34410,
+  // inversors — system packages (15K-G5-615W)
+  'I-SIS-15KG5-1764':    33342,
+  'I-SIS-15KG5-1848':    34292,
+  'I-SIS-15KG5-2016':    36192,
+  'I-SIS-15KG5-2100':    37142,
+  'I-SIS-15KG5-2268':    39042,
+  'I-SIS-15KG5-2352':    39992,
+  'I-SIS-15KG5-2520':    41892,
+  'I-SIS-15KG5-2604':    42842,
+  // inversors — system packages (18K-G5-615W)
+  'I-SIS-18KG5-2016':    37974,
+  'I-SIS-18KG5-2184':    39874,
+  'I-SIS-18KG5-2352':    41774,
+  'I-SIS-18KG5-2520':    43674,
+  // inversors — system packages (20K-615W)
+  'I-SIS-20K-1848':      36678,
+  'I-SIS-20K-2184':      40478,
+  'I-SIS-20K-2352':      42378,
   // accessories
   'A-SMART-SENSOR': 914.52,
   'A-DONGLE-WLAN':  585,
@@ -942,12 +996,65 @@ const PRICES = {
   'A-CAJA-8P':      294.46,
 };
 
-// Inversor catalogue
+// Inversor catalogue  (sorted by maxPanels asc — required for suggestInversor)
 const INVERSORS = [
-  { id:'I-SOLIS-2.5K', label:'2.5 kW',  brand:'Solis 1P',      note:'Monofásico',  maxPanels: 5  },
-  { id:'I-CSOLAR-5K',  label:'5 kW',    brand:'Canadian Solar', note:'Monofásico',  maxPanels: 9  },
-  { id:'I-CSOLAR-7K',  label:'7 kW',    brand:'Canadian Solar', note:'Monofásico',  maxPanels: 12 },
-  { id:'I-HUAWEI-8K',  label:'8 kW',    brand:'Huawei',         note:'Trifásico',   maxPanels: 20 },
+  // ─── microinverters ──────────────────────────────────────────────────────────
+  { id:'I-HOYMILES-1.8K',   label:'1.8 kW',       brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4  },
+  { id:'I-HOYMILES-2K',     label:'2 kW',          brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4  },
+  { id:'I-APS-DS3D',        label:'2 kW',          brand:'APS',             note:'Microinversor',         maxPanels: 4  },
+  // ─── small monofásico / híbrido ──────────────────────────────────────────────
+  { id:'I-SOLIS-2.5K',      label:'2.5 kW',        brand:'Solis 1P',        note:'Monofásico',            maxPanels: 5  },
+  { id:'I-HUAWEI-3K',       label:'3 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 6  },
+  { id:'I-GROWATT-SPF3K',   label:'3 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 6  },
+  { id:'I-GROWATT-MIC3.3K', label:'3.3 kW',        brand:'Growatt',         note:'Monofásico',            maxPanels: 7  },
+  { id:'I-HUAWEI-4K',       label:'4 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 8  },
+  { id:'I-CSOLAR-5K',       label:'5 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 9  },
+  { id:'I-HUAWEI-5K',       label:'5 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 10 },
+  { id:'I-GROWATT-MIN5K',   label:'5 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 10 },
+  { id:'I-CSOLAR-7K',       label:'7 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 12 },
+  { id:'I-HUAWEI-6K',       label:'6 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 12 },
+  { id:'I-GROWATT-MIN6K',   label:'6 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 12 },
+  { id:'I-GROWATT-SPF6K',   label:'6 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 12 },
+  { id:'I-GROWATT-MIN7K',   label:'7 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 14 },
+  { id:'I-HUAWEI-8K',       label:'8 kW',          brand:'Huawei',          note:'Trifásico',             maxPanels: 20 },
+  { id:'I-GROWATT-MIN10K',  label:'10 kW',         brand:'Growatt',         note:'Monofásico',            maxPanels: 20 },
+  // ─── commercial trifásico ───────────────────────────────────────────────────
+  { id:'I-GROWATT-MAC15K',  label:'15 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 29 },
+  { id:'I-GROWATT-MAC25K',  label:'25 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 48 },
+  { id:'I-GROWATT-MAC36K',  label:'36 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 70 },
+  // ─── system packages — 10K-G5-650W ──────────────────────────────────────────
+  { id:'I-SIS-10KG5-1760',  label:'1760 kWh/mes',  brand:'10K-G5-650W',     note:'Trifásico · Paquete',   maxPanels: 20 },
+  // ─── system packages — 10K-LV-650W ──────────────────────────────────────────
+  { id:'I-SIS-10KLV-1760',  label:'1760 kWh/mes',  brand:'10K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20 },
+  // ─── system packages — 15K-LV-650W ──────────────────────────────────────────
+  { id:'I-SIS-15KLV-1760',  label:'1760 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20 },
+  { id:'I-SIS-15KLV-1848',  label:'1848 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21 },
+  { id:'I-SIS-18KLV-1848',  label:'1848 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21 },
+  { id:'I-SIS-15KG5-1764',  label:'1764 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 21 },
+  { id:'I-SIS-15KLV-1936',  label:'1936 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 22 },
+  { id:'I-SIS-15KG5-1848',  label:'1848 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 22 },
+  { id:'I-SIS-20K-1848',    label:'1848 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 22 },
+  { id:'I-SIS-15KLV-2024',  label:'2024 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 23 },
+  { id:'I-SIS-15KLV-2112',  label:'2112 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24 },
+  { id:'I-SIS-18KLV-2112',  label:'2112 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24 },
+  { id:'I-SIS-15KG5-2016',  label:'2016 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24 },
+  { id:'I-SIS-18KG5-2016',  label:'2016 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24 },
+  { id:'I-SIS-15KG5-2100',  label:'2100 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 25 },
+  { id:'I-SIS-15KLV-2288',  label:'2288 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26 },
+  { id:'I-SIS-18KLV-2288',  label:'2288 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26 },
+  { id:'I-SIS-18KG5-2184',  label:'2184 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 26 },
+  { id:'I-SIS-20K-2184',    label:'2184 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 26 },
+  { id:'I-SIS-15KG5-2268',  label:'2268 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 27 },
+  { id:'I-SIS-15KLV-2464',  label:'2464 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28 },
+  { id:'I-SIS-18KLV-2464',  label:'2464 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28 },
+  { id:'I-SIS-15KG5-2352',  label:'2352 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28 },
+  { id:'I-SIS-18KG5-2352',  label:'2352 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28 },
+  { id:'I-SIS-20K-2352',    label:'2352 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 28 },
+  { id:'I-SIS-15KLV-2640',  label:'2640 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30 },
+  { id:'I-SIS-18KLV-2640',  label:'2640 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30 },
+  { id:'I-SIS-15KG5-2520',  label:'2520 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30 },
+  { id:'I-SIS-18KG5-2520',  label:'2520 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30 },
+  { id:'I-SIS-15KG5-2604',  label:'2604 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 31 },
 ];
 
 // ── ACABADO CONFIG ──
