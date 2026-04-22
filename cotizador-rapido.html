@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizador Rápido Solar — SIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --amber: #F59E0B;
+  --amber-l: #FCD34D;
+  --amber-d: #B45309;
+  --amber-glow: rgba(245,158,11,0.15);
+  --amber-glow2: rgba(245,158,11,0.08);
+  --ink: #0C0F18;
+  --ink2: #131829;
+  --ink3: #1A2236;
+  --ink4: #222C42;
+  --line: rgba(255,255,255,0.07);
+  --line2: rgba(255,255,255,0.12);
+  --txt: #E8EDF5;
+  --txt2: rgba(232,237,245,0.55);
+  --txt3: rgba(232,237,245,0.28);
+  --green: #34D399;
+  --green-soft: rgba(52,211,153,0.12);
+  --green-border: rgba(52,211,153,0.3);
+  --blue: #60A5FA;
+  --blue-soft: rgba(96,165,250,0.1);
+  --red: #F87171;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--ink); color: var(--txt);
+  min-height: 100vh; overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
+.glow-tr {
+  position: fixed; top: -200px; right: -200px;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+.glow-bl {
+  position: fixed; bottom: -150px; left: -150px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(52,211,153,0.06) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 860px; margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+}
+
+/* ── HEADER ── */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 3rem;
+  animation: fadeDown 0.5s ease both;
+}
+.logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.logo-icon {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-d));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 20px rgba(245,158,11,0.35);
+}
+.logo-text .name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--txt); }
+.logo-text .sub  { font-size: 0.65rem; color: var(--txt3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.header-badge {
+  font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700;
+  color: var(--amber); background: var(--amber-glow);
+  border: 1px solid rgba(245,158,11,0.3);
+  padding: 0.25rem 0.7rem; border-radius: 20px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.header-link {
+  font-size: 0.7rem; color: var(--txt3); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 20px;
+  padding: 0.25rem 0.7rem; transition: all 0.2s;
+  white-space: nowrap;
+}
+.header-link:hover { color: var(--txt2); border-color: var(--line2); }
+
+/* ── HERO ── */
+.hero { margin-bottom: 2.5rem; animation: fadeUp 0.5s ease 0.05s both; }
+.hero h1 {
+  font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.hl { color: var(--amber); }
+.hero p { font-size: 1rem; color: var(--txt2); max-width: 520px; line-height: 1.6; }
+
+/* ── INPUT CARD ── */
+.input-card {
+  background: var(--ink2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius);
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+.input-card-title {
+  font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700;
+  color: var(--amber); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.inputs-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+}
+.input-group label {
+  display: block; font-size: 0.72rem; color: var(--txt3);
+  margin-bottom: 0.6rem; letter-spacing: 0.03em;
+}
+.input-box {
+  display: flex; align-items: center;
+  background: var(--ink3); border: 1px solid var(--line2);
+  border-radius: var(--radius-sm); overflow: hidden;
+  transition: border-color 0.2s;
+}
+.input-box:focus-within { border-color: var(--amber); }
+.input-box input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: 'DM Mono', monospace; font-size: 1.5rem; font-weight: 500;
+  color: var(--txt); padding: 0.7rem 1rem;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.input-box input::-webkit-outer-spin-button,
+.input-box input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.input-box .unit {
+  padding: 0 1rem; font-size: 0.75rem; color: var(--txt3);
+  font-family: 'DM Mono', monospace; white-space: nowrap;
+}
+
+/* ── RESULTS SECTION ── */
+.results-section { animation: fadeUp 0.5s ease 0.15s both; }
+
+.result-card {
+  background: var(--ink2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius);
+  padding: 1.6rem 2rem;
+  margin-bottom: 1rem;
+}
+.result-card-title {
+  font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+.result-card-title.green { color: var(--green); }
+.result-card-title.blue  { color: var(--blue); }
+.result-card-title.amber { color: var(--amber); }
+
+/* System specs grid */
+.spec-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.spec-item .spec-val {
+  font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700;
+  color: var(--txt); line-height: 1.2;
+}
+.spec-item .spec-lbl {
+  font-size: 0.68rem; color: var(--txt3); margin-top: 3px;
+}
+
+.price-hero {
+  background: linear-gradient(135deg, var(--amber-glow), var(--amber-glow2));
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.price-hero .ph-label { font-size: 0.72rem; color: var(--txt2); }
+.price-hero .ph-val {
+  font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+  color: var(--amber);
+}
+.price-hero .ph-sub { font-size: 0.65rem; color: var(--txt3); margin-top: 2px; }
+
+/* Savings comparison */
+.savings-compare {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem;
+  align-items: center; margin-bottom: 1.2rem;
+}
+.savings-before, .savings-after {
+  background: var(--ink3); border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem;
+}
+.savings-before { border: 1px solid var(--line); }
+.savings-after  { border: 1px solid var(--green-border); background: var(--green-soft); }
+.sb-label { font-size: 0.65rem; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.sb-amount {
+  font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700;
+}
+.savings-before .sb-amount { color: var(--red); }
+.savings-after  .sb-amount { color: var(--green); }
+.sb-sub { font-size: 0.68rem; color: var(--txt3); margin-top: 3px; }
+.savings-arrow {
+  font-size: 1.5rem; color: var(--txt3); text-align: center;
+}
+
+.savings-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.6rem 0; border-bottom: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+.savings-row:last-child { border-bottom: none; }
+.savings-row .sk { color: var(--txt2); }
+.savings-row .sv { font-family: 'DM Mono', monospace; color: var(--txt); font-size: 0.82rem; }
+.savings-row .sv.green { color: var(--green); }
+.savings-row .sv.amber { color: var(--amber); }
+
+/* Projection card */
+.proj-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+}
+.proj-item {
+  background: var(--ink3); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 1rem 1.2rem;
+  text-align: center;
+}
+.proj-item.highlight {
+  border-color: rgba(52,211,153,0.3); background: var(--green-soft);
+}
+.proj-year { font-size: 0.65rem; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.proj-val  { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--green); }
+.proj-sub  { font-size: 0.62rem; color: var(--txt3); margin-top: 2px; }
+
+/* Print button */
+.print-btn {
+  width: 100%; padding: 1rem 1.5rem; margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--amber), var(--amber-d));
+  border: none; border-radius: var(--radius-sm);
+  color: #fff; font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 1rem; letter-spacing: 0.02em;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  gap: 10px; box-shadow: 0 4px 20px rgba(245,158,11,0.35);
+  transition: opacity 0.2s, transform 0.15s;
+}
+.print-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.print-btn:active { transform: translateY(0); }
+
+/* Note card */
+.note-card {
+  background: var(--ink3);
+  border: 1px solid var(--line2);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.note-card p { font-size: 0.82rem; color: var(--txt2); line-height: 1.7; margin-bottom: 0.5rem; }
+.note-card p:last-child { margin-bottom: 0; }
+.note-card a { color: var(--amber); text-decoration: none; }
+.note-card a:hover { text-decoration: underline; }
+.note-card strong { color: var(--txt); }
+
+/* Footer */
+footer {
+  text-align: center; padding-top: 2rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.72rem; color: var(--txt3); line-height: 1.8;
+}
+footer strong { color: var(--txt2); }
+footer a { color: var(--amber); text-decoration: none; }
+
+/* Animations */
+@keyframes fadeDown { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeUp   { from { opacity:0; transform:translateY(14px);  } to { opacity:1; transform:translateY(0); } }
+
+/* Mobile */
+@media (max-width: 580px) {
+  .inputs-row { grid-template-columns: 1fr; }
+  .spec-grid  { grid-template-columns: 1fr 1fr; }
+  .savings-compare { grid-template-columns: 1fr; }
+  .savings-arrow { display: none; }
+  .proj-grid  { grid-template-columns: 1fr; }
+  .price-hero { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .header-right { gap: 6px; }
+  .header-link { display: none; }
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  @page { margin: 20mm 15mm; size: A4 portrait; }
+
+  body { background: #fff !important; color: #111 !important; font-size: 11pt; }
+  body::before, .glow-tr, .glow-bl { display: none !important; }
+
+  :root {
+    --ink: #fff; --ink2: #f8f8f8; --ink3: #f0f0f0; --ink4: #e8e8e8;
+    --txt: #111; --txt2: #444; --txt3: #888;
+    --line: #ddd; --line2: #ccc;
+    --amber: #b45309; --green: #047857; --red: #b91c1c; --blue: #1d4ed8;
+    --amber-glow: #fef3c7; --green-soft: #ecfdf5; --green-border: #6ee7b7;
+    --amber-glow2: #fde68a;
+  }
+
+  header, .input-card, .print-btn, .note-card footer { display: none !important; }
+  .wrap { padding: 0 !important; max-width: 100% !important; }
+  .result-card { break-inside: avoid; border: 1px solid #ccc !important; }
+
+  /* Print header */
+  .results-section::before {
+    content: '';
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+  #print-header { display: block !important; }
+
+  .price-hero { background: #fef3c7 !important; border: 1px solid #b45309 !important; }
+  .savings-after { background: #ecfdf5 !important; border: 1px solid #6ee7b7 !important; }
+  .proj-item.highlight { background: #ecfdf5 !important; border: 1px solid #6ee7b7 !important; }
+
+  .logo-icon { background: #b45309 !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="glow-tr"></div>
+<div class="glow-bl"></div>
+
+<div class="wrap">
+
+  <!-- PRINT HEADER (hidden on screen) -->
+  <div id="print-header" style="display:none; margin-bottom:2rem; padding-bottom:1rem; border-bottom:2px solid #b45309;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:#b45309;">SIS</div>
+        <div style="font-size:0.7rem; color:#888; text-transform:uppercase; letter-spacing:0.1em;">Soluciones de Ingeniería Sostenible</div>
+      </div>
+      <div style="text-align:right; font-size:0.75rem; color:#555;">
+        <div style="font-weight:700;">Cotización Rápida Solar</div>
+        <div id="print-date"></div>
+        <div>📞 30053270 · 58756331</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <a class="logo" href="index.html">
+      <div class="logo-icon">☀</div>
+      <div class="logo-text">
+        <div class="name">SIS</div>
+        <div class="sub">Soluciones de Ingeniería Sostenible</div>
+      </div>
+    </a>
+    <div class="header-right">
+      <div class="header-badge">Cotizador Rápido</div>
+      <a class="header-link" href="cotizador.html">Ver Cotizador Detallado →</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Tu cotización solar,<br><span class="hl">en segundos.</span></h1>
+    <p>Ingresa tu consumo mensual y el monto de tu factura. Calculamos tu sistema y tu ahorro al instante.</p>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="input-card">
+    <div class="input-card-title">Datos de consumo</div>
+    <div class="inputs-row">
+      <div class="input-group">
+        <label>Consumo mensual</label>
+        <div class="input-box">
+          <input type="number" id="kwhInput" min="50" max="6000" value="600" placeholder="600">
+          <span class="unit">kWh / mes</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Factura mensual actual</label>
+        <div class="input-box">
+          <input type="number" id="facturaInput" min="0" value="800" placeholder="800">
+          <span class="unit">Q / mes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="resultsSection">
+
+    <!-- Sistema -->
+    <div class="result-card">
+      <div class="result-card-title blue">Sistema recomendado · Huawei Premium · Losa · Acabado Tipo 2</div>
+      <div class="spec-grid">
+        <div class="spec-item">
+          <div class="spec-val" id="specInv">—</div>
+          <div class="spec-lbl">Inversor(es)</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-val" id="specPanels">—</div>
+          <div class="spec-lbl">Paneles JA Solar 625W</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-val" id="specKwp">—</div>
+          <div class="spec-lbl">Potencia instalada</div>
+        </div>
+      </div>
+      <div class="price-hero">
+        <div>
+          <div class="ph-label">Inversión total estimada (IVA incluido)</div>
+          <div class="ph-val" id="specPrice">—</div>
+          <div class="ph-sub">Incluye equipos, acabado Tipo 2 y mano de obra · referencial</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ahorro -->
+    <div class="result-card" id="savingsCard">
+      <div class="result-card-title green">Tu ahorro mensual</div>
+      <div class="savings-compare">
+        <div class="savings-before">
+          <div class="sb-label">Factura actual</div>
+          <div class="sb-amount" id="billBefore">—</div>
+          <div class="sb-sub">/ mes (100%)</div>
+        </div>
+        <div class="savings-arrow">→</div>
+        <div class="savings-after">
+          <div class="sb-label">Nueva cuota eléctrica</div>
+          <div class="sb-amount" id="billAfter">—</div>
+          <div class="sb-sub">/ mes (solo 10%)</div>
+        </div>
+      </div>
+      <div class="savings-row">
+        <span class="sk">Ahorro mensual estimado (90% de tu factura)</span>
+        <span class="sv green" id="rowAhorro">—</span>
+      </div>
+      <div class="savings-row">
+        <span class="sk">El sistema cubre</span>
+        <span class="sv" id="rowCobertura">100% de tu consumo</span>
+      </div>
+      <div class="savings-row">
+        <span class="sk">Retorno de inversión estimado</span>
+        <span class="sv amber" id="rowPayback">—</span>
+      </div>
+    </div>
+
+    <!-- Proyección -->
+    <div class="result-card">
+      <div class="result-card-title amber">Proyección de ahorro neto</div>
+      <div class="proj-grid">
+        <div class="proj-item">
+          <div class="proj-year">5 años</div>
+          <div class="proj-val" id="proj5">—</div>
+          <div class="proj-sub">ahorro acumulado neto</div>
+        </div>
+        <div class="proj-item">
+          <div class="proj-year">10 años</div>
+          <div class="proj-val" id="proj10">—</div>
+          <div class="proj-sub">ahorro acumulado neto</div>
+        </div>
+        <div class="proj-item highlight">
+          <div class="proj-year">25 años · vida útil</div>
+          <div class="proj-val" id="proj25">—</div>
+          <div class="proj-sub">ahorro acumulado neto</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+
+  <!-- PRINT BUTTON -->
+  <button class="print-btn" onclick="imprimirPDF()">
+    <span>📄</span> Imprimir / Guardar como PDF
+  </button>
+
+  <!-- NOTE -->
+  <div class="note-card">
+    <p>
+      <strong>¿Quieres explorar más opciones?</strong>
+      Esta cotización usa la configuración estándar: inversor Huawei Premium, estructura losa y acabado Tipo 2.
+      Usando nuestro <a href="cotizador.html"><strong>Cotizador Detallado</strong></a> puedes elegir entre distintos inversores, tipos de estructura y acabados,
+      y es posible que obtengas un <strong>mejor precio</strong> según tu instalación específica.
+    </p>
+    <p>
+      También puedes contactarnos directamente para una visita técnica sin costo —
+      a veces el sitio permite optimizaciones que reducen el precio final.
+      📞 <strong>30053270 &nbsp;·&nbsp; 58756331</strong>
+    </p>
+  </div>
+
+  <footer>
+    Estimación basada en <strong>4.5 HSP/día</strong> (Ciudad de Guatemala) · Factor de rendimiento 87% · Paneles JA Solar 625W bifaciales<br>
+    IVA 12% incluido · Precio referencial sujeto a visita técnica · El ahorro real puede variar según tarifa eléctrica y consumo<br>
+    <span style="margin-top:4px;display:block">📞 30053270 &nbsp;·&nbsp; 58756331 &nbsp;·&nbsp; <a href="#">contactar a SIS</a></span>
+  </footer>
+
+</div><!-- /wrap -->
+
+<script>
+const HSP = 4.5, EFF = 0.87, PANEL_W = 625;
+const LABOR_RATIO = 0.30;
+const IVA = 0.12;
+const ACABADO_PCT = 0.25; // Tipo 2
+const CABLE_M = 30;
+const SAVINGS_PCT = 0.90; // 90% of bill saved
+
+const P = {
+  'P-JA-625W':    800,
+  'I-HUAWEI-8K':  8200,
+  'A-SMART-SENSOR': 914.52,
+  'A-DONGLE-WLAN':  585,
+  'E-RIEL-6M':    336,
+  'E-MIDCLAMP':   23.75,
+  'E-ENDCLAMP':   23.75,
+  'E-FIJTIERRA':  6.02,
+  'E-UNION-RIEL': 28.75,
+  'E-PATA-DEL':   131.95,
+  'E-PATA-TRAS-S':95,
+  'E-PATA-TRAS-M':122.5,
+  'C-MC4':        31.25,
+  'C-CAB4-NEGRO': 14.99,
+  'C-CAB4-ROJO':  14.99,
+  'A-FLIP-2X25DC':112.50,
+  'A-SUP-2P-DC':  385.50,
+  'A-FLIP-2X32AC':98.06,
+  'A-SUP-2P-AC':  321.25,
+  'A-CAJA-8P':    294.46,
+};
+
+function fmt(n, d=0) {
+  return n.toLocaleString('es-GT', {minimumFractionDigits:d, maximumFractionDigits:d});
+}
+function fmtQ(n) { return 'Q ' + fmt(n, 0); }
+
+function calcSystemPrice(panels) {
+  const n = panels;
+  const kwp = n * PANEL_W / 1000;
+  const invUnits = Math.ceil(kwp / 8);
+  const large = n > 8;
+  const rieles = Math.ceil(Math.ceil(n / 2.3) / 2) * 2;
+
+  let mat = 0;
+  mat += n          * P['P-JA-625W'];
+  mat += invUnits   * P['I-HUAWEI-8K'];
+  mat +=               P['A-SMART-SENSOR'];
+  mat +=               P['A-DONGLE-WLAN'];
+  mat += rieles     * P['E-RIEL-6M'];
+  mat += n * 2      * P['E-MIDCLAMP'];
+  mat += Math.ceil(n * 0.85) * P['E-ENDCLAMP'];
+  mat += rieles     * P['E-FIJTIERRA'];
+  mat += Math.ceil(rieles / 2) * P['E-UNION-RIEL'];
+  mat += rieles     * P['E-PATA-DEL'];
+  mat += Math.ceil(n / 2.5) * P['E-PATA-TRAS-S'];
+  mat += rieles     * P['E-PATA-TRAS-M'];
+  mat += Math.ceil(n * 0.5) * P['C-MC4'];
+  mat += CABLE_M    * P['C-CAB4-NEGRO'];
+  mat += CABLE_M    * P['C-CAB4-ROJO'];
+  mat += (large ? 2 : 1) * P['A-FLIP-2X25DC'];
+  mat += (large ? 2 : 1) * P['A-SUP-2P-DC'];
+  mat +=               P['A-FLIP-2X32AC'];
+  mat +=               P['A-SUP-2P-AC'];
+  mat += Math.ceil(n / 7 + 0.5) * P['A-CAJA-8P'];
+
+  const acabado = mat * ACABADO_PCT;
+  const labor   = mat * LABOR_RATIO;
+  const subtotal = mat + acabado + labor;
+  const iva  = subtotal * IVA;
+  return { total: Math.round((subtotal + iva) / 100) * 100, invUnits };
+}
+
+function update() {
+  const kwh     = Math.max(50, parseInt(document.getElementById('kwhInput').value)    || 600);
+  const factura = Math.max(0,  parseFloat(document.getElementById('facturaInput').value) || 0);
+
+  const kwpNeeded = kwh / (HSP * EFF * 30);
+  const panels    = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
+  const kwpReal   = panels * PANEL_W / 1000;
+  const { total: systemPrice, invUnits } = calcSystemPrice(panels);
+
+  const ahorroMensual = factura * SAVINGS_PCT;
+  const nuevaCuota    = factura * (1 - SAVINGS_PCT);
+
+  let paybackStr = '—';
+  if (ahorroMensual > 0) {
+    const mo = systemPrice / ahorroMensual;
+    const yy = Math.floor(mo / 12);
+    const mm = Math.round(mo % 12);
+    paybackStr = mm > 0 ? `${yy} años ${mm} meses` : `${yy} años`;
+  }
+
+  const netAhorro = (yrs) => Math.max(0, yrs * 12 * ahorroMensual - systemPrice);
+
+  // System card
+  document.getElementById('specInv').textContent     = `${invUnits} × Huawei SUN2000-8K`;
+  document.getElementById('specPanels').textContent  = `${panels} und.`;
+  document.getElementById('specKwp').textContent     = `${fmt(kwpReal, 2)} kWp`;
+  document.getElementById('specPrice').textContent   = fmtQ(systemPrice);
+
+  // Savings card
+  document.getElementById('billBefore').textContent  = `Q ${fmt(factura, 0)}`;
+  document.getElementById('billAfter').textContent   = `Q ${fmt(nuevaCuota, 0)}`;
+  document.getElementById('rowAhorro').textContent   = `Q ${fmt(ahorroMensual, 0)} / mes`;
+  document.getElementById('rowPayback').textContent  = paybackStr;
+
+  // Projection
+  const sign = (n) => n >= 0 ? `Q ${fmt(n, 0)}` : `−Q ${fmt(-n, 0)}`;
+  document.getElementById('proj5').textContent  = sign(netAhorro(5));
+  document.getElementById('proj10').textContent = sign(netAhorro(10));
+  document.getElementById('proj25').textContent = sign(netAhorro(25));
+}
+
+function imprimirPDF() {
+  document.getElementById('print-date').textContent =
+    new Date().toLocaleDateString('es-GT', { year:'numeric', month:'long', day:'numeric' });
+  window.print();
+}
+
+document.getElementById('kwhInput').addEventListener('input', update);
+document.getElementById('facturaInput').addEventListener('input', update);
+update();
+</script>
+</body>
+</html>
