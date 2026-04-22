@@ -654,6 +654,36 @@ footer a { color: var(--amber); text-decoration: none; }
   .bd-unit-price { display: none; }
   .roi-hero { flex-direction: column; gap: 0.8rem; }
 }
+
+@media print {
+  @page { margin: 18mm 14mm; size: A4 portrait; }
+
+  body { background: #fff !important; color: #111 !important; font-size: 11pt; }
+  body::before, .glow-tr, .glow-bl { display: none !important; }
+
+  :root {
+    --ink: #fff; --ink2: #f8f8f8; --ink3: #f2f2f2; --ink4: #e8e8e8;
+    --txt: #111; --txt2: #444; --txt3: #777;
+    --line: #ddd; --line2: #ccc;
+    --amber: #b45309; --green: #047857; --blue: #1d4ed8;
+    --amber-glow: #fef3c7; --amber-glow2: #fde68a;
+    --green-soft: #ecfdf5; --blue-soft: #eff6ff;
+  }
+
+  header, .hero, .step-card, #pdfSection { display: none !important; }
+  .wrap { padding: 0 !important; max-width: 100% !important; }
+  #print-header { display: block !important; }
+  .results-section, .roi-toggle-wrap, footer { display: block !important; }
+  .kpi-card, .balance-card, .tech-note, .breakdown-toggle, .breakdown-body, .roi-toggle, .roi-body {
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+  .kpi-card.kpi-price { background: #fef3c7 !important; border-color: #b45309 !important; }
+  .breakdown-toggle, .roi-toggle { background: #f8f8f8 !important; color: #111 !important; }
+  .breakdown-body, .roi-body { display: block !important; border-top: none !important; }
+  .bd-arrow, .roi-toggle-arrow { display: none !important; }
+  footer { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #ddd; }
+}
 </style>
 </head>
 <body>
@@ -662,6 +692,20 @@ footer a { color: var(--amber); text-decoration: none; }
 <div class="glow-bl"></div>
 
 <div class="wrap">
+
+  <div id="print-header" style="display:none; margin-bottom:2rem; padding-bottom:1rem; border-bottom:2px solid #b45309;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:#b45309;">SIS</div>
+        <div style="font-size:0.7rem; color:#888; text-transform:uppercase; letter-spacing:0.1em;">Soluciones de Ingenieria Sostenible</div>
+      </div>
+      <div style="text-align:right; font-size:0.75rem; color:#555;">
+        <div style="font-weight:700;">Cotizacion Solar Detallada</div>
+        <div id="print-date"></div>
+        <div>30053270 · 58756331</div>
+      </div>
+    </div>
+  </div>
 
   <!-- HEADER -->
   <header>
@@ -935,7 +979,7 @@ footer a { color: var(--amber); text-decoration: none; }
       transition:opacity 0.2s,transform 0.15s;
     ">
       <span style="font-size:1.2rem;">📄</span>
-      Generar cotización en PDF
+      Imprimir / Guardar como PDF
     </button>
     <div id="pdfStatus" style="display:none;text-align:center;font-size:0.75rem;color:var(--txt3);margin-top:8px;"></div>
   </div>

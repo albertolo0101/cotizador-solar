@@ -431,25 +431,43 @@
   };
 
   window.generarPDF = function () {
-    const sizing = getSystemSizing();
-    const { bom, inv, invUnits } = computeBOM(sizing);
-    const subtotalMats = bom.reduce((s, i) => s + i.subtotal, 0);
-    const acabadoAmt = subtotalMats * ACABADO[state.acabado].pct;
-    const labor = subtotalMats * LABOR_RATIO;
-    const subtotalBase = subtotalMats + acabadoAmt + labor;
-    const profitAmt = subtotalBase * CFG.PROFIT_PCT;
-    const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
-    const subtotalAll = subtotalBase + profitAmt + transportSurcharge;
-    const ivaAmt = subtotalAll * IVA;
-    const totalRounded = Math.round((subtotalAll + ivaAmt) / 100) * 100;
+    const breakdownToggle = document.getElementById('bdToggle');
+    const breakdownBody = document.getElementById('bdBody');
+    const roiToggle = document.getElementById('roiToggle');
+    const roiBody = document.getElementById('roiBody');
+    const printDate = document.getElementById('print-date');
+    const hadBreakdownOpen = breakdownBody.classList.contains('open');
+    const hadRoiOpen = roiBody.classList.contains('open');
 
-    const bomRows = bom.map(item => `
-      <tr>
-        <td style="padding:6px 10px;color:#c8d4e8;font-size:10px;">${item.desc}</td>
-        <td style="padding:6px 10px;text-align:center;color:#8899aa;font-size:10px;">${fmt(item.qty)}</td>
-        <td style="padding:6px 10px;text-align:right;color:#8899aa;font-size:10px;">${fmtQ(item.unitPrice)}</td>
-        <td style="padding:6px 10px;text-align:right;color:#c8d4e8;font-size:10px;font-weight:600;">${fmtQ0(item.subtotal)}</td>
-      </tr>`).join('');
+    if (!hadBreakdownOpen) {
+      breakdownToggle.classList.add('open');
+      breakdownBody.classList.add('open');
+    }
+    if (!hadRoiOpen) {
+      roiToggle.classList.add('open');
+      roiBody.classList.add('open');
+    }
+    if (printDate) {
+      printDate.textContent = new Date().toLocaleDateString('es-GT', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    window.print();
+
+    setTimeout(function () {
+      if (!hadBreakdownOpen) {
+        breakdownToggle.classList.remove('open');
+        breakdownBody.classList.remove('open');
+      }
+      if (!hadRoiOpen) {
+        roiToggle.classList.remove('open');
+        roiBody.classList.remove('open');
+      }
+    }, 300);
+    return;
 
     const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cotizacion Solar SIS</title></head><body style="font-family:Arial,sans-serif;padding:24px;color:#111;">
       <h2>SIS · Cotizacion Solar</h2>
