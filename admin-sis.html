@@ -246,13 +246,17 @@ body::before {
   transition: color 0.2s;
 }
 .back-link:hover { color: var(--amber); }
+.top-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem; }
 </style>
 </head>
 <body>
 
 <div class="wrap">
 
-  <a class="back-link" href="index.html">← Volver al inicio</a>
+  <div class="top-links">
+    <a class="back-link" href="index.html">← Volver al inicio</a>
+    <a class="back-link" href="admin-catalogo.html">Administrar catalogo →</a>
+  </div>
 
   <div class="admin-header">
     <div>

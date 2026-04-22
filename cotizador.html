@@ -42,7 +42,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── NOISE TEXTURE OVERLAY ── */
+/* ?"??"? NOISE TEXTURE OVERLAY ?"??"? */
 body::before {
   content: '';
   position: fixed; inset: 0;
@@ -50,7 +50,7 @@ body::before {
   pointer-events: none; z-index: 0; opacity: 0.4;
 }
 
-/* ── AMBIENT GLOWS ── */
+/* ?"??"? AMBIENT GLOWS ?"??"? */
 .glow-tr {
   position: fixed; top: -200px; right: -200px;
   width: 700px; height: 700px; border-radius: 50%;
@@ -64,7 +64,7 @@ body::before {
   pointer-events: none; z-index: 0;
 }
 
-/* ── LAYOUT ── */
+/* ?"??"? LAYOUT ?"??"? */
 .wrap {
   position: relative; z-index: 1;
   max-width: 920px;
@@ -72,7 +72,7 @@ body::before {
   padding: 3rem 2rem 6rem;
 }
 
-/* ── HEADER ── */
+/* ?"??"? HEADER ?"??"? */
 header {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 3.5rem;
@@ -107,7 +107,7 @@ header {
   padding: 5px 12px; border-radius: 20px;
 }
 
-/* ── HERO TEXT ── */
+/* ?"??"? HERO TEXT ?"??"? */
 .hero {
   margin-bottom: 3rem;
   animation: fadeDown 0.5s 0.08s ease both;
@@ -125,7 +125,7 @@ header {
   font-weight: 300; max-width: 460px; line-height: 1.75;
 }
 
-/* ══ STEP CARDS ══ */
+/* ?.??.? STEP CARDS ?.??.? */
 .step-card {
   background: var(--ink2);
   border: 1px solid var(--line);
@@ -147,7 +147,7 @@ header {
   content: ''; flex: 1; height: 1px; background: var(--line);
 }
 
-/* ── KWH INPUT ── */
+/* ?"??"? KWH INPUT ?"??"? */
 .kwh-row {
   display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem;
 }
@@ -176,7 +176,7 @@ header {
   white-space: nowrap;
 }
 
-/* ── SLIDER ── */
+/* ?"??"? SLIDER ?"??"? */
 input[type=range] {
   -webkit-appearance: none; appearance: none; width: 100%; height: 5px;
   border-radius: 3px; outline: none; cursor: pointer;
@@ -198,7 +198,7 @@ input[type=range]::-webkit-slider-thumb:hover {
   font-size: 0.6rem; color: var(--txt3); margin-bottom: 1.2rem;
 }
 
-/* ── PRESETS ── */
+/* ?"??"? PRESETS ?"??"? */
 .presets {
   display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
 }
@@ -216,7 +216,7 @@ input[type=range]::-webkit-slider-thumb:hover {
   color: var(--amber);
 }
 
-/* ── TOGGLES (estructura/inversor) ── */
+/* ?"??"? TOGGLES (estructura/inversor) ?"??"? */
 .toggle-group {
   display: flex; gap: 8px; flex-wrap: wrap;
 }
@@ -243,7 +243,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 .toggle-btn.active .tb-name { color: var(--amber); }
 .toggle-btn.active .tb-desc { color: rgba(245,158,11,0.6); }
 
-/* ── INV SELECTOR ── */
+/* ?"??"? INV SELECTOR ?"??"? */
 .inv-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px;
 }
@@ -269,7 +269,7 @@ input[type=range]::-webkit-slider-thumb:hover {
   margin-top: 6px; display: block;
 }
 
-/* ── CATEGORY TABS ── */
+/* ?"??"? CATEGORY TABS ?"??"? */
 .cat-tabs {
   display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;
 }
@@ -332,7 +332,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 .extras-row.active .toggle-pill { background: var(--blue); }
 .extras-row.active .toggle-pill::after { transform: translateX(18px); background: white; }
 
-/* ══ RESULTS ══ */
+/* ?.??.? RESULTS ?.??.? */
 .results-section {
   animation: fadeUp 0.5s 0.2s ease both;
 }
@@ -429,7 +429,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 }
 .tech-note strong { color: var(--txt2); }
 
-/* ══ ITEMIZED BREAKDOWN ══ */
+/* ?.??.? ITEMIZED BREAKDOWN ?.??.? */
 .breakdown-toggle {
   display: flex; align-items: center; gap: 12px;
   padding: 1rem 1.2rem;
@@ -506,7 +506,7 @@ input[type=range]::-webkit-slider-thumb:hover {
 .bd-total-row.grand .tk { font-weight: 700; color: var(--txt); font-size: 0.9rem; }
 .bd-total-row.grand .tv { color: var(--amber); font-size: 1rem; font-weight: 500; }
 
-/* ══ ROI SECTION ══ */
+/* ?.??.? ROI SECTION ?.??.? */
 .roi-toggle-wrap { margin-bottom: 1.2rem; }
 .roi-toggle {
   display: flex; align-items: center; gap: 12px;
@@ -607,7 +607,7 @@ input[type=range]::-webkit-slider-thumb:hover {
   font-size: 0.6rem; color: var(--txt3);
 }
 
-/* ── FOOTER ── */
+/* ?"??"? FOOTER ?"??"? */
 footer {
   margin-top: 3rem; padding-top: 2rem;
   border-top: 1px solid var(--line);
@@ -617,12 +617,12 @@ footer {
 footer strong { color: var(--txt2); }
 footer a { color: var(--amber); text-decoration: none; }
 
-/* ── FUERA METRO TOGGLE (amber variant) ── */
+/* ?"??"? FUERA METRO TOGGLE (amber variant) ?"??"? */
 .extras-row.amber-mode.active { border-color: rgba(245,158,11,0.3); background: var(--amber-glow2); }
 .extras-row.amber-mode.active .toggle-pill { background: var(--amber); }
 .extras-row.amber-mode.active .toggle-pill::after { transform: translateX(18px); background: white; }
 
-/* ── ANIMATIONS ── */
+/* ?"??"? ANIMATIONS ?"??"? */
 @keyframes fadeDown {
   from { opacity: 0; transform: translateY(-12px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -728,13 +728,19 @@ footer a { color: var(--amber); text-decoration: none; }
       </div>
     </div>
 
+    <div style="margin-bottom:1.4rem;">
+      <div style="font-size:0.72rem;color:var(--txt3);margin-bottom:0.7rem;">Panel solar</div>
+      <div class="inv-grid" id="panelGrid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
     <!-- INVERSOR -->
     <div style="margin-bottom:1rem;">
       <div style="font-size:0.72rem;color:var(--txt3);margin-bottom:0.7rem;">Inversor</div>
       <div class="cat-tabs">
         <button class="cat-tab active" data-cat="GENERIC" onclick="setCat(this)">Genérico</button>
         <button class="cat-tab"        data-cat="HUAWEI"  onclick="setCat(this)">Huawei Premium</button>
-        <button class="cat-tab"        data-cat="PACKAGE" onclick="setCat(this)">Paquetes</button>
       </div>
       <div class="inv-grid" id="invGrid">
         <!-- populated by JS -->
@@ -809,7 +815,7 @@ footer a { color: var(--amber); text-decoration: none; }
         <div class="kpi-sub" id="res-kwp-sub">—</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Paneles JA Solar</div>
+        <div class="kpi-label">Paneles seleccionados</div>
         <div class="kpi-value" id="res-panels">—<span class="kpi-unit">und.</span></div>
         <div class="kpi-sub" id="res-panels-sub">—</div>
       </div>
@@ -934,7 +940,7 @@ footer a { color: var(--amber); text-decoration: none; }
   </div>
 
   <footer>
-    Estimación basada en <strong>4.5 HSP/día</strong> (Ciudad de Guatemala) · Factor de rendimiento 87% · Paneles JA Solar 625W bifaciales<br>
+    Estimación basada en <strong>4.5 HSP/día</strong> (Ciudad de Guatemala) · Factor de rendimiento 87% · Paneles <strong id="footerPanelLabel">según selección</strong><br>
     IVA 12% incluido en precio final · Precio referencial sujeto a visita técnica<br>
     <span style="margin-top:4px;display:block">📞 30053270 &nbsp;·&nbsp; 58756331 &nbsp;·&nbsp; <a href="#">contactar a SIS</a></span>
   </footer>
@@ -942,857 +948,7 @@ footer a { color: var(--amber); text-decoration: none; }
 </div><!-- /wrap -->
 
 <script src="config.js"></script>
-<script>
-// ══════════════════════════════════════════════════════════════════
-// PRICES FROM EXCEL (highest observed per product)
-// ══════════════════════════════════════════════════════════════════
-const PRICES = {
-  // panels
-  'P-JA-625W': 800,
-  // inversors — individual
-  'I-SOLIS-2.5K':        5250,
-  'I-CSOLAR-5K':         5269.45,
-  'I-CSOLAR-7K':         6700,
-  'I-HUAWEI-8K':         8200,
-  'I-HUAWEI-3K':         8500,
-  'I-HUAWEI-4K':         10000,
-  'I-HUAWEI-5K':         11000,
-  'I-HUAWEI-6K':         10300,
-  'I-HOYMILES-1.8K':     3000,
-  'I-HOYMILES-2K':       0,
-  'I-APS-DS3D':          4500,
-  'I-GROWATT-MIC3.3K':   5519,
-  'I-GROWATT-MIN5K':     5749,
-  'I-GROWATT-MIN6K':     6499,
-  'I-GROWATT-MIN7K':     8200,
-  'I-GROWATT-MIN10K':    11910,
-  'I-GROWATT-SPF3K':     6536,
-  'I-GROWATT-SPF6K':     12346,
-  'I-GROWATT-MAC15K':    22540,
-  'I-GROWATT-MAC25K':    40668,
-  'I-GROWATT-MAC36K':    50836,
-  // inversors — system packages (15K-LV-650W)
-  'I-SIS-15KLV-1760':    36610,
-  'I-SIS-15KLV-1848':    37604,
-  'I-SIS-15KLV-1936':    38597,
-  'I-SIS-15KLV-2024':    39591,
-  'I-SIS-15KLV-2112':    40584,
-  'I-SIS-15KLV-2288':    42541,
-  'I-SIS-15KLV-2464':    44528,
-  'I-SIS-15KLV-2640':    46515,
-  // inversors — system packages (18K-LV-650W)
-  'I-SIS-18KLV-1848':    40464,
-  'I-SIS-18KLV-2112':    43444,
-  'I-SIS-18KLV-2288':    45401,
-  'I-SIS-18KLV-2464':    47388,
-  'I-SIS-18KLV-2640':    49375,
-  // inversors — system packages (10K-G5-650W)
-  'I-SIS-10KG5-1760':    28582,
-  // inversors — system packages (10K-LV-650W)
-  'I-SIS-10KLV-1760':    34410,
-  // inversors — system packages (15K-G5-615W)
-  'I-SIS-15KG5-1764':    33342,
-  'I-SIS-15KG5-1848':    34292,
-  'I-SIS-15KG5-2016':    36192,
-  'I-SIS-15KG5-2100':    37142,
-  'I-SIS-15KG5-2268':    39042,
-  'I-SIS-15KG5-2352':    39992,
-  'I-SIS-15KG5-2520':    41892,
-  'I-SIS-15KG5-2604':    42842,
-  // inversors — system packages (18K-G5-615W)
-  'I-SIS-18KG5-2016':    37974,
-  'I-SIS-18KG5-2184':    39874,
-  'I-SIS-18KG5-2352':    41774,
-  'I-SIS-18KG5-2520':    43674,
-  // inversors — system packages (20K-615W)
-  'I-SIS-20K-1848':      36678,
-  'I-SIS-20K-2184':      40478,
-  'I-SIS-20K-2352':      42378,
-  // accessories
-  'A-SMART-SENSOR': 914.52,
-  'A-DONGLE-WLAN':  585,
-  // structure
-  'E-RIEL-6M':      336,
-  'E-MIDCLAMP':     23.75,
-  'E-ENDCLAMP':     23.75,
-  'E-FIJTIERRA':    6.02,
-  'E-UNION-RIEL':   28.75,
-  'E-PATA-DEL':     131.95,
-  'E-PATA-TRAS-S':  95,
-  'E-PATA-TRAS-M':  122.5,
-  'E-SILLA-L':      20.70,
-  // cables
-  'C-MC4':          31.25,
-  'C-CAB4-NEGRO':   14.99,
-  'C-CAB4-ROJO':    14.99,
-  // protections DC
-  'A-FLIP-2X25DC':  112.50,
-  'A-SUP-2P-DC':    385.50,
-  // protections AC
-  'A-FLIP-2X32AC':  98.06,
-  'A-SUP-2P-AC':    321.25,
-  // boxes
-  'A-CAJA-8P':      294.46,
-};
-
-// apply configurable price overrides from admin panel
-PRICES['P-JA-625W']   = CFG.PRICE_PANEL;
-PRICES['I-HUAWEI-8K'] = CFG.PRICE_HUAWEI_8K;
-
-// Inversor catalogue  (sorted by maxPanels asc — required for suggestInversor)
-const INVERSORS = [
-  // ─── genérico: microinverters ────────────────────────────────────────────────
-  { id:'I-HOYMILES-1.8K',   label:'1.8 kW',       brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4,  cat:'GENERIC' },
-  { id:'I-HOYMILES-2K',     label:'2 kW',          brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4,  cat:'GENERIC' },
-  { id:'I-APS-DS3D',        label:'2 kW',          brand:'APS',             note:'Microinversor',         maxPanels: 4,  cat:'GENERIC' },
-  // ─── genérico: monofásico / híbrido ─────────────────────────────────────────
-  { id:'I-SOLIS-2.5K',      label:'2.5 kW',        brand:'Solis 1P',        note:'Monofásico',            maxPanels: 5,  cat:'GENERIC' },
-  { id:'I-GROWATT-SPF3K',   label:'3 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 6,  cat:'GENERIC' },
-  { id:'I-GROWATT-MIC3.3K', label:'3.3 kW',        brand:'Growatt',         note:'Monofásico',            maxPanels: 7,  cat:'GENERIC' },
-  { id:'I-CSOLAR-5K',       label:'5 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 9,  cat:'GENERIC' },
-  { id:'I-GROWATT-MIN5K',   label:'5 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 10, cat:'GENERIC' },
-  { id:'I-CSOLAR-7K',       label:'7 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 12, cat:'GENERIC' },
-  { id:'I-GROWATT-MIN6K',   label:'6 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 12, cat:'GENERIC' },
-  { id:'I-GROWATT-SPF6K',   label:'6 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 12, cat:'GENERIC' },
-  { id:'I-GROWATT-MIN7K',   label:'7 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 14, cat:'GENERIC' },
-  { id:'I-GROWATT-MIN10K',  label:'10 kW',         brand:'Growatt',         note:'Monofásico',            maxPanels: 20, cat:'GENERIC' },
-  // ─── genérico: comercial trifásico ──────────────────────────────────────────
-  { id:'I-GROWATT-MAC15K',  label:'15 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 29, cat:'GENERIC' },
-  { id:'I-GROWATT-MAC25K',  label:'25 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 48, cat:'GENERIC' },
-  { id:'I-GROWATT-MAC36K',  label:'36 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 70, cat:'GENERIC' },
-  // ─── huawei premium ─────────────────────────────────────────────────────────
-  { id:'I-HUAWEI-3K',       label:'3 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 6,  cat:'HUAWEI'  },
-  { id:'I-HUAWEI-4K',       label:'4 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 8,  cat:'HUAWEI'  },
-  { id:'I-HUAWEI-5K',       label:'5 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 10, cat:'HUAWEI'  },
-  { id:'I-HUAWEI-6K',       label:'6 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 12, cat:'HUAWEI'  },
-  { id:'I-HUAWEI-8K',       label:'8 kW',          brand:'Huawei',          note:'Trifásico',             maxPanels: 20, cat:'HUAWEI'  },
-  // ─── paquetes — 10K-G5-650W ─────────────────────────────────────────────────
-  { id:'I-SIS-10KG5-1760',  label:'1760 kWh/mes',  brand:'10K-G5-650W',     note:'Trifásico · Paquete',   maxPanels: 20, cat:'PACKAGE' },
-  // ─── paquetes — 10K-LV-650W ─────────────────────────────────────────────────
-  { id:'I-SIS-10KLV-1760',  label:'1760 kWh/mes',  brand:'10K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20, cat:'PACKAGE' },
-  // ─── paquetes — 15K-LV-650W ─────────────────────────────────────────────────
-  { id:'I-SIS-15KLV-1760',  label:'1760 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20, cat:'PACKAGE' },
-  { id:'I-SIS-15KLV-1848',  label:'1848 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21, cat:'PACKAGE' },
-  { id:'I-SIS-18KLV-1848',  label:'1848 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-1764',  label:'1764 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 21, cat:'PACKAGE' },
-  { id:'I-SIS-15KLV-1936',  label:'1936 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 22, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-1848',  label:'1848 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 22, cat:'PACKAGE' },
-  { id:'I-SIS-20K-1848',    label:'1848 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 22, cat:'PACKAGE' },
-  { id:'I-SIS-15KLV-2024',  label:'2024 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 23, cat:'PACKAGE' },
-  { id:'I-SIS-15KLV-2112',  label:'2112 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
-  { id:'I-SIS-18KLV-2112',  label:'2112 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-2016',  label:'2016 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
-  { id:'I-SIS-18KG5-2016',  label:'2016 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-2100',  label:'2100 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 25, cat:'PACKAGE' },
-  { id:'I-SIS-15KLV-2288',  label:'2288 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
-  { id:'I-SIS-18KLV-2288',  label:'2288 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
-  { id:'I-SIS-18KG5-2184',  label:'2184 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
-  { id:'I-SIS-20K-2184',    label:'2184 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-2268',  label:'2268 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 27, cat:'PACKAGE' },
-  { id:'I-SIS-15KLV-2464',  label:'2464 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
-  { id:'I-SIS-18KLV-2464',  label:'2464 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-2352',  label:'2352 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
-  { id:'I-SIS-18KG5-2352',  label:'2352 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
-  { id:'I-SIS-20K-2352',    label:'2352 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
-  { id:'I-SIS-15KLV-2640',  label:'2640 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
-  { id:'I-SIS-18KLV-2640',  label:'2640 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-2520',  label:'2520 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
-  { id:'I-SIS-18KG5-2520',  label:'2520 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
-  { id:'I-SIS-15KG5-2604',  label:'2604 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 31, cat:'PACKAGE' },
-];
-
-// ── ACABADO CONFIG ──
-const ACABADO = {
-  TIPO1: {
-    get pct() { return CFG.ACABADO_T1_PCT; },
-    get label() { return `Tipo 1 — Estándar (+${Math.round(CFG.ACABADO_T1_PCT*100)}%)`; },
-    desc: 'Conduit PVC plástico · Cajas de paso plásticas · Amarras plásticas · Etiquetado básico'
-  },
-  TIPO2: {
-    get pct() { return CFG.ACABADO_T2_PCT; },
-    get label() { return `Tipo 2 — Premium (+${Math.round(CFG.ACABADO_T2_PCT*100)}%)`; },
-    desc: 'Conduit metálico EMT · Cajas de paso metálicas · Abrazaderas metálicas · Etiquetado profesional · Acabado pintura anticorrosiva'
-  }
-};
-
-// ── STATE ──
-let state = {
-  kwh: 600,
-  struct: 'LOSA',
-  cat: 'GENERIC',
-  inversor: 'I-CSOLAR-5K',
-  cableM: 30,
-  huaweiExtras: false,
-  acabado: 'TIPO1',
-  fueraMetro: false,
-};
-
-const HSP = CFG.HSP, EFF = CFG.EFF, PANEL_W = CFG.PANEL_W;
-const LABOR_RATIO = CFG.LABOR_RATIO;
-const IVA = CFG.IVA;
-
-function fmt(n, d=0) {
-  return n.toLocaleString('es-GT', {minimumFractionDigits:d, maximumFractionDigits:d});
-}
-function fmtQ(n) { return 'Q ' + fmt(n, 2); }
-function fmtQ0(n) { return 'Q ' + fmt(n, 0); }
-
-// ── BUILD INVERSOR GRID ──
-function buildInvGrid() {
-  const grid = document.getElementById('invGrid');
-  grid.innerHTML = '';
-
-  if (state.cat === 'HUAWEI') {
-    const kwpNeeded = state.kwh / (HSP * EFF * 30);
-    const panels    = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
-    const kwp       = panels * PANEL_W / 1000;
-    const units8k   = Math.ceil(kwp / 8);
-
-    INVERSORS.filter(i => i.cat === 'HUAWEI').forEach(inv => {
-      const btn = document.createElement('button');
-      btn.className = 'inv-btn' + (inv.id === state.inversor ? ' active' : '');
-      const unitPrice = PRICES[inv.id];
-      const scaled    = inv.id === 'I-HUAWEI-8K' && units8k > 1;
-      const label     = scaled ? `${units8k} × ${inv.label}` : inv.label;
-      const priceStr  = scaled
-        ? `${fmtQ(units8k * unitPrice)} (${units8k} × ${fmtQ(unitPrice)})`
-        : fmtQ(unitPrice);
-      btn.innerHTML = `
-        <span class="ib-kw">${label}</span>
-        <span class="ib-brand">${inv.brand} · ${inv.note}</span>
-        <span class="ib-price">${priceStr}</span>
-      `;
-      btn.onclick = () => { state.inversor = inv.id; buildInvGrid(); updateHuaweiRow(); update(); };
-      grid.appendChild(btn);
-    });
-    return;
-  }
-
-  INVERSORS.filter(i => i.cat === state.cat).forEach(inv => {
-    const btn = document.createElement('button');
-    btn.className = 'inv-btn' + (inv.id === state.inversor ? ' active' : '');
-    const price = PRICES[inv.id];
-    btn.innerHTML = `
-      <span class="ib-kw">${inv.label}</span>
-      <span class="ib-brand">${inv.brand} · ${inv.note}</span>
-      <span class="ib-price">${price ? fmtQ(price) : 'Consultar'}</span>
-    `;
-    btn.onclick = () => { state.inversor = inv.id; buildInvGrid(); updateHuaweiRow(); update(); };
-    grid.appendChild(btn);
-  });
-}
-
-function setCat(btn) {
-  document.querySelectorAll('[data-cat]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.cat = btn.dataset.cat;
-  if (state.cat === 'HUAWEI') {
-    const kwpNeeded = state.kwh / (HSP * EFF * 30);
-    const p = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
-    const best = INVERSORS.filter(i => i.cat === 'HUAWEI').find(i => i.maxPanels >= p);
-    state.inversor = best ? best.id : 'I-HUAWEI-8K';
-  } else {
-    const first = INVERSORS.find(i => i.cat === state.cat);
-    if (first) state.inversor = first.id;
-  }
-  buildInvGrid();
-  updateHuaweiRow();
-  update();
-}
-
-function updateHuaweiRow() {
-  const row = document.getElementById('huaweiExtrasRow');
-  if (state.inversor.startsWith('I-HUAWEI')) {
-    row.style.display = 'flex';
-  } else {
-    row.style.display = 'none';
-    state.huaweiExtras = false;
-    row.classList.remove('active');
-  }
-}
-
-function setStruct(btn) {
-  document.querySelectorAll('[data-struct]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.struct = btn.dataset.struct;
-  update();
-}
-
-function setAcabado(btn) {
-  document.querySelectorAll('[data-acabado]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.acabado = btn.dataset.acabado;
-  document.getElementById('acabadoDesc').textContent = ACABADO[state.acabado].desc;
-  update();
-}
-
-function toggleExtras() {
-  state.huaweiExtras = !state.huaweiExtras;
-  const row = document.getElementById('huaweiExtrasRow');
-  row.classList.toggle('active', state.huaweiExtras);
-  update();
-}
-
-function toggleFueraMetro() {
-  state.fueraMetro = !state.fueraMetro;
-  const row = document.getElementById('fueraMetroRow');
-  row.classList.toggle('active', state.fueraMetro);
-  update();
-}
-
-// ── COMPUTE BILL OF MATERIALS ──
-function computeBOM(panels, cableM, struct, invId, huaweiExtras, cat) {
-  const n = panels;
-  const isHuawei = cat === 'HUAWEI';
-  const invUnits = (isHuawei && invId === 'I-HUAWEI-8K') ? Math.ceil(n * PANEL_W / 1000 / 8) : 1;
-  const largeSystem = n > 8;
-
-  // Ratios from Excel "Ratios y Supuestos"
-  const rieles   = Math.ceil(Math.ceil(n / 2.3) / 2) * 2;
-  const midclamp = n * 2;
-  const endclamp = Math.ceil(n * 0.85);
-  const tierra   = rieles;
-  const union    = Math.ceil(rieles / 2);
-  const mc4      = Math.ceil(n * 0.5);
-  const cableN   = cableM;
-  const cableR   = cableM;
-  const flipDC   = largeSystem ? 2 : 1;
-  const supDC    = largeSystem ? 2 : 1;
-  const flipAC   = 1;
-  const supAC    = 1;
-  const cajas    = Math.ceil(n / 7 + 0.5);
-
-  // structure-specific
-  const patasDel  = struct === 'LOSA' ? rieles : 0;
-  const patasTrS  = struct === 'LOSA' ? Math.ceil(n / 2.5) : 0;
-  const patasTrM  = struct === 'LOSA' ? rieles : 0;
-  const sillasL   = struct === 'LAMINA' ? Math.ceil(n * 3) : 0;
-
-  const bom = [];
-
-  // Panels
-  bom.push({ section:'Paneles', code:'P-JA-625W', desc:'Panel JA Solar 625W bifacial', qty:n });
-
-  // Inversor
-  const _inv = INVERSORS.find(i => i.id === invId);
-  const invDesc = isHuawei
-    ? `${invUnits} × Inversor Huawei SUN2000-8K (${invUnits * 8} kWp)`
-    : `Inversor ${_inv.brand} ${_inv.label}`;
-  bom.push({ section:'Inversor', code:invId, desc:invDesc, qty:invUnits });
-
-  // Huawei extras
-  if (isHuawei && huaweiExtras) {
-    bom.push({ section:'Accesorios', code:'A-SMART-SENSOR', desc:'Smart Power Sensor trifásico DTSU666-H', qty:1 });
-    bom.push({ section:'Accesorios', code:'A-DONGLE-WLAN',  desc:'Dongle WLAN A-05 (monitoreo WiFi)', qty:1 });
-  }
-
-  // Structure common
-  bom.push({ section:'Estructura', code:'E-RIEL-6M',    desc:'Riel de aluminio 6.0 m', qty:rieles });
-  bom.push({ section:'Estructura', code:'E-MIDCLAMP',   desc:'Mid clamp (abrazadera media)', qty:midclamp });
-  bom.push({ section:'Estructura', code:'E-ENDCLAMP',   desc:'End clamp (abrazadera extremo)', qty:endclamp });
-  bom.push({ section:'Estructura', code:'E-FIJTIERRA',  desc:'Fijador de tierra', qty:tierra });
-  bom.push({ section:'Estructura', code:'E-UNION-RIEL', desc:'Unión para rieles', qty:union });
-
-  // Structure-specific
-  if (struct === 'LOSA') {
-    bom.push({ section:'Estructura Losa', code:'E-PATA-DEL',    desc:'Pata delantera telescópica', qty:patasDel });
-    bom.push({ section:'Estructura Losa', code:'E-PATA-TRAS-S', desc:'Pata trasera 15–30°', qty:patasTrS });
-    bom.push({ section:'Estructura Losa', code:'E-PATA-TRAS-M', desc:'Pata trasera 30–60°', qty:patasTrM });
-  } else {
-    bom.push({ section:'Estructura Lámina', code:'E-SILLA-L', desc:'Soporte tipo Silla L', qty:sillasL });
-  }
-
-  // Cables
-  bom.push({ section:'Cables', code:'C-MC4',        desc:'Conector MC4 (par)', qty:mc4 });
-  bom.push({ section:'Cables', code:'C-CAB4-NEGRO', desc:'Cable fotovoltaico 4mm² negro', qty:cableN });
-  bom.push({ section:'Cables', code:'C-CAB4-ROJO',  desc:'Cable fotovoltaico 4mm² rojo', qty:cableR });
-
-  // DC protections
-  bom.push({ section:'Protecciones DC', code:'A-FLIP-2X25DC', desc:'Flipón 2x25A 500VDC', qty:flipDC });
-  bom.push({ section:'Protecciones DC', code:'A-SUP-2P-DC',   desc:'Supresor 2 polos 40kA DC', qty:supDC });
-
-  // AC protections
-  bom.push({ section:'Protecciones AC', code:'A-FLIP-2X32AC', desc:'Flipón 2x32A 240VAC', qty:flipAC });
-  bom.push({ section:'Protecciones AC', code:'A-SUP-2P-AC',   desc:'Supresor 2 polos 40kA 240VAC', qty:supAC });
-
-  // Boxes
-  bom.push({ section:'Cajas', code:'A-CAJA-8P', desc:`Caja sobreponer 8 polos`, qty:cajas });
-
-  // attach prices & subtotals
-  bom.forEach(item => {
-    item.unitPrice = PRICES[item.code] || 0;
-    item.subtotal  = item.qty * item.unitPrice;
-  });
-
-  return bom;
-}
-
-// ── RENDER BREAKDOWN TABLE ──
-function renderBOM(bom) {
-  const content = document.getElementById('bdContent');
-  const totals  = document.getElementById('bdTotals');
-
-  let currentSection = '';
-  let html = '';
-
-  bom.forEach(item => {
-    if (item.section !== currentSection) {
-      currentSection = item.section;
-      html += `<div class="bd-section-header">${item.section}</div>`;
-    }
-    html += `
-      <div class="bd-row">
-        <div class="bd-desc">${item.desc}</div>
-        <div class="bd-qty">${fmt(item.qty)}</div>
-        <div class="bd-unit-price">${fmtQ(item.unitPrice)}</div>
-        <div class="bd-subtotal">${fmtQ0(item.subtotal)}</div>
-      </div>`;
-  });
-  content.innerHTML = html;
-
-  const subtotalMats       = bom.reduce((s,i) => s + i.subtotal, 0);
-  const acabadoInfo        = ACABADO[state.acabado];
-  const acabadoAmt         = subtotalMats * acabadoInfo.pct;
-  const labor              = subtotalMats * LABOR_RATIO;
-  const subtotalBase       = subtotalMats + acabadoAmt + labor;
-  const profitAmt          = subtotalBase * CFG.PROFIT_PCT;
-  const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
-  const subtotalAll        = subtotalBase + profitAmt + transportSurcharge;
-  const ivaAmt             = subtotalAll * IVA;
-  const total              = subtotalAll + ivaAmt;
-
-  const laborPct  = Math.round(CFG.LABOR_RATIO * 100);
-  const profitPct = Math.round(CFG.PROFIT_PCT  * 100);
-  const ivaPct    = Math.round(CFG.IVA          * 100);
-
-  totals.innerHTML = `
-    <div class="bd-total-row"><span class="tk">Equipos sin IVA</span><span class="tv">${fmtQ(subtotalMats)}</span></div>
-    <div class="bd-total-row"><span class="tk">${acabadoInfo.label}</span><span class="tv">${fmtQ(acabadoAmt)}</span></div>
-    <div class="bd-total-row"><span class="tk">Mano de obra estimada (${laborPct}%)</span><span class="tv">${fmtQ(labor)}</span></div>
-    ${profitPct > 0 ? `<div class="bd-total-row"><span class="tk">Flete y servicios adicionales (${profitPct}%)<br><small style="font-size:0.7em;opacity:0.65;font-weight:400;">Costos calculados en base a transporte y trámites administrativos</small></span><span class="tv">${fmtQ(profitAmt)}</span></div>` : ''}
-    ${state.fueraMetro ? `<div class="bd-total-row"><span class="tk">Servicios fuera del área metropolitana (8%)</span><span class="tv">${fmtQ(transportSurcharge)}</span></div>` : ''}
-    <div class="bd-total-row"><span class="tk">Subtotal sin IVA</span><span class="tv">${fmtQ(subtotalAll)}</span></div>
-    <div class="bd-total-row"><span class="tk">IVA ${ivaPct}%</span><span class="tv">${fmtQ(ivaAmt)}</span></div>
-    <div class="bd-total-row grand"><span class="tk">TOTAL CON IVA</span><span class="tv">Q ${fmt(Math.round(total/100)*100, 0)}</span></div>
-  `;
-
-  return { subtotalMats, acabadoAmt, labor, subtotalBase, profitAmt, transportSurcharge, subtotalAll, ivaAmt, total };
-}
-
-// ── MAIN UPDATE ──
-function update() {
-  const kwh = state.kwh;
-  const kwpNeeded = kwh / (HSP * EFF * 30);
-  const panels = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
-  const kwpReal = panels * PANEL_W / 1000;
-  const genMes  = kwpReal * HSP * EFF * 30;
-  const coverage = Math.min(genMes / kwh * 100, 100);
-
-  if (state.cat === 'HUAWEI') buildInvGrid();
-  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
-  const { subtotalMats, acabadoAmt, labor, transportSurcharge, subtotalAll, ivaAmt, total } = renderBOM(bom);
-  const totalRounded = Math.round(total / 100) * 100;
-
-  // KPIs
-  animNum('res-kwp', fmt(kwpReal, 2) + '<span class="kpi-unit">kWp</span>');
-  document.getElementById('res-kwp-sub').textContent = fmt(kwpNeeded, 2) + ' kWp necesarios';
-
-  animNum('res-panels', fmt(panels) + '<span class="kpi-unit">und.</span>');
-  document.getElementById('res-panels-sub').textContent = 'JA Solar 625W · ' + fmt(kwpReal,2) + ' kWp total';
-
-  animNum('res-gen', fmt(genMes, 0) + '<span class="kpi-unit">kWh</span>');
-  const diff = genMes - kwh;
-  document.getElementById('res-gen-sub').textContent = diff >= 0
-    ? `+${fmt(diff,0)} kWh excedente/mes`
-    : `${fmt(Math.abs(diff),0)} kWh restantes de red`;
-
-  const acabadoInfo = ACABADO[state.acabado];
-  animNum('res-price', 'Q ' + fmt(totalRounded, 0));
-  document.getElementById('res-price-sub').textContent = `${acabadoInfo.label} · incluye equipos, acabado y mano de obra`;
-  document.getElementById('bd-mats').textContent         = fmtQ(subtotalMats);
-  document.getElementById('bd-acabado-lbl').textContent  = `Acabado ${state.acabado === 'TIPO1' ? 'Tipo 1 (+15%)' : 'Tipo 2 (+25%)'}`;
-  document.getElementById('bd-acabado').textContent      = fmtQ(acabadoAmt);
-  document.getElementById('bd-labor').textContent        = fmtQ(labor);
-  document.getElementById('bd-iva').textContent          = fmtQ(ivaAmt);
-  document.getElementById('bd-porkwp').textContent       = fmtQ(totalRounded / kwpReal) + ' / kWp';
-
-  // bars
-  const maxB = Math.max(kwh, genMes);
-  document.getElementById('bar-c').style.width   = (kwh / maxB * 100) + '%';
-  document.getElementById('bar-g').style.width   = (genMes / maxB * 100) + '%';
-  document.getElementById('bar-c-val').textContent = fmt(kwh,0) + ' kWh';
-  document.getElementById('bar-g-val').textContent = fmt(genMes,0) + ' kWh';
-  document.getElementById('coverage-pct').textContent = fmt(coverage,0) + '% cobertura';
-
-  // tech note
-  const inv = INVERSORS.find(i => i.id === state.inversor);
-  let note = '';
-  if (panels <= 5)      note = `<strong>Sistema compacto (${panels} paneles · ${fmt(kwpReal,2)} kWp).</strong> Inversor ${inv.brand} monofásico. Ideal para apartamento o casa pequeña.`;
-  else if (panels <= 9) note = `<strong>Sistema residencial (${panels} paneles · ${fmt(kwpReal,2)} kWp).</strong> Inversor ${inv.brand} ${inv.label}. Cobertura estimada del ${fmt(coverage,0)}% de tu consumo.`;
-  else if (panels <= 14)note = `<strong>Sistema mediano-grande (${panels} paneles · ${fmt(kwpReal,1)} kWp).</strong> Inversor trifásico ${inv.brand}. Puede requerir análisis del tablero eléctrico existente.`;
-  else                   note = `<strong>Sistema comercial/industrial (${panels} paneles · ${fmt(kwpReal,1)} kWp).</strong> Requiere visita técnica, estudio de sombras y diseño estructural personalizado.`;
-  note += ` Estructura tipo <strong>${state.struct === 'LOSA' ? 'losa con patas telescópicas' : 'lámina con soportes Silla L'}</strong>. Basado en <strong>4.5 HSP/día</strong> para Ciudad de Guatemala.`;
-  document.getElementById('techNote').innerHTML = note;
-
-  // slider gradient
-  const pct = ((Math.min(kwh,6000) - 50) / (6000 - 50) * 100).toFixed(1);
-  document.getElementById('kwhSlider').style.setProperty('--pct', pct + '%');
-
-  // update ROI if visible
-  const fv = parseFloat(document.getElementById('facturaInput').value);
-  if (fv > 0) updateROI(fv, coverage, totalRounded);
-
-  // suggest inversor based on panels
-  suggestInversor(panels);
-}
-
-function suggestInversor(panels) {
-  const inCat = INVERSORS.filter(i => i.cat === state.cat);
-  const best = inCat.find(i => i.maxPanels >= panels) || inCat[inCat.length - 1];
-  if (!best || state.inversor === best.id) return;
-  const cur = INVERSORS.find(i => i.id === state.inversor);
-  if (cur && panels > cur.maxPanels) {
-    state.inversor = best.id;
-    buildInvGrid();
-    updateHuaweiRow();
-  }
-}
-
-function animNum(id, html) {
-  const el = document.getElementById(id);
-  el.innerHTML = html;
-  el.classList.remove('num-pop');
-  void el.offsetWidth;
-  el.classList.add('num-pop');
-}
-
-// ── ROI ──
-function updateROI(factura, coverage, totalPrice) {
-  if (factura <= 0) { document.getElementById('roiResult').classList.remove('show'); return; }
-  const ahorro = factura * (coverage / 100);
-  const meses = Math.round(totalPrice / ahorro);
-  const vidaUtil = 25 * 12;
-  const pctRec = Math.min(meses / vidaUtil * 100, 50);
-  const anosLibres = ((vidaUtil - meses) / 12).toFixed(1);
-
-  document.getElementById('roi-months').innerHTML = fmt(meses) + '<span class="rb-unit">meses</span>';
-  document.getElementById('roi-precio').textContent  = 'Q ' + fmt(totalPrice, 0);
-  document.getElementById('roi-factura').textContent = fmtQ(factura);
-  document.getElementById('roi-ahorro').textContent  = fmtQ(ahorro) + '/mes';
-  document.getElementById('roi-cob').textContent     = fmt(coverage,0) + '%';
-  document.getElementById('rb-inv').style.width      = pctRec + '%';
-  document.getElementById('roi-free-label').textContent = anosLibres + ' años de ahorro libre →';
-  document.getElementById('roiResult').classList.add('show');
-}
-
-// ── UI TOGGLES ──
-function toggleBreakdown() {
-  const toggle = document.getElementById('bdToggle');
-  const body   = document.getElementById('bdBody');
-  toggle.classList.toggle('open');
-  body.classList.toggle('open');
-}
-function toggleROI() {
-  const toggle = document.getElementById('roiToggle');
-  const body   = document.getElementById('roiBody');
-  toggle.classList.toggle('open');
-  body.classList.toggle('open');
-}
-
-// ── EVENT LISTENERS ──
-const numInput = document.getElementById('kwhInput');
-const slider   = document.getElementById('kwhSlider');
-
-numInput.addEventListener('input', () => {
-  let v = parseInt(numInput.value) || 50;
-  v = Math.max(50, Math.min(5000, v));
-  slider.value = Math.min(v, 6000);
-  state.kwh = v;
-  update();
-});
-slider.addEventListener('input', () => {
-  const v = parseInt(slider.value);
-  numInput.value = v;
-  state.kwh = v;
-  update();
-});
-document.querySelectorAll('.preset-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const v = parseInt(btn.dataset.val);
-    numInput.value = v; slider.value = v; state.kwh = v;
-    document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b === btn));
-    update();
-  });
-});
-document.getElementById('cableInput').addEventListener('input', function() {
-  state.cableM = Math.max(10, parseInt(this.value) || 30);
-  update();
-});
-document.getElementById('facturaInput').addEventListener('input', function() {
-  const fv = parseFloat(this.value) || 0;
-  const kwh = state.kwh;
-  const panels = Math.max(1, Math.ceil(kwh / (HSP * EFF * 30) * 1000 / PANEL_W));
-  const kwpReal = panels * PANEL_W / 1000;
-  const genMes  = kwpReal * HSP * EFF * 30;
-  const coverage = Math.min(genMes / kwh * 100, 100);
-  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
-  const subtotalMats  = bom.reduce((s,i) => s + i.subtotal, 0);
-  const acabadoAmt    = subtotalMats * ACABADO[state.acabado].pct;
-  const labor         = subtotalMats * LABOR_RATIO;
-  const subtotalBase  = subtotalMats + acabadoAmt + labor;
-  const profitAmt     = subtotalBase * CFG.PROFIT_PCT;
-  const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
-  const subtotalAll   = subtotalBase + profitAmt + transportSurcharge;
-  const totalFull     = subtotalAll * (1 + IVA);
-  const totalRounded  = Math.round(totalFull / 100) * 100;
-  updateROI(fv, coverage, totalRounded);
-});
-
-// ── INIT ──
-buildInvGrid();
-updateHuaweiRow();
-document.getElementById('acabadoDesc').textContent = ACABADO[state.acabado].desc;
-update();
-
-// ══════════════════════════════════════════════════════════════════
-// PDF GENERATION
-// ══════════════════════════════════════════════════════════════════
-function generarPDF() {
-  const btn = document.getElementById('pdfBtn');
-  const status = document.getElementById('pdfStatus');
-  btn.style.opacity = '0.7';
-  btn.textContent = '⏳ Generando PDF...';
-  status.style.display = 'block';
-  status.textContent = 'Preparando documento...';
-
-  // Gather current state
-  const kwh = state.kwh;
-  const panels = Math.max(1, Math.ceil(kwh / (HSP * EFF * 30) * 1000 / PANEL_W));
-  const kwpReal = panels * PANEL_W / 1000;
-  const genMes  = kwpReal * HSP * EFF * 30;
-  const coverage = Math.min(genMes / kwh * 100, 100);
-  const inv = INVERSORS.find(i => i.id === state.inversor);
-  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras, state.cat);
-  const subtotalMats       = bom.reduce((s,i) => s + i.subtotal, 0);
-  const acabadoInfo        = ACABADO[state.acabado];
-  const acabadoAmt         = subtotalMats * acabadoInfo.pct;
-  const labor              = subtotalMats * LABOR_RATIO;
-  const subtotalBase       = subtotalMats + acabadoAmt + labor;
-  const profitAmt          = subtotalBase * CFG.PROFIT_PCT;
-  const transportSurcharge = state.fueraMetro ? subtotalMats * 0.08 : 0;
-  const subtotalAll        = subtotalBase + profitAmt + transportSurcharge;
-  const ivaAmt             = subtotalAll * IVA;
-  const total              = subtotalAll + ivaAmt;
-  const totalRounded       = Math.round(total / 100) * 100;
-  const today = new Date().toLocaleDateString('es-GT', {day:'2-digit',month:'long',year:'numeric'});
-
-  // Group BOM by section
-  const sections = {};
-  bom.forEach(item => {
-    if (!sections[item.section]) sections[item.section] = [];
-    sections[item.section].push(item);
-  });
-
-  let bomRows = '';
-  Object.entries(sections).forEach(([sec, items]) => {
-    bomRows += `<tr><td colspan="4" style="background:#1e2a3a;color:#F59E0B;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:6px 10px;font-weight:700;">${sec}</td></tr>`;
-    items.forEach(item => {
-      bomRows += `
-        <tr>
-          <td style="padding:6px 10px;color:#c8d4e8;font-size:10px;">${item.desc}</td>
-          <td style="padding:6px 10px;text-align:center;color:#8899aa;font-size:10px;">${fmt(item.qty)}</td>
-          <td style="padding:6px 10px;text-align:right;color:#8899aa;font-size:10px;">${fmtQ(item.unitPrice)}</td>
-          <td style="padding:6px 10px;text-align:right;color:#c8d4e8;font-size:10px;font-weight:600;">${fmtQ0(item.subtotal)}</td>
-        </tr>`;
-    });
-  });
-
-  const roiSection = (() => {
-    const fv = parseFloat(document.getElementById('facturaInput').value) || 0;
-    if (fv <= 0) return '';
-    const ahorro = fv * (coverage / 100);
-    const meses = Math.round(totalRounded / ahorro);
-    const anos = (meses / 12).toFixed(1);
-    return `
-      <div style="margin-top:20px;background:#0f1f10;border:1px solid #1a4a20;border-radius:10px;padding:18px 20px;">
-        <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#34D399;margin-bottom:12px;">Retorno de Inversión</div>
-        <div style="display:flex;gap:30px;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:32px;font-weight:900;color:#34D399;line-height:1;">${fmt(meses)}</div>
-            <div style="font-size:10px;color:#5a8a6a;margin-top:3px;">meses (${anos} años)</div>
-          </div>
-          <div style="flex:1;">
-            <table style="width:100%;border-collapse:collapse;">
-              <tr><td style="font-size:9px;color:#5a8a6a;padding:3px 0;">Factura mensual actual</td><td style="font-size:9px;color:#a0c8b0;text-align:right;">${fmtQ(fv)}</td></tr>
-              <tr><td style="font-size:9px;color:#5a8a6a;padding:3px 0;">Ahorro mensual estimado</td><td style="font-size:9px;color:#a0c8b0;text-align:right;">${fmtQ(ahorro)}</td></tr>
-              <tr><td style="font-size:9px;color:#5a8a6a;padding:3px 0;">Cobertura del sistema</td><td style="font-size:9px;color:#a0c8b0;text-align:right;">${fmt(coverage,0)}%</td></tr>
-            </table>
-          </div>
-        </div>
-      </div>`;
-  })();
-
-  const html = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Cotización Solar SIS</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap');
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Lato',sans-serif; background:#0C0F18; color:#E8EDF5; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .page { max-width:760px; margin:0 auto; padding:32px 36px; }
-  @media print {
-    body { background:#0C0F18 !important; }
-    .page { padding:20px 24px; }
-    @page { size:A4; margin:10mm 12mm; }
-  }
-  table { border-collapse:collapse; }
-</style>
-</head>
-<body>
-<div class="page">
-
-  <!-- HEADER -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid #1e2a3a;">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <div style="width:44px;height:44px;background:linear-gradient(135deg,#F59E0B,#B45309);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;">☀</div>
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:-0.5px;">SIS</div>
-        <div style="font-size:9px;color:#4a5a70;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;">Soluciones de Ingeniería Sostenible</div>
-      </div>
-    </div>
-    <div style="text-align:right;">
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:#F59E0B;">Cotización Solar</div>
-      <div style="font-size:9px;color:#4a5a70;margin-top:4px;">Fecha: ${today}</div>
-      <div style="font-size:9px;color:#4a5a70;margin-top:2px;">Referencial · sujeto a visita técnica</div>
-    </div>
-  </div>
-
-  <!-- SYSTEM OVERVIEW -->
-  <div style="background:#131829;border:1px solid #1e2a3a;border-radius:12px;padding:18px 20px;margin-bottom:16px;">
-    <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#F59E0B;margin-bottom:14px;">Configuración del Sistema</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
-      <div>
-        <div style="font-size:8.5px;color:#4a5a70;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Consumo</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1;">${fmt(kwh,0)}</div>
-        <div style="font-size:9px;color:#4a5a70;margin-top:2px;">kWh/mes</div>
-      </div>
-      <div>
-        <div style="font-size:8.5px;color:#4a5a70;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Potencia</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1;">${fmt(kwpReal,2)}</div>
-        <div style="font-size:9px;color:#4a5a70;margin-top:2px;">kWp</div>
-      </div>
-      <div>
-        <div style="font-size:8.5px;color:#4a5a70;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Paneles</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1;">${panels}</div>
-        <div style="font-size:9px;color:#4a5a70;margin-top:2px;">JA Solar 625W</div>
-      </div>
-      <div>
-        <div style="font-size:8.5px;color:#4a5a70;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Generación est.</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1;">${fmt(genMes,0)}</div>
-        <div style="font-size:9px;color:#4a5a70;margin-top:2px;">kWh/mes (${fmt(coverage,0)}% cob.)</div>
-      </div>
-    </div>
-    <div style="margin-top:14px;padding-top:14px;border-top:1px solid #1e2a3a;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-      <div style="font-size:9.5px;color:#8899aa;">🏗 Estructura: <span style="color:#c8d4e8;font-weight:700;">${state.struct === 'LOSA' ? 'Losa (patas telescópicas)' : 'Lámina (Silla L)'}</span></div>
-      <div style="font-size:9.5px;color:#8899aa;">⚡ Inversor: <span style="color:#c8d4e8;font-weight:700;">${inv.brand} ${inv.label}</span></div>
-      <div style="font-size:9.5px;color:#8899aa;">✨ Acabado: <span style="color:#c8d4e8;font-weight:700;">${state.acabado === 'TIPO1' ? 'Tipo 1 — Estándar' : 'Tipo 2 — Premium'}</span></div>
-    </div>
-  </div>
-
-  <!-- BOM TABLE -->
-  <div style="background:#131829;border:1px solid #1e2a3a;border-radius:12px;overflow:hidden;margin-bottom:16px;">
-    <div style="padding:12px 16px;background:#0f1824;border-bottom:1px solid #1e2a3a;">
-      <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#F59E0B;">Desglose de Materiales</div>
-    </div>
-    <table style="width:100%;">
-      <thead>
-        <tr style="background:#0f1824;">
-          <th style="padding:8px 10px;text-align:left;font-size:8.5px;color:#4a5a70;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Descripción</th>
-          <th style="padding:8px 10px;text-align:center;font-size:8.5px;color:#4a5a70;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Cant.</th>
-          <th style="padding:8px 10px;text-align:right;font-size:8.5px;color:#4a5a70;letter-spacing:1px;text-transform:uppercase;font-weight:600;">P. Unit.</th>
-          <th style="padding:8px 10px;text-align:right;font-size:8.5px;color:#4a5a70;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Subtotal</th>
-        </tr>
-      </thead>
-      <tbody>${bomRows}</tbody>
-    </table>
-  </div>
-
-  <!-- PRICE SUMMARY -->
-  <div style="background:#131829;border:1px solid #1e2a3a;border-radius:12px;padding:18px 20px;margin-bottom:16px;">
-    <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#F59E0B;margin-bottom:14px;">Resumen de Precio</div>
-    <table style="width:100%;">
-      <tr>
-        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Equipos (materiales) sin IVA</td>
-        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(subtotalMats)}</td>
-      </tr>
-      <tr>
-        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Acabado ${state.acabado === 'TIPO1' ? 'Tipo 1 (+15%)' : 'Tipo 2 (+25%)'}</td>
-        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(acabadoAmt)}</td>
-      </tr>
-      <tr>
-        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Mano de obra estimada (30%)</td>
-        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(labor)}</td>
-      </tr>
-      ${profitAmt > 0 ? `<tr>
-        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Flete y servicios adicionales (${Math.round(CFG.PROFIT_PCT*100)}%)<br><span style="font-size:8.5px;color:#4a5a70;">Costos de transporte y trámites administrativos</span></td>
-        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(profitAmt)}</td>
-      </tr>` : ''}
-      ${state.fueraMetro ? `<tr>
-        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Servicios fuera del área metropolitana (8%)</td>
-        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(transportSurcharge)}</td>
-      </tr>` : ''}
-      <tr>
-        <td style="font-size:10px;color:#8899aa;padding:4px 0;">Subtotal sin IVA</td>
-        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(subtotalAll)}</td>
-      </tr>
-      <tr>
-        <td style="font-size:10px;color:#8899aa;padding:4px 0;">IVA 12%</td>
-        <td style="font-size:10px;color:#c8d4e8;text-align:right;padding:4px 0;font-family:'DM Mono',monospace;">${fmtQ(ivaAmt)}</td>
-      </tr>
-      <tr style="border-top:1px solid #1e2a3a;">
-        <td style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:#fff;padding:10px 0 0;">PRECIO ESTIMADO CON IVA</td>
-        <td style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#F59E0B;text-align:right;padding:10px 0 0;">Q ${fmt(totalRounded,0)}</td>
-      </tr>
-      <tr>
-        <td colspan="2" style="font-size:8.5px;color:#4a5a70;padding-top:4px;">Q ${fmt(totalRounded/kwpReal,0)} por kWp instalado</td>
-      </tr>
-    </table>
-  </div>
-
-  ${roiSection}
-
-  <!-- FOOTER -->
-  <div style="margin-top:24px;padding-top:16px;border-top:1px solid #1e2a3a;display:flex;justify-content:space-between;align-items:flex-end;">
-    <div style="font-size:8px;color:#2a3a50;line-height:1.8;">
-      Basado en 4.5 HSP/día · Factor de rendimiento 87% · Paneles JA Solar 625W<br>
-      IVA 12% incluido · Precio referencial sujeto a visita técnica<br>
-      <strong style="color:#3a5a70;">📞 30053270 &nbsp;·&nbsp; 58756331</strong>
-    </div>
-    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#1e2a3a;">SIS</div>
-  </div>
-
-</div>
-</body>
-</html>`;
-
-  // Open print window
-  const win = window.open('', '_blank', 'width=820,height=1000');
-  win.document.write(html);
-  win.document.close();
-
-  win.onload = () => {
-    setTimeout(() => {
-      win.focus();
-      win.print();
-      btn.style.opacity = '1';
-      btn.innerHTML = '<span style="font-size:1.2rem;">📄</span> Generar cotización en PDF';
-      status.textContent = '✓ PDF listo — usa "Guardar como PDF" en el diálogo de impresión';
-      setTimeout(() => { status.style.display = 'none'; }, 5000);
-    }, 600);
-  };
-}
-</script>
+<script src="catalog.js"></script>
+<script src="cotizador-detailed.js"></script>
 </body>
 </html>
