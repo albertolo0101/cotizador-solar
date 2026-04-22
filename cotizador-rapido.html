@@ -63,7 +63,7 @@ body::before {
   padding: 3rem 2rem 6rem;
 }
 
-/* ── HEADER ── */
+/* ?"??"? HEADER ?"??"? */
 header {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 3rem;
@@ -96,7 +96,7 @@ header {
 }
 .header-link:hover { color: var(--txt2); border-color: var(--line2); }
 
-/* ── HERO ── */
+/* ?"??"? HERO ?"??"? */
 .hero { margin-bottom: 2.5rem; animation: fadeUp 0.5s ease 0.05s both; }
 .hero h1 {
   font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3rem);
@@ -106,7 +106,7 @@ header {
 .hl { color: var(--amber); }
 .hero p { font-size: 1rem; color: var(--txt2); max-width: 520px; line-height: 1.6; }
 
-/* ── INPUT CARD ── */
+/* ?"??"? INPUT CARD ?"??"? */
 .input-card {
   background: var(--ink2);
   border: 1px solid var(--line2);
@@ -147,7 +147,7 @@ header {
   font-family: 'DM Mono', monospace; white-space: nowrap;
 }
 
-/* ── RESULTS SECTION ── */
+/* ?"??"? RESULTS SECTION ?"??"? */
 .results-section { animation: fadeUp 0.5s ease 0.15s both; }
 
 .result-card {
@@ -297,7 +297,7 @@ footer a { color: var(--amber); text-decoration: none; }
   .header-link { display: none; }
 }
 
-/* ── FUERA METRO TOGGLE ── */
+/* ?"??"? FUERA METRO TOGGLE ?"??"? */
 .fuera-metro-row {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0.9rem 1rem; margin-top: 1.2rem;
@@ -375,7 +375,7 @@ footer a { color: var(--amber); text-decoration: none; }
   line-height: 1.5;
 }
 
-/* ── PRINT STYLES ── */
+/* ?"??"? PRINT STYLES ?"??"? */
 @media print {
   @page { margin: 20mm 15mm; size: A4 portrait; }
 
@@ -502,7 +502,7 @@ footer a { color: var(--amber); text-decoration: none; }
 
     <!-- Sistema -->
     <div class="result-card">
-      <div class="result-card-title blue" id="systemCardTitle">Sistema recomendado · Generico · Losa · Acabado Tipo 1</div>
+      <div class="result-card-title blue" id="systemCardTitle">Sistema recomendado · Genérico · Losa · Acabado Tipo 1</div>
       <div class="spec-grid">
         <div class="spec-item">
           <div class="spec-val" id="specInv">—</div>
@@ -601,7 +601,7 @@ footer a { color: var(--amber); text-decoration: none; }
   </div>
 
   <footer>
-    Estimación basada en <strong>4.5 HSP/día</strong> (Ciudad de Guatemala) · Factor de rendimiento 87% · Paneles JA Solar 625W bifaciales<br>
+    Estimación basada en <strong>4.5 HSP/día</strong> (Ciudad de Guatemala) · Factor de rendimiento 87% · Paneles según catálogo activo<br>
     IVA 12% incluido · Precio referencial sujeto a visita técnica · El ahorro real puede variar según tarifa eléctrica y consumo<br>
     <span style="margin-top:4px;display:block">📞 30053270 &nbsp;·&nbsp; 58756331 &nbsp;·&nbsp; <a href="#">contactar a SIS</a></span>
   </footer>
@@ -609,223 +609,8 @@ footer a { color: var(--amber); text-decoration: none; }
 </div><!-- /wrap -->
 
 <script src="config.js"></script>
-<script>
-const HSP = CFG.HSP, EFF = CFG.EFF, PANEL_W = CFG.PANEL_W;
-const LABOR_RATIO = CFG.LABOR_RATIO;
-const IVA = CFG.IVA;
-const ACABADO_PCT = CFG.ACABADO_T1_PCT;
-const CABLE_M = CFG.CABLE_M;
-const SAVINGS_PCT = CFG.SAVINGS_PCT;
-
-let fueraMetro = false;
-let equipmentLine = 'GENERIC';
-
-function toggleFueraMetro() {
-  fueraMetro = !fueraMetro;
-  const row = document.getElementById('fueraMetroRowR');
-  row.classList.toggle('active', fueraMetro);
-  update();
-}
-
-function setEquipmentLine(line) {
-  equipmentLine = line;
-  document.getElementById('lineBtnGeneric').classList.toggle('active', line === 'GENERIC');
-  document.getElementById('lineBtnPremium').classList.toggle('active', line === 'HUAWEI');
-  update();
-}
-
-const P = {
-  'P-JA-625W':    800,
-  'I-SOLIS-2.5K': 5250,
-  'I-GROWATT-SPF3K': 6536,
-  'I-GROWATT-MIC3.3K': 5519,
-  'I-CSOLAR-5K': 5269.45,
-  'I-GROWATT-MIN5K': 5749,
-  'I-CSOLAR-7K': 6700,
-  'I-GROWATT-MIN6K': 6499,
-  'I-GROWATT-SPF6K': 12346,
-  'I-GROWATT-MIN7K': 8200,
-  'I-GROWATT-MIN10K': 11910,
-  'I-GROWATT-MAC15K': 22540,
-  'I-GROWATT-MAC25K': 40668,
-  'I-GROWATT-MAC36K': 50836,
-  'I-HUAWEI-3K':  8500,
-  'I-HUAWEI-4K':  10000,
-  'I-HUAWEI-5K':  11000,
-  'I-HUAWEI-6K':  10300,
-  'I-HUAWEI-8K':  8200,
-  'A-SMART-SENSOR': 914.52,
-  'A-DONGLE-WLAN':  585,
-  'E-RIEL-6M':    336,
-  'E-MIDCLAMP':   23.75,
-  'E-ENDCLAMP':   23.75,
-  'E-FIJTIERRA':  6.02,
-  'E-UNION-RIEL': 28.75,
-  'E-PATA-DEL':   131.95,
-  'E-PATA-TRAS-S':95,
-  'E-PATA-TRAS-M':122.5,
-  'C-MC4':        31.25,
-  'C-CAB4-NEGRO': 14.99,
-  'C-CAB4-ROJO':  14.99,
-  'A-FLIP-2X25DC':112.50,
-  'A-SUP-2P-DC':  385.50,
-  'A-FLIP-2X32AC':98.06,
-  'A-SUP-2P-AC':  321.25,
-  'A-CAJA-8P':    294.46,
-};
-
-// apply configurable price overrides
-P['P-JA-625W']   = CFG.PRICE_PANEL;
-P['I-HUAWEI-8K'] = CFG.PRICE_HUAWEI_8K;
-
-function fmt(n, d=0) {
-  return n.toLocaleString('es-GT', {minimumFractionDigits:d, maximumFractionDigits:d});
-}
-function fmtQ(n) { return 'Q ' + fmt(n, 0); }
-
-const INVERTER_OPTIONS = [
-  { id:'I-SOLIS-2.5K', label:'2.5 kW', brand:'Solis 1P', maxPanels: 5, cat:'GENERIC' },
-  { id:'I-GROWATT-SPF3K', label:'3 kW', brand:'Growatt', maxPanels: 6, cat:'GENERIC' },
-  { id:'I-GROWATT-MIC3.3K', label:'3.3 kW', brand:'Growatt', maxPanels: 7, cat:'GENERIC' },
-  { id:'I-CSOLAR-5K', label:'5 kW', brand:'Canadian Solar', maxPanels: 9, cat:'GENERIC' },
-  { id:'I-GROWATT-MIN5K', label:'5 kW', brand:'Growatt', maxPanels: 10, cat:'GENERIC' },
-  { id:'I-CSOLAR-7K', label:'7 kW', brand:'Canadian Solar', maxPanels: 12, cat:'GENERIC' },
-  { id:'I-GROWATT-MIN6K', label:'6 kW', brand:'Growatt', maxPanels: 12, cat:'GENERIC' },
-  { id:'I-GROWATT-SPF6K', label:'6 kW', brand:'Growatt', maxPanels: 12, cat:'GENERIC' },
-  { id:'I-GROWATT-MIN7K', label:'7 kW', brand:'Growatt', maxPanels: 14, cat:'GENERIC' },
-  { id:'I-GROWATT-MIN10K', label:'10 kW', brand:'Growatt', maxPanels: 20, cat:'GENERIC' },
-  { id:'I-GROWATT-MAC15K', label:'15 kW', brand:'Growatt', maxPanels: 29, cat:'GENERIC' },
-  { id:'I-GROWATT-MAC25K', label:'25 kW', brand:'Growatt', maxPanels: 48, cat:'GENERIC' },
-  { id:'I-GROWATT-MAC36K', label:'36 kW', brand:'Growatt', maxPanels: 70, cat:'GENERIC' },
-  { id:'I-HUAWEI-3K', label:'SUN2000-3K', brand:'Huawei', maxPanels: 6, cat:'HUAWEI' },
-  { id:'I-HUAWEI-4K', label:'SUN2000-4K', brand:'Huawei', maxPanels: 8, cat:'HUAWEI' },
-  { id:'I-HUAWEI-5K', label:'SUN2000-5K', brand:'Huawei', maxPanels: 10, cat:'HUAWEI' },
-  { id:'I-HUAWEI-6K', label:'SUN2000-6K', brand:'Huawei', maxPanels: 12, cat:'HUAWEI' },
-  { id:'I-HUAWEI-8K', label:'SUN2000-8K', brand:'Huawei', maxPanels: 20, cat:'HUAWEI' },
-];
-
-function selectInverter(panels, category) {
-  const options = INVERTER_OPTIONS
-    .filter(inv => inv.cat === category && P[inv.id] > 0)
-    .sort((a, b) => (a.maxPanels - b.maxPanels) || (P[a.id] - P[b.id]));
-
-  const single = options.find(inv => inv.maxPanels >= panels);
-  if (single) {
-    return { ...single, units: 1, displayName: `${single.brand} ${single.label}` };
-  }
-
-  const largest = options[options.length - 1];
-  const units = Math.ceil(panels / largest.maxPanels);
-  return {
-    ...largest,
-    units,
-    displayName: `${units} × ${largest.brand} ${largest.label}`
-  };
-}
-
-function calcSystemPrice(panels, isFueraMetro, category) {
-  const n = panels;
-  const selectedInv = selectInverter(n, category);
-  const { id: invId, units: invUnits, displayName } = selectedInv;
-  const large = n > 8;
-  const rieles = Math.ceil(Math.ceil(n / 2.3) / 2) * 2;
-
-  let mat = 0;
-  mat += n          * P['P-JA-625W'];
-  mat += invUnits   * P[invId];
-  mat +=               P['A-SMART-SENSOR'];
-  mat +=               P['A-DONGLE-WLAN'];
-  mat += rieles     * P['E-RIEL-6M'];
-  mat += n * 2      * P['E-MIDCLAMP'];
-  mat += Math.ceil(n * 0.85) * P['E-ENDCLAMP'];
-  mat += rieles     * P['E-FIJTIERRA'];
-  mat += Math.ceil(rieles / 2) * P['E-UNION-RIEL'];
-  mat += rieles     * P['E-PATA-DEL'];
-  mat += Math.ceil(n / 2.5) * P['E-PATA-TRAS-S'];
-  mat += rieles     * P['E-PATA-TRAS-M'];
-  mat += Math.ceil(n * 0.5) * P['C-MC4'];
-  mat += CABLE_M    * P['C-CAB4-NEGRO'];
-  mat += CABLE_M    * P['C-CAB4-ROJO'];
-  mat += (large ? 2 : 1) * P['A-FLIP-2X25DC'];
-  mat += (large ? 2 : 1) * P['A-SUP-2P-DC'];
-  mat +=               P['A-FLIP-2X32AC'];
-  mat +=               P['A-SUP-2P-AC'];
-  mat += Math.ceil(n / 7 + 0.5) * P['A-CAJA-8P'];
-
-  const acabado          = mat * ACABADO_PCT;
-  const labor            = mat * LABOR_RATIO;
-  const subtotalBase     = mat + acabado + labor;
-  const profit           = subtotalBase * CFG.PROFIT_PCT;
-  const transportSurcharge = isFueraMetro ? mat * 0.08 : 0;
-  const subtotal         = subtotalBase + profit + transportSurcharge;
-  const iva              = subtotal * IVA;
-  return {
-    total: Math.round((subtotal + iva) / 100) * 100,
-    selectedInv,
-    displayName,
-    transportSurcharge
-  };
-}
-
-function update() {
-  const kwh     = Math.max(50, parseInt(document.getElementById('kwhInput').value)    || 600);
-  const factura = Math.max(0,  parseFloat(document.getElementById('facturaInput').value) || 0);
-
-  const kwpNeeded = kwh / (HSP * EFF * 30);
-  const panels    = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
-  const kwpReal   = panels * PANEL_W / 1000;
-  const { total: systemPrice, displayName, transportSurcharge } = calcSystemPrice(panels, fueraMetro, equipmentLine);
-  const lineLabel = equipmentLine === 'HUAWEI' ? 'Premium' : 'Generico';
-
-  const ahorroMensual = factura * SAVINGS_PCT;
-  const nuevaCuota    = factura * (1 - SAVINGS_PCT);
-
-  let paybackStr = '—';
-  if (ahorroMensual > 0) {
-    const mo = systemPrice / ahorroMensual;
-    const yy = Math.floor(mo / 12);
-    const mm = Math.round(mo % 12);
-    paybackStr = mm > 0 ? `${yy} años ${mm} meses` : `${yy} años`;
-  }
-
-  const netAhorro = (yrs) => Math.max(0, yrs * 12 * ahorroMensual - systemPrice);
-
-  // System card
-  document.getElementById('systemCardTitle').textContent = `Sistema recomendado · ${lineLabel} · Losa · Acabado Tipo 1`;
-  document.getElementById('specInv').textContent     = displayName;
-  document.getElementById('specPanels').textContent  = `${panels} und.`;
-  document.getElementById('specKwp').textContent     = `${fmt(kwpReal, 2)} kWp`;
-  document.getElementById('specPrice').textContent   = fmtQ(systemPrice);
-  const priceSub = document.getElementById('specPriceSub');
-  if (priceSub) {
-    priceSub.textContent = fueraMetro
-      ? `Incluye equipos ${lineLabel.toLowerCase()}, acabado Tipo 1, mano de obra y recargo fuera área metropolitana (${fmtQ(transportSurcharge)}) · referencial`
-      : `Incluye equipos ${lineLabel.toLowerCase()}, acabado Tipo 1 y mano de obra · referencial`;
-  }
-
-  // Savings card
-  document.getElementById('billBefore').textContent  = `Q ${fmt(factura, 0)}`;
-  document.getElementById('billAfter').textContent   = `Q ${fmt(nuevaCuota, 0)}`;
-  document.getElementById('rowAhorro').textContent   = `Q ${fmt(ahorroMensual, 0)} / mes`;
-  document.getElementById('rowCobertura').textContent = `${fmt(Math.min((kwpReal * HSP * EFF * 30 / kwh) * 100, 100), 0)}% de tu consumo`;
-  document.getElementById('rowPayback').textContent  = paybackStr;
-
-  // Projection
-  const sign = (n) => n >= 0 ? `Q ${fmt(n, 0)}` : `−Q ${fmt(-n, 0)}`;
-  document.getElementById('proj5').textContent  = sign(netAhorro(5));
-  document.getElementById('proj10').textContent = sign(netAhorro(10));
-  document.getElementById('proj25').textContent = sign(netAhorro(25));
-}
-
-function imprimirPDF() {
-  document.getElementById('print-date').textContent =
-    new Date().toLocaleDateString('es-GT', { year:'numeric', month:'long', day:'numeric' });
-  window.print();
-}
-
-document.getElementById('kwhInput').addEventListener('input', update);
-document.getElementById('facturaInput').addEventListener('input', update);
-update();
-</script>
+<script src="catalog.js"></script>
+<script src="cotizador-rapido.js"></script>
 </body>
 </html>
+
