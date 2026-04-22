@@ -4,7 +4,7 @@
  */
 (function () {
   var D = {
-    PROFIT_PCT:      10,    // Margen de ganancia adicional (%)
+    PROFIT_PCT:      1,    // Margen de ganancia adicional (%)
     IVA_PCT:         12,   // IVA (%)
     LABOR_RATIO_PCT: 30,   // Mano de obra % sobre materiales
     ACABADO_T1_PCT:  15,   // Acabado Tipo 1 markup (%)
