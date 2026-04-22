@@ -296,6 +296,33 @@ footer a { color: var(--amber); text-decoration: none; }
   .header-link { display: none; }
 }
 
+/* ── FUERA METRO TOGGLE ── */
+.fuera-metro-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.9rem 1rem; margin-top: 1.2rem;
+  background: var(--ink3); border: 1px solid var(--line2);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: border-color 0.2s;
+}
+.fuera-metro-row:hover { border-color: rgba(245,158,11,0.4); }
+.fuera-metro-row.active { border-color: rgba(245,158,11,0.5); background: var(--amber-glow); }
+.fm-txt .fm1 { font-size: 0.8rem; color: var(--txt); }
+.fm-txt .fm2 { font-size: 0.68rem; color: var(--txt3); margin-top: 2px; }
+.fuera-metro-row.active .fm1 { color: var(--amber); }
+.toggle-pill-fm {
+  width: 38px; height: 20px; border-radius: 10px;
+  background: var(--ink4); position: relative;
+  transition: background 0.25s; flex-shrink: 0;
+}
+.toggle-pill-fm::after {
+  content: ''; position: absolute;
+  top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--txt3); transition: transform 0.25s, background 0.25s;
+}
+.fuera-metro-row.active .toggle-pill-fm { background: var(--amber); }
+.fuera-metro-row.active .toggle-pill-fm::after { transform: translateX(18px); background: white; }
+
 /* ── PRINT STYLES ── */
 @media print {
   @page { margin: 20mm 15mm; size: A4 portrait; }
@@ -394,6 +421,14 @@ footer a { color: var(--amber); text-decoration: none; }
         </div>
       </div>
     </div>
+
+    <div class="fuera-metro-row" id="fueraMetroRowR" onclick="toggleFueraMetro()">
+      <div class="fm-txt">
+        <div class="fm1">Servicios fuera del área metropolitana</div>
+        <div class="fm2">Recargo del 8% sobre materiales — transporte y trámites para instalaciones fuera de ciudad</div>
+      </div>
+      <div class="toggle-pill-fm"></div>
+    </div>
   </div>
 
   <!-- RESULTS -->
@@ -420,7 +455,7 @@ footer a { color: var(--amber); text-decoration: none; }
         <div>
           <div class="ph-label">Inversión total estimada (IVA incluido)</div>
           <div class="ph-val" id="specPrice">—</div>
-          <div class="ph-sub">Incluye equipos, acabado Tipo 2 y mano de obra · referencial</div>
+          <div class="ph-sub" id="specPriceSub">Incluye equipos, acabado Tipo 2 y mano de obra · referencial</div>
         </div>
       </div>
     </div>
@@ -516,6 +551,15 @@ const ACABADO_PCT = CFG.ACABADO_T2_PCT;
 const CABLE_M = CFG.CABLE_M;
 const SAVINGS_PCT = CFG.SAVINGS_PCT;
 
+let fueraMetro = false;
+
+function toggleFueraMetro() {
+  fueraMetro = !fueraMetro;
+  const row = document.getElementById('fueraMetroRowR');
+  row.classList.toggle('active', fueraMetro);
+  update();
+}
+
 const P = {
   'P-JA-625W':    800,
   'I-HUAWEI-3K':  8500,
@@ -569,7 +613,7 @@ function selectHuawei(panels) {
   return { id: 'I-HUAWEI-8K', units, name: 'SUN2000-8K' };
 }
 
-function calcSystemPrice(panels) {
+function calcSystemPrice(panels, isFueraMetro) {
   const n = panels;
   const { id: invId, units: invUnits, name: invName } = selectHuawei(n);
   const large = n > 8;
@@ -597,13 +641,14 @@ function calcSystemPrice(panels) {
   mat +=               P['A-SUP-2P-AC'];
   mat += Math.ceil(n / 7 + 0.5) * P['A-CAJA-8P'];
 
-  const acabado     = mat * ACABADO_PCT;
-  const labor       = mat * LABOR_RATIO;
-  const subtotalBase = mat + acabado + labor;
-  const profit      = subtotalBase * CFG.PROFIT_PCT;
-  const subtotal    = subtotalBase + profit;
-  const iva         = subtotal * IVA;
-  return { total: Math.round((subtotal + iva) / 100) * 100, invUnits, invName };
+  const acabado          = mat * ACABADO_PCT;
+  const labor            = mat * LABOR_RATIO;
+  const subtotalBase     = mat + acabado + labor;
+  const profit           = subtotalBase * CFG.PROFIT_PCT;
+  const transportSurcharge = isFueraMetro ? mat * 0.08 : 0;
+  const subtotal         = subtotalBase + profit + transportSurcharge;
+  const iva              = subtotal * IVA;
+  return { total: Math.round((subtotal + iva) / 100) * 100, invUnits, invName, transportSurcharge };
 }
 
 function update() {
@@ -613,7 +658,7 @@ function update() {
   const kwpNeeded = kwh / (HSP * EFF * 30);
   const panels    = Math.max(1, Math.ceil(kwpNeeded * 1000 / PANEL_W));
   const kwpReal   = panels * PANEL_W / 1000;
-  const { total: systemPrice, invUnits, invName } = calcSystemPrice(panels);
+  const { total: systemPrice, invUnits, invName, transportSurcharge } = calcSystemPrice(panels, fueraMetro);
 
   const ahorroMensual = factura * SAVINGS_PCT;
   const nuevaCuota    = factura * (1 - SAVINGS_PCT);
@@ -633,6 +678,12 @@ function update() {
   document.getElementById('specPanels').textContent  = `${panels} und.`;
   document.getElementById('specKwp').textContent     = `${fmt(kwpReal, 2)} kWp`;
   document.getElementById('specPrice').textContent   = fmtQ(systemPrice);
+  const priceSub = document.getElementById('specPriceSub');
+  if (priceSub) {
+    priceSub.textContent = fueraMetro
+      ? `Incluye equipos, acabado Tipo 2, mano de obra y recargo fuera área metropolitana (${fmtQ(transportSurcharge)}) · referencial`
+      : `Incluye equipos, acabado Tipo 2 y mano de obra · referencial`;
+  }
 
   // Savings card
   document.getElementById('billBefore').textContent  = `Q ${fmt(factura, 0)}`;
