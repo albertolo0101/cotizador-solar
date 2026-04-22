@@ -269,6 +269,20 @@ input[type=range]::-webkit-slider-thumb:hover {
   margin-top: 6px; display: block;
 }
 
+/* ── CATEGORY TABS ── */
+.cat-tabs {
+  display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;
+}
+.cat-tab {
+  background: var(--ink3); border: 2px solid var(--line);
+  border-radius: 20px; padding: 0.32rem 0.85rem;
+  font-size: 0.7rem; font-family: 'Syne', sans-serif; font-weight: 600;
+  color: var(--txt2); cursor: pointer; transition: all 0.2s;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.cat-tab:hover { border-color: var(--line2); color: var(--txt); }
+.cat-tab.active { border-color: var(--amber); background: var(--amber-glow); color: var(--amber); }
+
 /* cable input */
 .cable-row {
   display: flex; align-items: center; gap: 12px;
@@ -667,14 +681,14 @@ footer a { color: var(--amber); text-decoration: none; }
 
     <div class="kwh-row">
       <div class="kwh-input-box">
-        <input type="number" id="kwhInput" min="50" max="5000" value="600" placeholder="600">
+        <input type="number" id="kwhInput" min="50" max="6000" value="600" placeholder="600">
         <span class="kwh-unit">kWh / mes</span>
       </div>
     </div>
 
-    <input type="range" id="kwhSlider" min="50" max="3000" value="600" step="10">
+    <input type="range" id="kwhSlider" min="50" max="6000" value="600" step="10">
     <div class="slider-ticks">
-      <span>50</span><span>500</span><span>1,000</span><span>2,000</span><span>3,000 kWh</span>
+      <span>50</span><span>1,000</span><span>2,000</span><span>4,000</span><span>6,000 kWh</span>
     </div>
 
     <div class="presets">
@@ -683,6 +697,7 @@ footer a { color: var(--amber); text-decoration: none; }
       <button class="preset-btn active" data-val="600">Casa mediana <small style="opacity:.6;display:block">~600 kWh</small></button>
       <button class="preset-btn" data-val="900">Casa grande <small style="opacity:.6;display:block">~900 kWh</small></button>
       <button class="preset-btn" data-val="1400">Comercial <small style="opacity:.6;display:block">~1,400 kWh</small></button>
+      <button class="preset-btn" data-val="3500">Industrial <small style="opacity:.6;display:block">~3,500 kWh</small></button>
     </div>
   </div>
 
@@ -707,34 +722,34 @@ footer a { color: var(--amber); text-decoration: none; }
       </div>
     </div>
 
-    <!-- INVERSOR TYPE -->
+    <!-- INVERSOR -->
     <div style="margin-bottom:1rem;">
-      <div style="font-size:0.72rem;color:var(--txt3);margin-bottom:0.7rem;">Tipo de inversor</div>
-      <div class="toggle-group">
-        <button class="toggle-btn active" data-invtype="GENERICO" onclick="setInvType(this)">
-          <span class="tb-icon">⚡</span>
-          <span class="tb-name">Genérico</span>
-          <span class="tb-desc">Solis / Canadian Solar · se elige según el sistema</span>
-        </button>
-        <button class="toggle-btn" data-invtype="PREMIUM" onclick="setInvType(this)">
-          <span class="tb-icon">⭐</span>
-          <span class="tb-name">Premium — Huawei</span>
-          <span class="tb-desc">Trifásico · incluye Smart Sensor + Dongle WiFi</span>
-        </button>
+      <div style="font-size:0.72rem;color:var(--txt3);margin-bottom:0.7rem;">Inversor</div>
+      <div class="cat-tabs">
+        <button class="cat-tab active" data-cat="GENERIC" onclick="setCat(this)">Genérico</button>
+        <button class="cat-tab"        data-cat="HUAWEI"  onclick="setCat(this)">Huawei Premium</button>
+        <button class="cat-tab"        data-cat="PACKAGE" onclick="setCat(this)">Paquetes</button>
       </div>
-      <div id="invSelectedInfo" style="margin-top:0.8rem;padding:0.7rem 1rem;background:var(--ink3);border:1px solid var(--line);border-radius:var(--radius-sm);display:flex;justify-content:space-between;align-items:center;">
-        <span id="invSelectedName" style="font-size:0.78rem;color:var(--txt2);">—</span>
-        <span id="invSelectedPrice" style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--amber);"></span>
+      <div class="inv-grid" id="invGrid">
+        <!-- populated by JS -->
       </div>
     </div>
 
-    <!-- CABLE -->
+    <!-- CABLE + HUAWEI EXTRAS -->
     <div class="cable-row">
       <label>Metros de cable DC (total, ida y vuelta):<br><span style="color:var(--txt3);font-size:0.67rem;">Distancia promedio panel → inversor × 2</span></label>
       <div class="cable-input-wrap">
         <input type="number" id="cableInput" min="10" max="500" value="30" step="5">
         <span class="cu">m</span>
       </div>
+    </div>
+
+    <div class="extras-row" id="huaweiExtrasRow" onclick="toggleExtras()" style="display:none;">
+      <div class="extras-txt">
+        <div class="et1">Incluir Smart Sensor + Dongle WLAN</div>
+        <div class="et2">Medidor trifásico DTSU666-H y WiFi — recomendado para inversores Huawei</div>
+      </div>
+      <div class="toggle-pill"></div>
     </div>
   </div>
 
@@ -1003,63 +1018,64 @@ const PRICES = {
 
 // Inversor catalogue  (sorted by maxPanels asc — required for suggestInversor)
 const INVERSORS = [
-  // ─── microinverters ──────────────────────────────────────────────────────────
-  { id:'I-HOYMILES-1.8K',   label:'1.8 kW',       brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4  },
-  { id:'I-HOYMILES-2K',     label:'2 kW',          brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4  },
-  { id:'I-APS-DS3D',        label:'2 kW',          brand:'APS',             note:'Microinversor',         maxPanels: 4  },
-  // ─── small monofásico / híbrido ──────────────────────────────────────────────
-  { id:'I-SOLIS-2.5K',      label:'2.5 kW',        brand:'Solis 1P',        note:'Monofásico',            maxPanels: 5  },
-  { id:'I-HUAWEI-3K',       label:'3 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 6  },
-  { id:'I-GROWATT-SPF3K',   label:'3 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 6  },
-  { id:'I-GROWATT-MIC3.3K', label:'3.3 kW',        brand:'Growatt',         note:'Monofásico',            maxPanels: 7  },
-  { id:'I-HUAWEI-4K',       label:'4 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 8  },
-  { id:'I-CSOLAR-5K',       label:'5 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 9  },
-  { id:'I-HUAWEI-5K',       label:'5 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 10 },
-  { id:'I-GROWATT-MIN5K',   label:'5 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 10 },
-  { id:'I-CSOLAR-7K',       label:'7 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 12 },
-  { id:'I-HUAWEI-6K',       label:'6 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 12 },
-  { id:'I-GROWATT-MIN6K',   label:'6 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 12 },
-  { id:'I-GROWATT-SPF6K',   label:'6 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 12 },
-  { id:'I-GROWATT-MIN7K',   label:'7 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 14 },
-  { id:'I-HUAWEI-8K',       label:'8 kW',          brand:'Huawei',          note:'Trifásico',             maxPanels: 20 },
-  { id:'I-GROWATT-MIN10K',  label:'10 kW',         brand:'Growatt',         note:'Monofásico',            maxPanels: 20 },
-  // ─── commercial trifásico ───────────────────────────────────────────────────
-  { id:'I-GROWATT-MAC15K',  label:'15 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 29 },
-  { id:'I-GROWATT-MAC25K',  label:'25 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 48 },
-  { id:'I-GROWATT-MAC36K',  label:'36 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 70 },
-  // ─── system packages — 10K-G5-650W ──────────────────────────────────────────
-  { id:'I-SIS-10KG5-1760',  label:'1760 kWh/mes',  brand:'10K-G5-650W',     note:'Trifásico · Paquete',   maxPanels: 20 },
-  // ─── system packages — 10K-LV-650W ──────────────────────────────────────────
-  { id:'I-SIS-10KLV-1760',  label:'1760 kWh/mes',  brand:'10K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20 },
-  // ─── system packages — 15K-LV-650W ──────────────────────────────────────────
-  { id:'I-SIS-15KLV-1760',  label:'1760 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20 },
-  { id:'I-SIS-15KLV-1848',  label:'1848 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21 },
-  { id:'I-SIS-18KLV-1848',  label:'1848 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21 },
-  { id:'I-SIS-15KG5-1764',  label:'1764 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 21 },
-  { id:'I-SIS-15KLV-1936',  label:'1936 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 22 },
-  { id:'I-SIS-15KG5-1848',  label:'1848 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 22 },
-  { id:'I-SIS-20K-1848',    label:'1848 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 22 },
-  { id:'I-SIS-15KLV-2024',  label:'2024 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 23 },
-  { id:'I-SIS-15KLV-2112',  label:'2112 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24 },
-  { id:'I-SIS-18KLV-2112',  label:'2112 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24 },
-  { id:'I-SIS-15KG5-2016',  label:'2016 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24 },
-  { id:'I-SIS-18KG5-2016',  label:'2016 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24 },
-  { id:'I-SIS-15KG5-2100',  label:'2100 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 25 },
-  { id:'I-SIS-15KLV-2288',  label:'2288 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26 },
-  { id:'I-SIS-18KLV-2288',  label:'2288 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26 },
-  { id:'I-SIS-18KG5-2184',  label:'2184 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 26 },
-  { id:'I-SIS-20K-2184',    label:'2184 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 26 },
-  { id:'I-SIS-15KG5-2268',  label:'2268 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 27 },
-  { id:'I-SIS-15KLV-2464',  label:'2464 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28 },
-  { id:'I-SIS-18KLV-2464',  label:'2464 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28 },
-  { id:'I-SIS-15KG5-2352',  label:'2352 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28 },
-  { id:'I-SIS-18KG5-2352',  label:'2352 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28 },
-  { id:'I-SIS-20K-2352',    label:'2352 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 28 },
-  { id:'I-SIS-15KLV-2640',  label:'2640 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30 },
-  { id:'I-SIS-18KLV-2640',  label:'2640 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30 },
-  { id:'I-SIS-15KG5-2520',  label:'2520 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30 },
-  { id:'I-SIS-18KG5-2520',  label:'2520 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30 },
-  { id:'I-SIS-15KG5-2604',  label:'2604 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 31 },
+  // ─── genérico: microinverters ────────────────────────────────────────────────
+  { id:'I-HOYMILES-1.8K',   label:'1.8 kW',       brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4,  cat:'GENERIC' },
+  { id:'I-HOYMILES-2K',     label:'2 kW',          brand:'Hoymiles',        note:'Microinversor',         maxPanels: 4,  cat:'GENERIC' },
+  { id:'I-APS-DS3D',        label:'2 kW',          brand:'APS',             note:'Microinversor',         maxPanels: 4,  cat:'GENERIC' },
+  // ─── genérico: monofásico / híbrido ─────────────────────────────────────────
+  { id:'I-SOLIS-2.5K',      label:'2.5 kW',        brand:'Solis 1P',        note:'Monofásico',            maxPanels: 5,  cat:'GENERIC' },
+  { id:'I-GROWATT-SPF3K',   label:'3 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 6,  cat:'GENERIC' },
+  { id:'I-GROWATT-MIC3.3K', label:'3.3 kW',        brand:'Growatt',         note:'Monofásico',            maxPanels: 7,  cat:'GENERIC' },
+  { id:'I-CSOLAR-5K',       label:'5 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 9,  cat:'GENERIC' },
+  { id:'I-GROWATT-MIN5K',   label:'5 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 10, cat:'GENERIC' },
+  { id:'I-CSOLAR-7K',       label:'7 kW',          brand:'Canadian Solar',  note:'Monofásico',            maxPanels: 12, cat:'GENERIC' },
+  { id:'I-GROWATT-MIN6K',   label:'6 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 12, cat:'GENERIC' },
+  { id:'I-GROWATT-SPF6K',   label:'6 kW',          brand:'Growatt',         note:'Híbrido',               maxPanels: 12, cat:'GENERIC' },
+  { id:'I-GROWATT-MIN7K',   label:'7 kW',          brand:'Growatt',         note:'Monofásico',            maxPanels: 14, cat:'GENERIC' },
+  { id:'I-GROWATT-MIN10K',  label:'10 kW',         brand:'Growatt',         note:'Monofásico',            maxPanels: 20, cat:'GENERIC' },
+  // ─── genérico: comercial trifásico ──────────────────────────────────────────
+  { id:'I-GROWATT-MAC15K',  label:'15 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 29, cat:'GENERIC' },
+  { id:'I-GROWATT-MAC25K',  label:'25 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 48, cat:'GENERIC' },
+  { id:'I-GROWATT-MAC36K',  label:'36 kW',         brand:'Growatt',         note:'Trifásico',             maxPanels: 70, cat:'GENERIC' },
+  // ─── huawei premium ─────────────────────────────────────────────────────────
+  { id:'I-HUAWEI-3K',       label:'3 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 6,  cat:'HUAWEI'  },
+  { id:'I-HUAWEI-4K',       label:'4 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 8,  cat:'HUAWEI'  },
+  { id:'I-HUAWEI-5K',       label:'5 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 10, cat:'HUAWEI'  },
+  { id:'I-HUAWEI-6K',       label:'6 kW',          brand:'Huawei',          note:'Monofásico',            maxPanels: 12, cat:'HUAWEI'  },
+  { id:'I-HUAWEI-8K',       label:'8 kW',          brand:'Huawei',          note:'Trifásico',             maxPanels: 20, cat:'HUAWEI'  },
+  // ─── paquetes — 10K-G5-650W ─────────────────────────────────────────────────
+  { id:'I-SIS-10KG5-1760',  label:'1760 kWh/mes',  brand:'10K-G5-650W',     note:'Trifásico · Paquete',   maxPanels: 20, cat:'PACKAGE' },
+  // ─── paquetes — 10K-LV-650W ─────────────────────────────────────────────────
+  { id:'I-SIS-10KLV-1760',  label:'1760 kWh/mes',  brand:'10K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20, cat:'PACKAGE' },
+  // ─── paquetes — 15K-LV-650W ─────────────────────────────────────────────────
+  { id:'I-SIS-15KLV-1760',  label:'1760 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 20, cat:'PACKAGE' },
+  { id:'I-SIS-15KLV-1848',  label:'1848 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21, cat:'PACKAGE' },
+  { id:'I-SIS-18KLV-1848',  label:'1848 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 21, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-1764',  label:'1764 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 21, cat:'PACKAGE' },
+  { id:'I-SIS-15KLV-1936',  label:'1936 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 22, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-1848',  label:'1848 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 22, cat:'PACKAGE' },
+  { id:'I-SIS-20K-1848',    label:'1848 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 22, cat:'PACKAGE' },
+  { id:'I-SIS-15KLV-2024',  label:'2024 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 23, cat:'PACKAGE' },
+  { id:'I-SIS-15KLV-2112',  label:'2112 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
+  { id:'I-SIS-18KLV-2112',  label:'2112 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-2016',  label:'2016 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
+  { id:'I-SIS-18KG5-2016',  label:'2016 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 24, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-2100',  label:'2100 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 25, cat:'PACKAGE' },
+  { id:'I-SIS-15KLV-2288',  label:'2288 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
+  { id:'I-SIS-18KLV-2288',  label:'2288 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
+  { id:'I-SIS-18KG5-2184',  label:'2184 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
+  { id:'I-SIS-20K-2184',    label:'2184 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 26, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-2268',  label:'2268 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 27, cat:'PACKAGE' },
+  { id:'I-SIS-15KLV-2464',  label:'2464 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
+  { id:'I-SIS-18KLV-2464',  label:'2464 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-2352',  label:'2352 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
+  { id:'I-SIS-18KG5-2352',  label:'2352 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
+  { id:'I-SIS-20K-2352',    label:'2352 kWh/mes',  brand:'20K-615W',         note:'Trifásico · Paquete',   maxPanels: 28, cat:'PACKAGE' },
+  { id:'I-SIS-15KLV-2640',  label:'2640 kWh/mes',  brand:'15K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
+  { id:'I-SIS-18KLV-2640',  label:'2640 kWh/mes',  brand:'18K-LV-650W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-2520',  label:'2520 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
+  { id:'I-SIS-18KG5-2520',  label:'2520 kWh/mes',  brand:'18K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 30, cat:'PACKAGE' },
+  { id:'I-SIS-15KG5-2604',  label:'2604 kWh/mes',  brand:'15K-G5-615W',     note:'Trifásico · Paquete',   maxPanels: 31, cat:'PACKAGE' },
 ];
 
 // ── ACABADO CONFIG ──
@@ -1080,8 +1096,10 @@ const ACABADO = {
 let state = {
   kwh: 600,
   struct: 'LOSA',
-  invType: 'GENERICO',
+  cat: 'GENERIC',
+  inversor: 'I-CSOLAR-5K',
   cableM: 30,
+  huaweiExtras: false,
   acabado: 'TIPO1',
 };
 
@@ -1095,18 +1113,44 @@ function fmt(n, d=0) {
 function fmtQ(n) { return 'Q ' + fmt(n, 2); }
 function fmtQ0(n) { return 'Q ' + fmt(n, 0); }
 
-// ── INVERSOR TYPE ──
-function setInvType(btn) {
-  document.querySelectorAll('[data-invtype]').forEach(b => b.classList.remove('active'));
+// ── BUILD INVERSOR GRID ──
+function buildInvGrid() {
+  const grid = document.getElementById('invGrid');
+  grid.innerHTML = '';
+  INVERSORS.filter(i => i.cat === state.cat).forEach(inv => {
+    const btn = document.createElement('button');
+    btn.className = 'inv-btn' + (inv.id === state.inversor ? ' active' : '');
+    const price = PRICES[inv.id];
+    btn.innerHTML = `
+      <span class="ib-kw">${inv.label}</span>
+      <span class="ib-brand">${inv.brand} · ${inv.note}</span>
+      <span class="ib-price">${price ? fmtQ(price) : 'Consultar'}</span>
+    `;
+    btn.onclick = () => { state.inversor = inv.id; buildInvGrid(); updateHuaweiRow(); update(); };
+    grid.appendChild(btn);
+  });
+}
+
+function setCat(btn) {
+  document.querySelectorAll('[data-cat]').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  state.invType = btn.dataset.invtype;
+  state.cat = btn.dataset.cat;
+  const first = INVERSORS.find(i => i.cat === state.cat);
+  if (first) state.inversor = first.id;
+  buildInvGrid();
+  updateHuaweiRow();
   update();
 }
 
-function getInversor(panels) {
-  if (state.invType === 'PREMIUM') return 'I-HUAWEI-8K';
-  const genericos = INVERSORS.filter(i => i.id !== 'I-HUAWEI-8K');
-  return (genericos.find(i => i.maxPanels >= panels) || genericos[genericos.length - 1]).id;
+function updateHuaweiRow() {
+  const row = document.getElementById('huaweiExtrasRow');
+  if (state.inversor.startsWith('I-HUAWEI')) {
+    row.style.display = 'flex';
+  } else {
+    row.style.display = 'none';
+    state.huaweiExtras = false;
+    row.classList.remove('active');
+  }
 }
 
 function setStruct(btn) {
@@ -1124,14 +1168,21 @@ function setAcabado(btn) {
   update();
 }
 
+function toggleExtras() {
+  state.huaweiExtras = !state.huaweiExtras;
+  const row = document.getElementById('huaweiExtrasRow');
+  row.classList.toggle('active', state.huaweiExtras);
+  update();
+}
+
 // ── COMPUTE BILL OF MATERIALS ──
-function computeBOM(panels, cableM, struct, invId) {
+function computeBOM(panels, cableM, struct, invId, huaweiExtras) {
   const n = panels;
   const isHuawei = invId === 'I-HUAWEI-8K';
   const largeSystem = n > 8;
 
   // Ratios from Excel "Ratios y Supuestos"
-  const rieles   = Math.ceil(n / 2.3);
+  const rieles   = Math.ceil(Math.ceil(n / 2.3) / 2) * 2;
   const midclamp = n * 2;
   const endclamp = Math.ceil(n * 0.85);
   const tierra   = rieles;
@@ -1159,8 +1210,8 @@ function computeBOM(panels, cableM, struct, invId) {
   // Inversor
   bom.push({ section:'Inversor', code:invId, desc:`Inversor ${INVERSORS.find(i=>i.id===invId).brand} ${INVERSORS.find(i=>i.id===invId).label}`, qty:1 });
 
-  // Huawei extras always included with Premium
-  if (isHuawei) {
+  // Huawei extras
+  if (isHuawei && huaweiExtras) {
     bom.push({ section:'Accesorios', code:'A-SMART-SENSOR', desc:'Smart Power Sensor trifásico DTSU666-H', qty:1 });
     bom.push({ section:'Accesorios', code:'A-DONGLE-WLAN',  desc:'Dongle WLAN A-05 (monitoreo WiFi)', qty:1 });
   }
@@ -1258,15 +1309,9 @@ function update() {
   const genMes  = kwpReal * HSP * EFF * 30;
   const coverage = Math.min(genMes / kwh * 100, 100);
 
-  const invId = getInversor(panels);
-  const bom = computeBOM(panels, state.cableM, state.struct, invId);
+  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras);
   const { subtotalMats, acabadoAmt, labor, subtotalAll, ivaAmt, total } = renderBOM(bom);
   const totalRounded = Math.round(total / 100) * 100;
-
-  // selected inversor info
-  const invData = INVERSORS.find(i => i.id === invId);
-  document.getElementById('invSelectedName').textContent = `${invData.brand} ${invData.label} · ${invData.note}`;
-  document.getElementById('invSelectedPrice').textContent = fmtQ(PRICES[invId]);
 
   // KPIs
   animNum('res-kwp', fmt(kwpReal, 2) + '<span class="kpi-unit">kWp</span>');
@@ -1300,7 +1345,7 @@ function update() {
   document.getElementById('coverage-pct').textContent = fmt(coverage,0) + '% cobertura';
 
   // tech note
-  const inv = invData;
+  const inv = INVERSORS.find(i => i.id === state.inversor);
   let note = '';
   if (panels <= 5)      note = `<strong>Sistema compacto (${panels} paneles · ${fmt(kwpReal,2)} kWp).</strong> Inversor ${inv.brand} monofásico. Ideal para apartamento o casa pequeña.`;
   else if (panels <= 9) note = `<strong>Sistema residencial (${panels} paneles · ${fmt(kwpReal,2)} kWp).</strong> Inversor ${inv.brand} ${inv.label}. Cobertura estimada del ${fmt(coverage,0)}% de tu consumo.`;
@@ -1310,24 +1355,26 @@ function update() {
   document.getElementById('techNote').innerHTML = note;
 
   // slider gradient
-  const pct = ((Math.min(kwh,3000) - 50) / (3000 - 50) * 100).toFixed(1);
+  const pct = ((Math.min(kwh,6000) - 50) / (6000 - 50) * 100).toFixed(1);
   document.getElementById('kwhSlider').style.setProperty('--pct', pct + '%');
 
   // update ROI if visible
   const fv = parseFloat(document.getElementById('facturaInput').value);
   if (fv > 0) updateROI(fv, coverage, totalRounded);
 
-  // auto-upgrade to premium if panels exceed generic capacity
-  autoUpgradeInvType(panels);
+  // suggest inversor based on panels
+  suggestInversor(panels);
 }
 
-function autoUpgradeInvType(panels) {
-  const maxGenerico = Math.max(...INVERSORS.filter(i => i.id !== 'I-HUAWEI-8K').map(i => i.maxPanels));
-  if (state.invType === 'GENERICO' && panels > maxGenerico) {
-    state.invType = 'PREMIUM';
-    document.querySelectorAll('[data-invtype]').forEach(b =>
-      b.classList.toggle('active', b.dataset.invtype === 'PREMIUM')
-    );
+function suggestInversor(panels) {
+  const inCat = INVERSORS.filter(i => i.cat === state.cat);
+  const best = inCat.find(i => i.maxPanels >= panels) || inCat[inCat.length - 1];
+  if (!best || state.inversor === best.id) return;
+  const cur = INVERSORS.find(i => i.id === state.inversor);
+  if (cur && panels > cur.maxPanels) {
+    state.inversor = best.id;
+    buildInvGrid();
+    updateHuaweiRow();
   }
 }
 
@@ -1379,7 +1426,7 @@ const slider   = document.getElementById('kwhSlider');
 numInput.addEventListener('input', () => {
   let v = parseInt(numInput.value) || 50;
   v = Math.max(50, Math.min(5000, v));
-  slider.value = Math.min(v, 3000);
+  slider.value = Math.min(v, 6000);
   state.kwh = v;
   update();
 });
@@ -1408,7 +1455,7 @@ document.getElementById('facturaInput').addEventListener('input', function() {
   const kwpReal = panels * PANEL_W / 1000;
   const genMes  = kwpReal * HSP * EFF * 30;
   const coverage = Math.min(genMes / kwh * 100, 100);
-  const bom = computeBOM(panels, state.cableM, state.struct, getInversor(panels));
+  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras);
   const subtotalMats = bom.reduce((s,i) => s + i.subtotal, 0);
   const acabadoAmt = subtotalMats * ACABADO[state.acabado].pct;
   const labor = subtotalMats * LABOR_RATIO;
@@ -1418,6 +1465,8 @@ document.getElementById('facturaInput').addEventListener('input', function() {
 });
 
 // ── INIT ──
+buildInvGrid();
+updateHuaweiRow();
 document.getElementById('acabadoDesc').textContent = ACABADO[state.acabado].desc;
 update();
 
@@ -1438,9 +1487,8 @@ function generarPDF() {
   const kwpReal = panels * PANEL_W / 1000;
   const genMes  = kwpReal * HSP * EFF * 30;
   const coverage = Math.min(genMes / kwh * 100, 100);
-  const invId = getInversor(panels);
-  const inv = INVERSORS.find(i => i.id === invId);
-  const bom = computeBOM(panels, state.cableM, state.struct, invId);
+  const inv = INVERSORS.find(i => i.id === state.inversor);
+  const bom = computeBOM(panels, state.cableM, state.struct, state.inversor, state.huaweiExtras);
   const subtotalMats = bom.reduce((s,i) => s + i.subtotal, 0);
   const acabadoInfo  = ACABADO[state.acabado];
   const acabadoAmt   = subtotalMats * acabadoInfo.pct;
