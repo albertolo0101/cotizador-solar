@@ -531,6 +531,10 @@
     updateROI(factura, sizing.coverage, totalRounded);
   });
 
+  window.addEventListener('storage', function (event) {
+    if (event.key === 'sis_cfg') window.location.reload();
+  });
+
   await SISCatalog.loadCatalog();
   refreshSelections();
   buildPanelGrid();

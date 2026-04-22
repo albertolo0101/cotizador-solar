@@ -168,5 +168,8 @@
   await SISCatalog.loadCatalog();
   document.getElementById('kwhInput').addEventListener('input', update);
   document.getElementById('facturaInput').addEventListener('input', update);
+  window.addEventListener('storage', function (event) {
+    if (event.key === 'sis_cfg') window.location.reload();
+  });
   update();
 })();

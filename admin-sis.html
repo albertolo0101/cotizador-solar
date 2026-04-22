@@ -285,7 +285,7 @@ body::before {
           <span class="cfg-unit">%</span>
         </div>
         <span class="cfg-desc">Margen de ganancia adicional aplicado sobre el subtotal (materiales + acabado + mano de obra) antes del IVA. Aparece como línea separada en el desglose si es mayor a 0.</span>
-        <span class="cfg-default">Default: 0%</span>
+        <span class="cfg-default">Default: 1%</span>
       </div>
 
       <div class="cfg-field">
@@ -306,6 +306,16 @@ body::before {
         </div>
         <span class="cfg-desc">Mano de obra estimada como porcentaje del costo de materiales. Cubre instalación, cableado y puesta en marcha. Revisar según mercado laboral.</span>
         <span class="cfg-default">Default: 30%</span>
+      </div>
+
+      <div class="cfg-field">
+        <span class="cfg-label">GRID_FIXED_FEE_Q</span>
+        <div class="cfg-input-wrap">
+          <input class="cfg-input" type="number" name="GRID_FIXED_FEE_Q" min="0" step="1">
+          <span class="cfg-unit">Q</span>
+        </div>
+        <span class="cfg-desc">Cargo fijo mensual no compensable del distribuidor. Se resta de la parte variable de la factura antes de calcular ahorro y nueva cuota.</span>
+        <span class="cfg-default">Default: Q 120</span>
       </div>
     </div>
 
@@ -444,7 +454,7 @@ body::before {
 const FIELDS = [
   'PROFIT_PCT','IVA_PCT','LABOR_RATIO_PCT',
   'ACABADO_T1_PCT','ACABADO_T2_PCT',
-  'HSP','EFF_PCT','PANEL_W','SAVINGS_PCT',
+  'HSP','EFF_PCT','PANEL_W','SAVINGS_PCT','GRID_FIXED_FEE_Q',
   'PRICE_PANEL','PRICE_HUAWEI_8K',
   'CABLE_M_DEFAULT','HUAWEI_BASE_KW'
 ];
