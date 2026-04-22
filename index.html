@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizador Solar — Soluciones de Ingeniería Sostenible</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sun: #F5A623;
+    --sun-light: #FEF3DC;
+    --sky: #0A1628;
+    --sky-mid: #0F2040;
+    --sky-soft: #162B52;
+    --accent: #4FC3F7;
+    --accent-soft: rgba(79,195,247,0.12);
+    --white: #FFFFFF;
+    --white-70: rgba(255,255,255,0.7);
+    --white-30: rgba(255,255,255,0.3);
+    --white-10: rgba(255,255,255,0.08);
+    --green: #4CAF50;
+    --green-soft: rgba(76,175,80,0.15);
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--sky);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── background atmosphere ── */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(79,195,247,0.08) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* ── header ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 3.5rem;
+    animation: fadeDown 0.6s ease both;
+  }
+  .logo-block .logo-mark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--sun);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .logo-block .logo-sub {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--white-30);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid rgba(79,195,247,0.25);
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+    margin-top: 6px;
+  }
+
+  /* ── headline ── */
+  .headline {
+    margin-bottom: 3rem;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+  .headline h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+  .headline h1 em {
+    font-style: italic;
+    color: var(--sun);
+  }
+  .headline p {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--white-70);
+    font-weight: 300;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  /* ── input section ── */
+  .input-section {
+    background: var(--sky-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .input-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .kwh-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .kwh-input-wrap input[type=number] {
+    flex: 1;
+    background: var(--sky);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 500;
+    padding: 1rem 1.4rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+    width: 100%;
+    text-align: center;
+  }
+  .kwh-input-wrap input[type=number]::-webkit-inner-spin-button,
+  .kwh-input-wrap input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .kwh-input-wrap input[type=number]:focus {
+    border-color: var(--sun);
+    box-shadow: 0 0 0 4px rgba(245,166,35,0.12);
+  }
+  .kwh-unit {
+    font-size: 1rem;
+    color: var(--white-70);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  /* ── slider ── */
+  .slider-track {
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--sun) var(--pct, 37.5%), rgba(255,255,255,0.12) var(--pct, 37.5%));
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--sun);
+    border: 3px solid var(--sky);
+    box-shadow: 0 0 0 2px var(--sun);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  input[type=range]::-moz-range-thumb {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--sun);
+    border: 3px solid var(--sky);
+    cursor: pointer;
+  }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--white-30);
+  }
+
+  /* ── quick preset buttons ── */
+  .presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .preset-btn {
+    background: var(--white-10);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: var(--white-70);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .preset-btn:hover, .preset-btn.active {
+    background: rgba(245,166,35,0.15);
+    border-color: var(--sun);
+    color: var(--sun);
+  }
+
+  /* ── divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 2rem 0;
+  }
+
+  /* ── results ── */
+  .results {
+    animation: fadeUp 0.6s 0.35s ease both;
+  }
+  .results-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white-30);
+    margin-bottom: 1.2rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .result-card {
+    background: var(--sky-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--sun));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s 0.1s ease;
+  }
+  .result-card.show::before { transform: scaleX(1); }
+  .result-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); }
+
+  .card-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white-30);
+    margin-bottom: 0.4rem;
+  }
+  .card-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--white);
+    transition: all 0.3s;
+  }
+  .card-value span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--white-70);
+    margin-left: 4px;
+  }
+  .card-sub {
+    font-size: 0.75rem;
+    color: var(--white-30);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* ── price card (featured) ── */
+  .price-card {
+    background: linear-gradient(135deg, rgba(245,166,35,0.18) 0%, rgba(245,166,35,0.06) 100%);
+    border-color: rgba(245,166,35,0.3);
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    --card-accent: var(--sun);
+  }
+  .price-card .price-left .card-label { color: rgba(245,166,35,0.7); }
+  .price-card .price-main {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 6vw, 3.8rem);
+    color: var(--sun);
+    line-height: 1;
+  }
+  .price-card .price-sub {
+    font-size: 0.8rem;
+    color: var(--white-70);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+  .price-card .price-right {
+    text-align: right;
+  }
+  .price-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .price-breakdown .pb-row {
+    font-size: 0.78rem;
+    color: var(--white-30);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .price-breakdown .pb-row strong {
+    color: var(--white-70);
+    font-weight: 500;
+  }
+
+  /* ── generation bar ── */
+  .gen-bar-section {
+    background: var(--sky-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .gen-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+  }
+  .gen-bar-header .label { font-size: 0.75rem; color: var(--white-30); letter-spacing: 0.08em; text-transform: uppercase; }
+  .gen-bar-header .value { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--accent); }
+
+  .gen-bars { display: flex; flex-direction: column; gap: 10px; }
+  .gen-bar-row { display: flex; align-items: center; gap: 12px; }
+  .gen-bar-row .bar-label { font-size: 0.72rem; color: var(--white-30); width: 70px; text-align: right; flex-shrink: 0; }
+  .gen-bar-row .bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .gen-bar-row .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .bar-fill.consumed { background: var(--accent); }
+  .bar-fill.generated { background: var(--green); }
+  .gen-bar-row .bar-val { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--white-70); width: 68px; flex-shrink: 0; }
+
+  /* ── nota técnica ── */
+  .nota {
+    background: var(--white-10);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 1rem 1.2rem;
+    font-size: 0.8rem;
+    color: var(--white-70);
+    line-height: 1.7;
+    margin-top: 1rem;
+  }
+  .nota strong { color: var(--accent); font-weight: 500; }
+
+  /* ── footer ── */
+  .footer {
+    margin-top: 4rem;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--white-30);
+    font-weight: 300;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+  .footer a { color: var(--sun); text-decoration: none; }
+
+  /* ── animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .updating { animation: pulse 0.4s ease; }
+
+  /* sun rays decoration */
+  .sun-deco {
+    position: fixed;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    pointer-events: none; z-index: 0;
+    opacity: 0.25;
+  }
+
+  .roi-section { margin-top: 1.5rem; animation: fadeUp 0.6s 0.45s ease both; }
+  .roi-toggle { display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; padding: 1.1rem 1.4rem; background: var(--sky-mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; transition: border-color 0.2s, background 0.2s; width: 100%; text-align: left; }
+  .roi-toggle:hover { border-color: rgba(245,166,35,0.3); background: rgba(245,166,35,0.05); }
+  .roi-toggle.open { border-radius: 16px 16px 0 0; border-bottom-color: transparent; background: rgba(245,166,35,0.07); border-color: rgba(245,166,35,0.3); }
+  .roi-toggle-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(245,166,35,0.15); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; transition: transform 0.3s; }
+  .roi-toggle-text { flex: 1; }
+  .roi-toggle-text .t1 { font-size: 0.85rem; font-weight: 500; color: var(--white); }
+  .roi-toggle-text .t2 { font-size: 0.72rem; color: var(--white-30); margin-top: 2px; }
+  .roi-toggle-arrow { font-size: 0.8rem; color: var(--white-30); transition: transform 0.3s, color 0.2s; }
+  .roi-toggle.open .roi-toggle-arrow { color: var(--sun); }
+  .roi-body { background: var(--sky-mid); border: 1px solid rgba(245,166,35,0.3); border-top: none; border-radius: 0 0 16px 16px; padding: 1.5rem; display: none; }
+  .roi-body.open { display: block; }
+  .factura-input-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem; }
+  .factura-prefix { font-family: 'DM Mono', monospace; font-size: 1.1rem; color: var(--sun); font-weight: 500; flex-shrink: 0; }
+  .factura-input-wrap input[type=number] { flex: 1; background: var(--sky); border: 2px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 1.4rem; font-weight: 500; padding: 0.7rem 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; -moz-appearance: textfield; min-width: 0; }
+  .factura-input-wrap input[type=number]::-webkit-inner-spin-button, .factura-input-wrap input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .factura-input-wrap input[type=number]:focus { border-color: var(--sun); box-shadow: 0 0 0 3px rgba(245,166,35,0.12); }
+  .factura-unit { font-size: 0.85rem; color: var(--white-30); flex-shrink: 0; }
+  .roi-result { display: none; margin-top: 1.4rem; }
+  .roi-result.show { display: block; }
+  .roi-hero { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; background: linear-gradient(135deg, rgba(76,175,80,0.12) 0%, rgba(76,175,80,0.04) 100%); border: 1px solid rgba(76,175,80,0.25); border-radius: 14px; padding: 1.4rem 1.6rem; margin-bottom: 1rem; }
+  .roi-months-big { font-family: 'DM Serif Display', serif; font-size: clamp(3rem, 8vw, 4.5rem); color: var(--green); line-height: 1; flex-shrink: 0; }
+  .roi-months-big span { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 400; color: rgba(76,175,80,0.7); margin-left: 6px; }
+  .roi-hero-detail { flex: 1; min-width: 160px; }
+  .roi-hero-detail .rh-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(76,175,80,0.6); margin-bottom: 8px; }
+  .roi-hero-detail .rh-rows { display: flex; flex-direction: column; gap: 6px; }
+  .roi-hero-detail .rh-row { display: flex; justify-content: space-between; font-size: 0.8rem; gap: 16px; }
+  .roi-hero-detail .rh-row .rk { color: var(--white-30); }
+  .roi-hero-detail .rh-row .rv { color: var(--white-70); font-weight: 500; font-family: 'DM Mono', monospace; }
+  .roi-timeline-wrap { margin-top: 0.8rem; }
+  .roi-timeline { display: flex; overflow: hidden; border-radius: 8px; height: 10px; background: rgba(255,255,255,0.05); }
+  .roi-timeline .tl-invested { background: var(--sun); height: 100%; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); min-width: 4px; }
+  .roi-timeline .tl-savings { background: var(--green); height: 100%; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); flex: 1; }
+  .roi-timeline-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.65rem; color: var(--white-30); }
+
+  @media (max-width: 600px) {
+    .container { padding: 2rem 1.2rem 4rem; }
+    .kwh-input-wrap input[type=number] { font-size: 1.6rem; }
+    .price-card { flex-direction: column; }
+    .price-card .price-right { text-align: left; }
+    .roi-hero { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="sun-deco" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="140" cy="140" r="50" fill="#F5A623"/>
+  <g stroke="#F5A623" stroke-width="3" stroke-linecap="round">
+    <line x1="140" y1="20" x2="140" y2="50"/>
+    <line x1="140" y1="230" x2="140" y2="260"/>
+    <line x1="20" y1="140" x2="50" y2="140"/>
+    <line x1="230" y1="140" x2="260" y2="140"/>
+    <line x1="55" y1="55" x2="76" y2="76"/>
+    <line x1="204" y1="204" x2="225" y2="225"/>
+    <line x1="225" y1="55" x2="204" y2="76"/>
+    <line x1="76" y1="204" x2="55" y2="225"/>
+  </g>
+</svg>
+
+<div class="container">
+
+  <header class="header">
+    <div class="logo-block">
+      <div class="logo-mark">SIS</div>
+      <div class="logo-sub">Soluciones de Ingeniería Sostenible</div>
+    </div>
+    <div class="header-tag">Cotizador v1.0</div>
+  </header>
+
+  <div class="headline">
+    <h1>Cotiza tu sistema<br><em>solar</em> en segundos</h1>
+    <p>Ingresa tu consumo eléctrico mensual y obtén al instante la potencia, paneles y precio estimado de tu instalación.</p>
+  </div>
+
+  <div class="input-section">
+    <label class="input-label">¿Cuánto consumes al mes?</label>
+
+    <div class="kwh-input-wrap">
+      <input type="number" id="kwhInput" min="50" max="3000" value="600" placeholder="600">
+      <span class="kwh-unit">kWh / mes</span>
+    </div>
+
+    <div class="slider-track">
+      <input type="range" id="kwhSlider" min="50" max="3000" value="600" step="10">
+      <div class="slider-labels">
+        <span>50 kWh</span>
+        <span>500 kWh</span>
+        <span>1,000 kWh</span>
+        <span>2,000 kWh</span>
+        <span>3,000 kWh</span>
+      </div>
+    </div>
+
+    <div class="presets">
+      <span style="font-size:0.72rem;color:var(--white-30);align-self:center;">Ejemplos:</span>
+      <button class="preset-btn" data-val="200">Casa pequeña<br><span style="font-size:0.65rem;opacity:0.6">~200 kWh</span></button>
+      <button class="preset-btn active" data-val="600">Casa mediana<br><span style="font-size:0.65rem;opacity:0.6">~600 kWh</span></button>
+      <button class="preset-btn" data-val="900">Casa grande<br><span style="font-size:0.65rem;opacity:0.6">~900 kWh</span></button>
+      <button class="preset-btn" data-val="1400">Local comercial<br><span style="font-size:0.65rem;opacity:0.6">~1,400 kWh</span></button>
+    </div>
+  </div>
+
+  <div class="results">
+    <p class="results-title">Estimación del sistema</p>
+
+    <div class="cards-grid">
+      <div class="result-card show" style="--card-accent: var(--accent);">
+        <span class="card-icon">⚡</span>
+        <div class="card-label">Potencia del sistema</div>
+        <div class="card-value" id="res-kwp">—<span>kWp</span></div>
+        <div class="card-sub" id="res-kwp-sub">—</div>
+      </div>
+
+      <div class="result-card show" style="--card-accent: #A78BFA;">
+        <span class="card-icon">🔲</span>
+        <div class="card-label">Paneles a instalar</div>
+        <div class="card-value" id="res-panels">—<span>und.</span></div>
+        <div class="card-sub" id="res-panels-sub">—</div>
+      </div>
+
+      <div class="result-card show" style="--card-accent: var(--green);">
+        <span class="card-icon">☀</span>
+        <div class="card-label">Generación mensual est.</div>
+        <div class="card-value" id="res-gen">—<span>kWh</span></div>
+        <div class="card-sub" id="res-gen-sub">—</div>
+      </div>
+
+      <div class="result-card price-card show">
+        <div class="price-left">
+          <div class="card-label">Precio estimado</div>
+          <div class="price-main" id="res-price">—</div>
+          <div class="price-sub">IVA incluido · referencial</div>
+        </div>
+        <div class="price-right">
+          <div class="price-breakdown" id="res-breakdown">
+            <div class="pb-row"><span>Costo sin IVA</span><strong id="bd-siniva">—</strong></div>
+            <div class="pb-row"><span>IVA 12%</span><strong id="bd-iva">—</strong></div>
+            <div class="pb-row"><span>Costo/kWp instalado</span><strong id="bd-porkwp">—</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gen-bar-section">
+      <div class="gen-bar-header">
+        <span class="label">Balance energético mensual</span>
+        <span class="value" id="coverage-pct">—% cobertura</span>
+      </div>
+      <div class="gen-bars">
+        <div class="gen-bar-row">
+          <span class="bar-label">Consumo</span>
+          <div class="bar-track"><div class="bar-fill consumed" id="bar-consumed" style="width:100%"></div></div>
+          <span class="bar-val" id="bar-consumed-val">— kWh</span>
+        </div>
+        <div class="gen-bar-row">
+          <span class="bar-label">Generación</span>
+          <div class="bar-track"><div class="bar-fill generated" id="bar-generated" style="width:0%"></div></div>
+          <span class="bar-val" id="bar-generated-val">— kWh</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nota" id="nota-tecnica">—</div>
+  </div>
+
+  <div class="roi-section">
+    <button class="roi-toggle" id="roiToggle">
+      <div class="roi-toggle-icon">Q</div>
+      <div class="roi-toggle-text">
+        <div class="t1">Calcular tiempo de recuperación de inversión</div>
+        <div class="t2">Opción: ingresa el monto de tu factura eléctrica mensual</div>
+      </div>
+      <div class="roi-toggle-arrow">▼</div>
+    </button>
+    <div class="roi-body" id="roiBody">
+      <label class="input-label" style="margin-bottom:0.8rem;display:block;">Monto de tu factura eléctrica mensual</label>
+      <div class="factura-input-wrap">
+        <span class="factura-prefix">Q</span>
+        <input type="number" id="facturaInput" min="0" max="99999" placeholder="0" step="1">
+        <span class="factura-unit">/ mes</span>
+      </div>
+      <div style="font-size:0.72rem;color:var(--white-30);margin-top:6px;">El ahorro se calcula según el porcentaje de consumo que cubre el sistema.</div>
+      <div class="roi-result" id="roiResult">
+        <div class="roi-hero">
+          <div class="roi-months-big" id="roi-months">—<span>meses</span></div>
+          <div class="roi-hero-detail">
+            <div class="rh-label">Detalle de recuperación</div>
+            <div class="rh-rows">
+              <div class="rh-row"><span class="rk">Precio del proyecto</span><span class="rv" id="roi-precio">—</span></div>
+              <div class="rh-row"><span class="rk">Factura mensual actual</span><span class="rv" id="roi-factura">—</span></div>
+              <div class="rh-row"><span class="rk">Ahorro mensual estimado</span><span class="rv" id="roi-ahorro">—</span></div>
+              <div class="rh-row"><span class="rk">Cobertura del sistema</span><span class="rv" id="roi-cob">—</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="roi-timeline-wrap">
+          <div class="roi-timeline">
+            <div class="tl-invested" id="tl-invested" style="width:30%"></div>
+            <div class="tl-savings" id="tl-savings" style="width:70%"></div>
+          </div>
+          <div class="roi-timeline-labels">
+            <span>Período de recuperación</span>
+            <span id="tl-label-right">Años de ahorro libre →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Estimación basada en <strong style="color:var(--white-70)">4.5 HSP/día</strong> (Ciudad de Guatemala) · Factor rendimiento 87% · Paneles JA Solar 625W · Inversores Huawei<br>
+    <span style="margin-top:4px;display:block">Precio referencial — cotización formal sujeta a visita técnica · <a href="#">contactar a SIS</a></span>
+  </footer>
+
+</div>
+
+<script>
+  const HSP = 4.5;
+  const EFF = 0.87;
+  const PANEL_W = 625;
+  const COSTO_POR_KWP_SIN_IVA = 35239 * 1.15 / 8.75;
+  const MARGEN = 0.70;
+  const IVA = 0.12;
+
+  function fmt(n, dec=0) {
+    return n.toLocaleString('es-GT', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  }
+  function fmtQ(n) {
+    return 'Q ' + fmt(n, 2);
+  }
+
+  function calc(kwh) {
+    const kwpNeeded = kwh / (HSP * EFF * 30);
+    const panels = Math.ceil(kwpNeeded * 1000 / PANEL_W);
+    const kwpReal = panels * PANEL_W / 1000;
+    const genMes = kwpReal * HSP * EFF * 30;
+    const costoMat = COSTO_POR_KWP_SIN_IVA * kwpReal;
+    const precioSinIva = costoMat * (1 + MARGEN);
+    const precioConIvaExact = precioSinIva * (1 + IVA);
+    const precioConIva = Math.round(precioConIvaExact / 100) * 100;
+    const coverage = Math.min(genMes / kwh * 100, 100);
+    return { kwh, kwpNeeded, kwpReal, panels, genMes, costoMat, precioSinIva, precioConIva, coverage };
+  }
+
+  function update(kwh) {
+    const r = calc(kwh);
+
+    // potencia
+    document.getElementById('res-kwp').innerHTML = fmt(r.kwpReal,2) + '<span>kWp</span>';
+    document.getElementById('res-kwp-sub').textContent = fmt(r.kwpNeeded,2) + ' kWp necesarios · sistema dimensionado al alza';
+
+    // paneles
+    document.getElementById('res-panels').innerHTML = fmt(r.panels) + '<span>und.</span>';
+    document.getElementById('res-panels-sub').textContent = 'JA Solar 625W bifacial · ' + fmt(r.kwpReal,3) + ' kWp totales';
+
+    // generación
+    document.getElementById('res-gen').innerHTML = fmt(r.genMes,0) + '<span>kWh</span>';
+    const diff = r.genMes - r.kwh;
+    const diffTxt = diff >= 0
+      ? '+ ' + fmt(diff,0) + ' kWh excedente al mes'
+      : fmt(Math.abs(diff),0) + ' kWh aún de red';
+    document.getElementById('res-gen-sub').textContent = diffTxt;
+
+    // precio (redondeado a la centena más cercana)
+    document.getElementById('res-price').textContent = 'Q ' + fmt(r.precioConIva, 0);
+    document.getElementById('bd-siniva').textContent = fmtQ(r.precioSinIva);
+    document.getElementById('bd-iva').textContent = fmtQ(r.precioConIva - r.precioSinIva);
+    document.getElementById('bd-porkwp').textContent = fmtQ(r.precioConIva / r.kwpReal) + ' / kWp';
+
+    // recalc ROI if factura already filled
+    const _fv = parseFloat(document.getElementById('facturaInput').value);
+    if (_fv > 0) updateROI(_fv, r);
+
+    // barras
+    const maxBar = Math.max(r.kwh, r.genMes);
+    document.getElementById('bar-consumed').style.width = (r.kwh / maxBar * 100) + '%';
+    document.getElementById('bar-generated').style.width = (r.genMes / maxBar * 100) + '%';
+    document.getElementById('bar-consumed-val').textContent = fmt(r.kwh,0) + ' kWh';
+    document.getElementById('bar-generated-val').textContent = fmt(r.genMes,0) + ' kWh';
+    document.getElementById('coverage-pct').textContent = fmt(r.coverage,0) + '% cobertura';
+
+    // nota técnica
+    let nota = '';
+    if (r.panels <= 6) {
+      nota = `<strong>Sistema pequeño (${r.panels} paneles).</strong> Ideal para apartamentos o casas con consumo bajo. Inversor monofásico de ${Math.ceil(r.kwpReal)} kW.`;
+    } else if (r.panels <= 14) {
+      nota = `<strong>Sistema mediano (${r.panels} paneles).</strong> Un solo inversor centralizado. Cobertura estimada del ${fmt(r.coverage,0)}% de tu consumo.`;
+    } else if (r.panels <= 24) {
+      nota = `<strong>Sistema grande (${r.panels} paneles).</strong> Inversor trifásico de alta capacidad. Requiere evaluación del tablero eléctrico existente.`;
+    } else {
+      nota = `<strong>Sistema industrial (${r.panels} paneles · ${fmt(r.kwpReal,1)} kWp).</strong> Instalación de escala comercial. Requiere visita técnica, estudio de sombras y diseño estructural personalizado.`;
+    }
+    nota += ` Estimación basada en <strong>4.5 HSP/día</strong> para Ciudad de Guatemala. El precio final puede variar según condiciones del techo, distancias de cableado y disponibilidad de equipos.`;
+    document.getElementById('nota-tecnica').innerHTML = nota;
+
+    // slider gradient
+    const pct = ((kwh - 50) / (3000 - 50) * 100).toFixed(1);
+    document.getElementById('kwhSlider').style.setProperty('--pct', pct + '%');
+
+    // update preset active state
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.val) === kwh);
+    });
+  }
+
+  // sync input ↔ slider
+  const numInput = document.getElementById('kwhInput');
+  const slider   = document.getElementById('kwhSlider');
+
+  numInput.addEventListener('input', () => {
+    let v = parseInt(numInput.value) || 50;
+    v = Math.max(50, Math.min(3000, v));
+    slider.value = v;
+    update(v);
+  });
+  slider.addEventListener('input', () => {
+    const v = parseInt(slider.value);
+    numInput.value = v;
+    update(v);
+  });
+
+  // presets
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = parseInt(btn.dataset.val);
+      numInput.value = v;
+      slider.value = v;
+      update(v);
+    });
+  });
+
+  // ROI toggle
+  const roiToggle = document.getElementById('roiToggle');
+  const roiBody   = document.getElementById('roiBody');
+  roiToggle.addEventListener('click', () => {
+    const open = roiBody.classList.toggle('open');
+    roiToggle.classList.toggle('open', open);
+  });
+
+  // ROI calculation
+  function updateROI(factura, r) {
+    if (!r) r = calc(parseInt(document.getElementById('kwhInput').value) || 600);
+    if (factura <= 0) { document.getElementById('roiResult').classList.remove('show'); return; }
+
+    const ahorro = factura * (r.coverage / 100);
+    const mesesExact = r.precioConIva / ahorro;
+    const meses = Math.round(mesesExact);
+    const vidaUtil = 25 * 12; // 25 años en meses
+    const pctRecup = Math.min(meses / vidaUtil * 100, 50);
+    const anosLibres = ((vidaUtil - meses) / 12).toFixed(1);
+
+    document.getElementById('roi-months').innerHTML = fmt(meses) + '<span>meses</span>';
+    document.getElementById('roi-precio').textContent = 'Q ' + fmt(r.precioConIva, 0);
+    document.getElementById('roi-factura').textContent = 'Q ' + fmt(factura, 2);
+    document.getElementById('roi-ahorro').textContent = 'Q ' + fmt(ahorro, 2) + '/mes';
+    document.getElementById('roi-cob').textContent = fmt(r.coverage, 0) + '%';
+    document.getElementById('tl-invested').style.width = pctRecup + '%';
+    document.getElementById('tl-label-right').textContent = anosLibres + ' años de ahorro libre →';
+    document.getElementById('roiResult').classList.add('show');
+  }
+
+  document.getElementById('facturaInput').addEventListener('input', function() {
+    const v = parseFloat(this.value) || 0;
+    const r = calc(parseInt(document.getElementById('kwhInput').value) || 600);
+    updateROI(v, r);
+  });
+
+  // init
+  update(600);
+</script>
+</body>
+</html>
